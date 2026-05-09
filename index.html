@@ -260,13 +260,15 @@
 
       opacity: 0;
 
-      animation: fadeInWord 0.6s ease forwards;
+      transition: opacity 0.6s ease, transform 0.6s ease;
 
     }
 
-    @keyframes fadeInWord {
+    .message span.revealed {
 
-      to { opacity: 1; transform: translateY(0); }
+      opacity: 1;
+
+      transform: translateY(0) !important;
 
     }
 
@@ -1444,9 +1446,9 @@
 
       words.forEach(function(word, i) {
 
-        word.style.animationDelay = (i * 0.12) + 's';
-
         word.style.transform = 'translateY(12px)';
+
+        setTimeout(function() { word.classList.add('revealed'); }, 100 + i * 120);
 
       });
 
@@ -1846,12 +1848,12 @@
       function onYouTubeReady() {
         player = new YT.Player('ytPlayerWrapper', {
           width: 1, height: 1,
-          videoId: 'ZstpFsszxZw',
+          videoId: '5eCE7-WERrs',
           playerVars: {
             autoplay: 1,
             mute: 0,
             loop: 1,
-            playlist: 'ZstpFsszxZw',
+            playlist: '5eCE7-WERrs',
             controls: 0,
             enablejsapi: 1
           },
@@ -1860,7 +1862,7 @@
               e.target.playVideo();
               playing = true;
               if (icon) icon.classList.remove('paused');
-              if (label) label.textContent = '\u266A Kalomira - Happy Birthday To You';
+              if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
               setTimeout(function() {
                 try { e.target.unMute(); } catch(ex) {}
               }, 100);
@@ -1875,7 +1877,7 @@
       function tryAudioFallback() {
         var a = document.createElement('audio');
         a.loop = true;
-        a.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3';
+        a.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3';
         a.play().catch(function(){});
       }
 
@@ -1900,7 +1902,7 @@
             } else {
               player.playVideo();
               if (icon) icon.classList.remove('paused');
-              if (label) label.textContent = '\u266A Kalomira - Happy Birthday To You';
+              if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
               playing = true;
             }
           }
