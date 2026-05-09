@@ -1873,6 +1873,15 @@
     
     // ==================== BACKGROUND MUSIC ====================
     let musicPlaying = false;
+    // Try autoplay on load
+    function tryAutoplay() {
+      var a = document.getElementById('bgMusic');
+      if (a) a.play().catch(function(){});
+    }
+    document.addEventListener('DOMContentLoaded', tryAutoplay);
+    window.addEventListener('load', tryAutoplay);
+    setTimeout(tryAutoplay, 500);
+
     function toggleMusic() {
       const audio = document.getElementById('bgMusic');
       const icon = document.getElementById('musicIcon');
@@ -1979,8 +1988,8 @@
     <span class="music-icon" id="musicIcon">&#x1F3B5;</span>
     <span class="music-label" id="musicLabel">Play Music</span>
   </div>
-  <audio id="bgMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  <audio id="bgMusic" loop autoplay playsinline>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
   </audio>
 </body>
 
