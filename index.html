@@ -90,7 +90,7 @@
 
       width: 100%;
 
-      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(252,228,236,0.7), rgba(255,255,255,0.9));
+      background: rgba(255,255,255,0.95);
 
       backdrop-filter: blur(16px);
 
@@ -98,29 +98,33 @@
 
       padding: 48px 32px;
 
-      box-shadow: 0 20px 60px rgba(233,30,99,0.2);
+      box-shadow: 0 20px 60px rgba(233,30,99,0.2), 0 0 0 3px rgba(233,30,99,0.15);
 
       text-align: center;
 
       margin: 20px 0;
 
-      border: 3px solid transparent;
-      background-clip: padding-box;
-      position: relative;
     }
     .main-card::before {
       content: '';
       position: absolute;
       inset: -4px;
       border-radius: 52px;
-      background: linear-gradient(135deg, #f48fb1, #e91e63, #f48fb1, #e91e63);
-      background-size: 300% 300%;
-      animation: gradientBorder 4s ease infinite;
+      background: linear-gradient(135deg, #f8bbd0, #f48fb1, #f8bbd0);
       z-index: -1;
     }
-    @keyframes gradientBorder {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+    .main-card::after {
+      content: '💗 🌸 💗 🌸 💗';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1rem;
+      letter-spacing: 4px;
+      background: rgba(255,255,255,0.9);
+      padding: 0 16px;
+      border-radius: 20px;
+      white-space: nowrap;
     }
     .main-card::after {
       content: '💗 🌸 💗 🌸 💗';
@@ -246,11 +250,9 @@
 
       line-height: 1.9;
 
-      color: #4a4a4a;
+      color: #2d2d2d;
 
       margin: 20px 0 30px;
-
-      padding: 0 10px;
 
     }
 
