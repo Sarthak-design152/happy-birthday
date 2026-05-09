@@ -765,6 +765,60 @@
       max-width: 120px;
     }
 
+  
+    /* Falling petals */
+    .petals-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .petal {
+      position: absolute;
+      top: -40px;
+      font-size: 28px;
+      opacity: 0.5;
+      animation: fallPetal linear infinite;
+      pointer-events: none;
+      user-select: none;
+    }
+    @keyframes fallPetal {
+      0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0.6; }
+      25% { transform: translateY(25vh) rotate(90deg) translateX(30px); opacity: 0.5; }
+      50% { transform: translateY(50vh) rotate(180deg) translateX(-20px); opacity: 0.4; }
+      75% { transform: translateY(75vh) rotate(270deg) translateX(40px); opacity: 0.3; }
+      100% { transform: translateY(110vh) rotate(360deg) translateX(-10px); opacity: 0; }
+    }
+
+  
+    /* Cursor trail */
+    .cursor-trail {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 20px;
+      animation: floatUp 0.8s ease forwards;
+    }
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-60px) scale(0.3); }
+    }
+
+  
+    /* Ripple effect */
+    .surprise-btn .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(233,30,99,0.3);
+      transform: scale(0);
+      animation: rippleAnim 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim {
+      to { transform: scale(4); opacity: 0; }
+    }
+
   </style>
 
 </head>
@@ -816,25 +870,25 @@
 
     <div class="surprises-grid">
 
-      <button class="surprise-btn" onclick="showSurprise('love')">
+      <button class="surprise-btn" onclick="showSurprise('love', this)">
 
         <span class="icon">&#x1F49C;</span> Love Note
 
       </button>
 
-      <button class="surprise-btn" onclick="showSurprise('hug')">
+      <button class="surprise-btn" onclick="showSurprise('hug', this)">
 
         <span class="icon">&#x1F917;</span> Virtual Hug
 
       </button>
 
-      <button class="surprise-btn" onclick="showSurprise('compliment')">
+      <button class="surprise-btn" onclick="showSurprise('compliment', this)">
 
         <span class="icon">&#x1F3B7;</span> Compliment
 
       </button>
 
-      <button class="surprise-btn" onclick="showSurprise('memory')">
+      <button class="surprise-btn" onclick="showSurprise('memory', this)">
 
         <span class="icon">&#x1F4F8;</span> Sweet Memory
 
@@ -1002,6 +1056,23 @@
   <script>
 
     // ==================== FLOATING HEARTS ====================
+
+    function createPetals() {
+      const container = document.getElementById('petalsContainer');
+      const petals = ['🌸', '🌺', '🌷', '💮'];
+      for (let i = 0; i < 15; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+        petal.style.left = Math.random() * 100 + '%';
+        petal.style.fontSize = (18 + Math.random() * 20) + 'px';
+        petal.style.animationDuration = (10 + Math.random() * 12) + 's';
+        petal.style.animationDelay = (Math.random() * 15) + 's';
+        petal.style.opacity = (0.3 + Math.random() * 0.3);
+        container.appendChild(petal);
+      }
+    }
+    createPetals();
 
     function createSparkles() {
       const container = document.getElementById('sparkleContainer');
