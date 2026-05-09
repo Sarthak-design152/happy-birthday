@@ -895,7 +895,133 @@
     .corner-deco.br { bottom: -10px; right: -10px; }
     @media (max-width: 600px) {
       .corner-deco { display: none; }
-    }</style>
+    }
+    /* Music player */
+    .music-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+      padding: 10px 18px;
+      box-shadow: 0 4px 20px rgba(233,30,99,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid rgba(233,30,99,0.15);
+    }
+    .music-player:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 30px rgba(233,30,99,0.3);
+    }
+    .music-player .music-icon {
+      font-size: 1.5rem;
+      animation: musicPulse 1.5s ease-in-out infinite;
+    }
+    .music-player .music-icon.paused {
+      animation: none;
+    }
+    @keyframes musicPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    .music-player .music-label {
+      font-size: 0.85rem;
+      color: #e91e63;
+      font-weight: 600;
+      font-family: 'Quicksand', sans-serif;
+    }
+    @media (max-width: 600px) {
+      .music-player { bottom: 10px; right: 10px; padding: 8px 14px; }
+    }
+
+  
+    /* Love meter */
+    .love-meter {
+      margin: 20px 0;
+      padding: 24px;
+      background: linear-gradient(135deg, #fce4ec, #fff);
+      border-radius: 28px;
+      text-align: center;
+      border: 2px dashed #f48fb1;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .love-meter:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 20px rgba(233,30,99,0.1);
+    }
+    .meter-bar {
+      width: 80%;
+      max-width: 300px;
+      height: 24px;
+      background: #fce4ec;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 0 auto;
+      border: 2px solid #f48fb1;
+    }
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f48fb1, #e91e63, #ff4081);
+      border-radius: 12px;
+      transition: width 2s ease;
+    }
+
+  
+    /* Slideshow */
+    .slideshow-container {
+      margin: 20px 0;
+      border-radius: 28px;
+      overflow: hidden;
+      position: relative;
+      height: 280px;
+      box-shadow: 0 8px 30px rgba(233,30,99,0.15);
+      border: 3px solid #fff;
+    }
+    .slideshow-container .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+    .slideshow-container .slide.active {
+      opacity: 1;
+    }
+
+  
+    /* Floating love notes */
+    .love-note-float {
+      position: fixed;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.1rem;
+      color: #e91e63;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0;
+      animation: floatNote 6s ease forwards;
+      text-shadow: 0 2px 10px rgba(233,30,99,0.2);
+      background: rgba(255,255,255,0.7);
+      padding: 8px 16px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 2px 10px rgba(233,30,99,0.1);
+    }
+    @keyframes floatNote {
+      0% { opacity: 0; transform: translateY(20px) scale(0.8); }
+      10% { opacity: 1; transform: translateY(0) scale(1); }
+      70% { opacity: 1; transform: translateY(-20px) scale(1); }
+      100% { opacity: 0; transform: translateY(-50px) scale(0.8); }
+    }
+
+  </style>
 
 </head>
 
@@ -1091,6 +1217,15 @@
 
     <!-- Heart Divider -->
     <div class="heart-divider"><span class="line"></span>❤️ ✨ ❤️<span class="line"></span></div>
+
+  <!-- Love Meter -->
+    <div class="love-meter">
+      <div style="font-family: 'Dancing Script', cursive; font-size: 1.3rem; color: #e91e63; margin-bottom: 8px;">&#x1F49B; Diksha & Golella &#x1F49B;</div>
+      <div class="meter-bar">
+        <div class="meter-fill" id="meterFill"></div>
+      </div>
+      <div style="font-size: 0.9rem; color: #ad1457; margin-top: 6px; font-weight: 600; min-height: 22px;" id="meterLabel">&#x2764;&#xFE0F; Click to check our love meter! &#x2764;&#xFE0F;</div>
+    </div>
 
     <!-- Timeline of memories -->
 
@@ -1735,7 +1870,95 @@
 
 
 
-        window.addEventListener('load', () => {
+    
+    // ==================== BACKGROUND MUSIC ====================
+    let musicPlaying = false;
+    function toggleMusic() {
+      const audio = document.getElementById('bgMusic');
+      const icon = document.getElementById('musicIcon');
+      const label = document.getElementById('musicLabel');
+      if (musicPlaying) {
+        audio.pause();
+        icon.classList.add('paused');
+        label.textContent = 'Play Music';
+        musicPlaying = false;
+      } else {
+        audio.play().catch(() => {});
+        icon.classList.remove('paused');
+        label.textContent = 'Now Playing';
+        musicPlaying = true;
+      }
+    }
+
+
+    // ==================== LOVE METER ====================
+    let meterFilled = false;
+    document.querySelector('.love-meter')?.addEventListener('click', function() {
+      if (meterFilled) return;
+      meterFilled = true;
+      const fill = document.getElementById('meterFill');
+      const label = document.getElementById('meterLabel');
+      let percent = 0;
+      const interval = setInterval(() => {
+        percent++;
+        fill.style.width = percent + '%';
+        if (percent >= 100) {
+          clearInterval(interval);
+          label.innerHTML = '&#x1F49B; 100% Pure Love! Perfect match! &#x1F49B;';
+          if (typeof launchConfetti === 'function') launchConfetti();
+        }
+      }, 20);
+    });
+
+
+    // ==================== AUTO SLIDESHOW ====================
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.slide');
+    if (slides.length > 1) {
+      setInterval(() => {
+        slides[slideIndex].classList.remove('active');
+        slideIndex = (slideIndex + 1) % slides.length;
+        slides[slideIndex].classList.add('active');
+      }, 3000);
+    }
+
+
+    // ==================== FLOATING LOVE NOTES ====================
+    const loveNotes = [
+      'You are my sunshine &#x2600;&#xFE0F;',
+      'Thinking of you always &#x1F49B;',
+      'You make my heart smile &#x1F49A;',
+      'My favorite person &#x1F493;',
+      'You are everything to me &#x1F497;',
+      'I love you more every day &#x1F49C;',
+      'You are my dream come true &#x2B50;',
+      'My heart is yours &#x1F49D;',
+      'You are beautiful inside out &#x1F33A;',
+      'Forever yours, Golella &#x1F618;',
+      'You are my happy place &#x1F31F;',
+      'My world is better with you &#x1F30D;',
+      'I adore you &#x1F496;',
+      'You are my everything &#x1F499;',
+      'Missing you always &#x1F48C;'
+    ];
+
+    function spawnLoveNote() {
+      const note = document.createElement('div');
+      note.className = 'love-note-float';
+      note.innerHTML = loveNotes[Math.floor(Math.random() * loveNotes.length)];
+      note.style.left = (10 + Math.random() * 60) + 'vw';
+      note.style.top = (10 + Math.random() * 60) + 'vh';
+      note.style.animationDuration = (5 + Math.random() * 4) + 's';
+      note.style.fontSize = (0.9 + Math.random() * 0.5) + 'rem';
+      document.body.appendChild(note);
+      setTimeout(() => note.remove(), 9000);
+    }
+
+    setInterval(spawnLoveNote, 4000);
+    // Spawn a few on load
+    setTimeout(() => { spawnLoveNote(); spawnLoveNote(); }, 2000);
+
+    window.addEventListener('load', () => {
 
       setTimeout(launchConfetti, 1000);
 
@@ -1751,6 +1974,14 @@
     Made with &#x1F49B; just for you &#x1F49B;
   </div>
 
+  <!-- Music Player -->
+  <div class="music-player" id="musicPlayer" onclick="toggleMusic()">
+    <span class="music-icon" id="musicIcon">&#x1F3B5;</span>
+    <span class="music-label" id="musicLabel">Play Music</span>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
 </body>
 
 </html>
