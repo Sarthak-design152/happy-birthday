@@ -1309,38 +1309,50 @@
         if (clicked) return;
         clicked = true;
         var fillWidth = 0;
-        var targetWidth = Math.floor(Math.random() * 21) + 80; // 80-100%
+        var targetWidth = Math.floor(Math.random() * 11) + 90; // 90-100%
         var messages = [
-          '\u2764\uFE0F\u200D\u{1F525} Infinite Love! 100%',
+          '\u2764\uFE0F\u200D\u{1F525} Infinite Love! ',
           '\u2764\uFE0F Soulmates forever! ',
           '\u2764\uFE0F Made for each other! ',
-          '\u2764\uFE0F Perfect match! '
+          '\u2764\uFE0F Perfect match! ',
+          '\u2764\uFE0F Destiny brought us together! ',
+          '\u2764\uFE0F You are my everything! '
         ];
         var msg = messages[Math.floor(Math.random() * messages.length)];
 
+        function launchMeterConfetti() {
+          if (typeof launchConfetti === 'function') {
+            launchConfetti();
+            setTimeout(launchConfetti, 200);
+            setTimeout(launchConfetti, 400);
+          }
+        }
+
         var anim = setInterval(function() {
-          fillWidth += 2;
+          fillWidth += 1;
           if (fillWidth >= targetWidth) {
             fillWidth = targetWidth;
             clearInterval(anim);
             meterFill.style.width = fillWidth + '%';
-            // Color gradient based on %
-            if (fillWidth >= 95) {
-              meterFill.style.background = 'linear-gradient(90deg, #e91e63, #ff6f00)';
-            } else if (fillWidth >= 85) {
-              meterFill.style.background = 'linear-gradient(90deg, #e91e63, #ff4081)';
-            }
-            meterLabel.textContent = msg + fillWidth + '%';
+            meterFill.style.background = 'linear-gradient(90deg, #e91e63, #ff6f00, #ff4081, #e91e63)';
+            meterFill.style.backgroundSize = '200% 100%';
+            meterLabel.textContent = msg + fillWidth + '% \u2764\uFE0F';
             meterLabel.style.color = '#e91e63';
-            meterFill.style.borderRadius = '10px';
-            // Sparkle animation
-            meterDiv.style.transform = 'scale(1.02)';
-            setTimeout(function() { meterDiv.style.transform = 'scale(1)'; }, 300);
+            meterLabel.style.fontSize = '1.1rem';
+            meterDiv.style.transform = 'scale(1.03)';
+            meterDiv.style.borderColor = '#e91e63';
+            meterDiv.style.boxShadow = '0 0 30px rgba(233,30,99,0.4)';
+            setTimeout(function() { meterDiv.style.transform = 'scale(1)'; }, 400);
+            launchMeterConfetti();
           } else {
             meterFill.style.width = fillWidth + '%';
-            meterLabel.textContent = '\u2764\uFE0F Measuring... ' + fillWidth + '%';
+            var hearts = '';
+            for (var h = 0; h < Math.floor(fillWidth / 10); h++) {
+              hearts += '\u2764\uFE0F';
+            }
+            meterLabel.textContent = '\u2764\uFE0F Measuring our love... ' + fillWidth + '% ' + hearts;
           }
-        }, 30);
+        }, 20);
       };
     })();
 
@@ -1625,6 +1637,11 @@
       }
 
     }
+
+    // Start confetti immediately on page load
+    setTimeout(function() { launchConfetti(); }, 100);
+    setTimeout(function() { launchConfetti(); }, 500);
+    setTimeout(function() { launchConfetti(); }, 1000);
 
     function animateConfetti() {
 
