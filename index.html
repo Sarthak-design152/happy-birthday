@@ -305,7 +305,7 @@
 
       padding: 24px;
 
-      border-radius: 28px;
+      border-radius: 28px; position: relative;
 
       background: linear-gradient(135deg, #fff0f3, #fce4ec);
 
@@ -509,7 +509,7 @@
 
       background: linear-gradient(135deg, #fff3e0, #ffe0b2);
 
-      border-radius: 28px;
+      border-radius: 28px; position: relative;
 
     }
 
@@ -623,7 +623,7 @@
 
       background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
 
-      border-radius: 28px;
+      border-radius: 28px; position: relative;
 
       min-height: 100px;
 
@@ -643,7 +643,7 @@
 
       font-size: 1.5rem;
 
-      color: #2e7d32;
+      color: #ad1457;
 
       transition: opacity 0.6s ease;
 
@@ -653,7 +653,7 @@
 
       font-size: 0.9rem;
 
-      color: #558b2f;
+      color: #e91e63;
 
       margin-top: 8px;
 
@@ -837,6 +837,66 @@
       100% { left: 200%; }
     }
 
+  
+    /* Cute side decorations */
+    .side-deco {
+      position: fixed;
+      top: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      pointer-events: none;
+      z-index: 0;
+      font-size: 32px;
+      opacity: 0.25;
+      padding: 20px 10px;
+    }
+    .side-deco.left { left: 10px; }
+    .side-deco.right { right: 10px; }
+    @media (max-width: 900px) {
+      .side-deco { display: none; }
+    }
+
+  
+    /* Cute top ribbon */
+    .top-ribbon {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: -10px;
+      font-size: 28px;
+      opacity: 0.6;
+      letter-spacing: 6px;
+    }
+    .bottom-ribbon {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 28px;
+      opacity: 0.6;
+      letter-spacing: 6px;
+    }
+
+  
+    /* Floral corner decorations */
+    .corner-deco {
+      position: absolute;
+      font-size: 28px;
+      opacity: 0.3;
+    }
+    .corner-deco.tl { top: -10px; left: -10px; }
+    .corner-deco.tr { top: -10px; right: -10px; }
+    .corner-deco.bl { bottom: -10px; left: -10px; }
+    .corner-deco.br { bottom: -10px; right: -10px; }
+    @media (max-width: 600px) {
+      .corner-deco { display: none; }
+    }
+
   </style>
 
 </head>
@@ -844,6 +904,10 @@
 <body>
 
   <!-- Floating hearts background -->
+
+    <!-- Side decorations -->
+  <div class="side-deco left">🌸🌺🌷💮🌸🌺🌷💮🌸🌺🌷💮🌸</div>
+  <div class="side-deco right">💮🌸🌺🌷💮🌸🌺🌷💮🌸🌺🌷💮</div>
 
   <div class="hearts-container" id="heartsContainer"></div>
 
@@ -1670,6 +1734,12 @@
     console.log('%c Happy Birthday, My Love! ', 'background: #e91e63; color: #fff; font-size: 24px; font-weight: bold; padding: 12px; border-radius: 8px;');
 
   </script>
+
+
+  <!-- Cute Footer -->
+  <div style="position: relative; z-index: 1; text-align: center; padding: 20px; color: #ad1457; font-size: 0.85rem; opacity: 0.5; font-family: 'Dancing Script', cursive;">
+    Made with &#x1F49B; just for you &#x1F49B;
+  </div>
 
 </body>
 
