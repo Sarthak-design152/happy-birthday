@@ -20,7 +20,9 @@
 
       font-family: 'Quicksand', sans-serif;
 
-      background: linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1);
+      background: linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1, #f8bbd0, #fce4ec);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
 
       min-height: 100vh;
 
@@ -34,6 +36,12 @@
 
       padding: 20px;
 
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* Floating Hearts */
@@ -1024,8 +1032,8 @@
   <!-- Floating hearts background -->
 
     <!-- Side decorations -->
-  <div class="side-deco left">🌸🌺🌷💮🌸🌺🌷💮🌸🌺🌷💮🌸</div>
-  <div class="side-deco right">💮🌸🌺🌷💮🌸🌺🌷💮🌸🌺🌷💮</div>
+  <div class="side-deco left">🎂🌸🌺🎂🌷💮🎂🌸🌺🎂🌷💮🎂🌸</div>
+  <div class="side-deco right">💮🌷🎂🌸💮🌷🎂🌸💮🌷🎂🌸💮</div>
 
   <div class="hearts-container" id="heartsContainer"></div>
 
@@ -1036,6 +1044,9 @@
   <!-- Confetti canvas -->
 
   <canvas id="confetti-canvas"></canvas>
+
+  <!-- Fireworks canvas -->
+  <canvas id="fireworks-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;"></canvas>
 
   <!-- Main card -->
 
@@ -1101,6 +1112,12 @@
       <button class="surprise-btn" onclick="launchConfetti()">
 
         <span class="icon">&#x2728;</span> Celebrate!
+
+      </button>
+
+      <button class="surprise-btn" onclick="showReason()">
+
+        <span class="icon">&#x1F49D;</span> Reasons I Love You
 
       </button>
 
@@ -1219,6 +1236,25 @@
         <div class="meter-fill" id="meterFill"></div>
       </div>
       <div style="font-size: 0.9rem; color: #ad1457; margin-top: 6px; font-weight: 600; min-height: 22px;" id="meterLabel">&#x2764;&#xFE0F; Click to check our love meter! &#x2764;&#xFE0F;</div>
+    </div>
+
+    <!-- Heart Divider -->
+    <div class="heart-divider"><span class="line"></span>🎵 ✨ 🎵<span class="line"></span></div>
+
+    <!-- Our Song Section -->
+    <div class="song-section" style="margin: 24px 0; padding: 24px; background: linear-gradient(135deg, #fff0f3, #fce4ec); border-radius: 28px; border: 2px solid rgba(233,30,99,0.1);">
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+        <div style="width:120px;height:120px;border-radius:20px;overflow:hidden;flex-shrink:0;box-shadow:0 8px 25px rgba(233,30,99,0.2);border:3px solid #fff;background:linear-gradient(135deg,#f48fb1,#e91e63);display:flex;align-items:center;justify-content:center;font-size:3.5rem;animation:musicPulse 2s ease-in-out infinite;">
+          🎂
+        </div>
+        <div style="flex:1;min-width:180px;text-align:left;">
+          <div style="font-family:'Dancing Script',cursive;font-size:1.6rem;color:#e91e63;">&#x1F3B5; Our Song &#x1F3B5;</div>
+          <div style="font-size:0.95rem;color:#ad1457;font-weight:600;margin:4px 0;">Pentatonix — Happy Birthday Beautiful</div>
+          <div style="font-size:0.85rem;color:#888;font-style:italic;line-height:1.5;margin-top:8px;min-height:50px;" id="lyricsDisplay">
+            "Happy birthday beautiful, you know you light up every room..."
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Timeline of memories -->
@@ -1514,6 +1550,34 @@
 
     };
 
+    const reasonsData = [
+      'Your smile lights up my whole world. &#x1F31F;',
+      'The way you laugh makes every day better. &#x1F49B;',
+      'Your kindness inspires me to be a better person. &#x1F33A;',
+      'You understand me in ways no one else ever has. &#x1F49C;',
+      'Your hugs feel like coming home. &#x1F917;',
+      'You make even ordinary moments feel magical. &#x2728;',
+      'Your strength and courage amaze me every day. &#x1F31F;',
+      'You believe in me even when I doubt myself. &#x1F49A;',
+      'Your voice is my favorite sound in the world. &#x1F3B5;',
+      'You have the most beautiful soul I have ever known. &#x1F496;',
+      'You make me want to be the best version of myself. &#x1F31E;',
+      'The way your eyes light up when you talk about things you love. &#x1F49D;',
+      'You are my best friend, my love, my everything. &#x1F9E1;',
+      'You always know the right thing to say to make me feel better. &#x1F49B;'
+    ];
+    let reasonIndex = 0;
+
+    function showReason() {
+      const box = document.getElementById('revealBox');
+      const reason = reasonsData[reasonIndex];
+      box.innerHTML = '<strong>Reason #' + (reasonIndex + 1) + ':</strong> ' + reason;
+      box.classList.add('show');
+      box.style.display = 'block';
+      reasonIndex = (reasonIndex + 1) % reasonsData.length;
+      launchConfetti();
+    }
+
     function showSurprise(type) {
 
       const box = document.getElementById('revealBox');
@@ -1533,6 +1597,140 @@
       void box.offsetWidth;
 
     }
+
+    // ==================== FIREWORKS ====================
+    (function() {
+      var fwCanvas = document.getElementById('fireworks-canvas');
+      var fwCtx = fwCanvas.getContext('2d');
+      var fwW, fwH;
+      var particles = [];
+      var rockets = [];
+      var fwRunning = false;
+
+      function resizeFW() {
+        fwW = fwCanvas.width = window.innerWidth;
+        fwH = fwCanvas.height = window.innerHeight;
+      }
+      resizeFW();
+      window.addEventListener('resize', resizeFW);
+
+      function Rocket() {
+        this.x = Math.random() * fwW;
+        this.y = fwH;
+        this.targetY = Math.random() * fwH * 0.4 + 50;
+        this.speed = 4 + Math.random() * 4;
+        this.trail = [];
+        this.exploded = false;
+      }
+      Rocket.prototype.update = function() {
+        if (this.exploded) return;
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > 8) this.trail.shift();
+        this.y -= this.speed;
+        this.x += (Math.random() - 0.5) * 2;
+        if (this.y <= this.targetY) {
+          this.exploded = true;
+          explode(this.x, this.y);
+        }
+      };
+      Rocket.prototype.draw = function() {
+        if (this.exploded) return;
+        for (var i = 0; i < this.trail.length; i++) {
+          var alpha = i / this.trail.length * 0.6;
+          fwCtx.beginPath();
+          fwCtx.arc(this.trail[i].x, this.trail[i].y, 2, 0, Math.PI * 2);
+          fwCtx.fillStyle = 'rgba(255,200,100,' + alpha + ')';
+          fwCtx.fill();
+        }
+      };
+
+      function Particle(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        var angle = Math.random() * Math.PI * 2;
+        var speed = 3 + Math.random() * 6;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.gravity = 0.08;
+        this.alpha = 1;
+        this.decay = 0.008 + Math.random() * 0.012;
+        this.size = 2 + Math.random() * 3;
+      }
+      Particle.prototype.update = function() {
+        this.x += this.vx;
+        this.vy += this.gravity;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+        this.vx *= 0.99;
+        this.vy *= 0.99;
+      };
+      Particle.prototype.draw = function() {
+        if (this.alpha <= 0) return;
+        fwCtx.save();
+        fwCtx.globalAlpha = this.alpha;
+        fwCtx.fillStyle = this.color;
+        fwCtx.beginPath();
+        fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        fwCtx.fill();
+        fwCtx.restore();
+      };
+
+      var colors = ['#ff4081','#e91e63','#ff80ab','#f48fb1','#ffd54f','#69f0ae','#40c4ff','#ff6e40','#ea80fc','#ffab40'];
+
+      function explode(x, y) {
+        var count = 60 + Math.floor(Math.random() * 60);
+        var color = colors[Math.floor(Math.random() * colors.length)];
+        for (var i = 0; i < count; i++) {
+          particles.push(new Particle(x, y, color));
+        }
+        // secondary smaller burst
+        setTimeout(function() {
+          var c2 = colors[Math.floor(Math.random() * colors.length)];
+          for (var i = 0; i < 30; i++) {
+            particles.push(new Particle(x + (Math.random()-0.5)*30, y + (Math.random()-0.5)*30, c2));
+          }
+        }, 150);
+      }
+
+      function launchFireworks() {
+        if (!fwRunning) {
+          fwRunning = true;
+          animateFW();
+        }
+        var count = 3 + Math.floor(Math.random() * 3);
+        for (var i = 0; i < count; i++) {
+          setTimeout(function() { rockets.push(new Rocket()); }, i * 200);
+        }
+      }
+
+      function animateFW() {
+        fwCtx.clearRect(0, 0, fwW, fwH);
+        for (var i = rockets.length - 1; i >= 0; i--) {
+          rockets[i].update();
+          rockets[i].draw();
+          if (rockets[i].exploded) rockets.splice(i, 1);
+        }
+        for (var i = particles.length - 1; i >= 0; i--) {
+          particles[i].update();
+          particles[i].draw();
+          if (particles[i].alpha <= 0) particles.splice(i, 1);
+        }
+        if (particles.length > 0 || rockets.length > 0) {
+          requestAnimationFrame(animateFW);
+        } else {
+          fwRunning = false;
+        }
+      }
+
+      // Fire on page load
+      setTimeout(function() { launchFireworks(); }, 300);
+      setTimeout(function() { launchFireworks(); }, 1200);
+      setTimeout(function() { launchFireworks(); }, 2500);
+      setTimeout(function() { launchFireworks(); }, 4000);
+
+      window.launchFireworks = launchFireworks;
+    })();
 
     // ==================== CONFETTI ====================
 
@@ -1779,6 +1977,29 @@
 
     setInterval(rotateQuote, 4000);
 
+    // ==================== LYRICS CAROUSEL ====================
+    (function() {
+      var lyrics = [
+        '"Happy birthday beautiful, you know you light up every room..."',
+        '"You\'re the one that I adore, every day I love you more..."',
+        '"I hope all your dreams come true, \'cause you deserve them too..."',
+        '"You\'re beautiful, you\'re wonderful, you\'re everything to me..."',
+        '"Happy birthday, here\'s to you, and all the love that\'s breaking through..."'
+      ];
+      var idx = 0;
+      var el = document.getElementById('lyricsDisplay');
+      if (el) {
+        setInterval(function() {
+          idx = (idx + 1) % lyrics.length;
+          el.style.opacity = '0';
+          setTimeout(function() {
+            el.textContent = lyrics[idx];
+            el.style.opacity = '1';
+          }, 400);
+        }, 5000);
+      }
+    })();
+
     // ==================== GALLERY ====================
 
     function revealGalleryItem(el) {
@@ -1839,87 +2060,41 @@
 
     renderTimeline();
 
-    // ==================== MUSIC (YouTube) ====================
+    // ==================== MUSIC ====================
     (function() {
-      var player = null;
       var playing = false;
       var started = false;
       var icon = document.getElementById('musicIcon');
       var label = document.getElementById('musicLabel');
       var playerBtn = document.getElementById('musicPlayer');
+      var wrapper = document.getElementById('ytPlayerWrapper');
 
       function startMusic() {
         if (started) return;
         started = true;
-        if (player && typeof player.playVideo === 'function') {
-          player.playVideo();
-          playing = true;
-          if (icon) icon.classList.remove('paused');
-          if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
-          setTimeout(function() {
-            try { player.unMute(); } catch(ex) {}
-          }, 100);
-        } else {
-          tryAudioFallback();
+        if (wrapper) {
+          wrapper.innerHTML = '<iframe width="1" height="1" src="https://www.youtube.com/embed/5eCE7-WERrs?autoplay=1&loop=1&playlist=5eCE7-WERrs&controls=0" allow="autoplay" frameborder="0"></iframe>';
         }
+        playing = true;
+        if (icon) icon.classList.remove('paused');
+        if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
       }
 
-      // Start on any click anywhere on the page
       document.addEventListener('click', startMusic, { once: true });
 
-      function onYouTubeReady() {
-        player = new YT.Player('ytPlayerWrapper', {
-          width: 1, height: 1,
-          videoId: '5eCE7-WERrs',
-          playerVars: {
-            autoplay: 0,
-            mute: 0,
-            loop: 1,
-            playlist: '5eCE7-WERrs',
-            controls: 0,
-            enablejsapi: 1
-          },
-          events: {
-            onReady: function(e) {
-              if (started) { startMusic(); }
-            },
-            onError: function() {
-              tryAudioFallback();
-            }
-          }
-        });
-      }
-
-      function tryAudioFallback() {
-        var a = document.createElement('audio');
-        a.loop = true;
-        a.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3';
-        a.play().catch(function(){});
-      }
-
-      if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
-        var tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        var first = document.getElementsByTagName('script')[0];
-        first.parentNode.insertBefore(tag, first);
-        window.onYouTubeIframeAPIReady = onYouTubeReady;
-      } else {
-        onYouTubeReady();
-      }
-
-      // Music button still works for toggle
       if (playerBtn) {
         playerBtn.onclick = function(e) {
           e.stopPropagation();
           if (!started) { startMusic(); return; }
-          if (player && typeof player.playVideo === 'function') {
+          var iframe = wrapper && wrapper.querySelector('iframe');
+          if (iframe) {
             if (playing) {
-              player.pauseVideo();
+              iframe.src = '';
               if (icon) icon.classList.add('paused');
               if (label) label.textContent = '\u23F8 Paused';
               playing = false;
             } else {
-              player.playVideo();
+              iframe.src = 'https://www.youtube.com/embed/5eCE7-WERrs?autoplay=1&loop=1&playlist=5eCE7-WERrs&controls=0';
               if (icon) icon.classList.remove('paused');
               if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
               playing = true;
