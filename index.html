@@ -1346,11 +1346,7 @@
             launchMeterConfetti();
           } else {
             meterFill.style.width = fillWidth + '%';
-            var hearts = '';
-            for (var h = 0; h < Math.floor(fillWidth / 10); h++) {
-              hearts += '\u2764\uFE0F';
-            }
-            meterLabel.textContent = '\u2764\uFE0F Measuring our love... ' + fillWidth + '% ' + hearts;
+            meterLabel.textContent = '\u2764\uFE0F Measuring our love... ' + fillWidth + '%';
           }
         }, 20);
       };
@@ -1442,11 +1438,11 @@
 
     // ==================== WORD REVEAL ====================
 
-    document.addEventListener('DOMContentLoaded', () => {
+    (function() {
 
-      const words = document.querySelectorAll('.message span');
+      var words = document.querySelectorAll('.message span');
 
-      words.forEach((word, i) => {
+      words.forEach(function(word, i) {
 
         word.style.animationDelay = (i * 0.12) + 's';
 
@@ -1454,7 +1450,7 @@
 
       });
 
-    });
+    })();
 
     // ==================== SURPRISES ====================
 
