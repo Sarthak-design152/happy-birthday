@@ -114,6 +114,9 @@
 
     h1 {
 
+      position: relative;
+      display: inline-block;
+
       font-family: 'Dancing Script', cursive;
 
       font-size: 3.2rem;
@@ -825,6 +828,42 @@
       to { transform: scale(4); opacity: 0; }
     }
 
+  
+    /* Shimmer title effect */
+    h1::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 3s infinite;
+      pointer-events: none;
+    }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
+
+  
+    /* Custom cursor area */
+    .main-card, .surprise-btn, .gallery-item, .timeline-item, .modal-content {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ctext y='18' font-size='18'%3E❤️%3C/text%3E%3C/svg%3E") 12 12, auto;
+    }
+
+  
+    .section-title {
+      color: #ad1457;
+      margin: 24px 0 12px;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      animation: titleGlow 2s ease-in-out infinite;
+    }
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(173,20,87,0.2); }
+      50% { text-shadow: 0 0 25px rgba(173,20,87,0.5), 0 0 50px rgba(233,30,99,0.2); }
+    }
+
   </style>
 
 </head>
@@ -960,7 +999,7 @@
 
     <!-- Photo gallery -->
 
-    <h3 style="color:#ad1457; margin: 24px 0 12px;">&#x1F5BC; Our Little Gallery</h3>
+    <h3 class="section-title">&#x1F5BC; Our Little Gallery</h3>
 
     <div class="gallery">
 
@@ -980,7 +1019,7 @@
 
     <!-- Photo Strip -->
 
-    <h3 style="color:#ad1457; margin: 24px 0 12px; font-family: 'Dancing Script', cursive; font-size: 1.8rem;">&#x1F49B; Precious Moments &#x1F49B;</h3>
+    <h3 class="section-title">&#x1F49B; Precious Moments &#x1F49B;</h3>
 
     <div style="display:flex;gap:12px;overflow-x:auto;padding:10px 0;margin:12px 0;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;">
 
@@ -1015,7 +1054,7 @@
 
     <!-- Timeline of memories -->
 
-    <h3 style="color:#ad1457; margin: 24px 0 12px; font-family: 'Dancing Script', cursive; font-size: 1.8rem;">&#x1F4C6; Our Beautiful Journey</h3>
+    <h3 class="section-title">&#x1F4C6; Our Beautiful Journey</h3>
 
     <div class="timeline" id="timeline"></div>
 
@@ -1082,7 +1121,7 @@
 
     function createSparkles() {
       const container = document.getElementById('sparkleContainer');
-      for (let i = 0; i < 35; i++) {
+      for (let i = 0; i < 50; i++) {
         const star = document.createElement('div');
         star.className = 'sparkle';
         star.style.left = Math.random() * 100 + '%';
@@ -1564,6 +1603,30 @@
     createBalloons();
 
     // ==================== AUTO CONFETTI ON LOAD ====================
+
+
+    // ==================== CLICK HEART BURST ====================
+    document.addEventListener('click', function(e) {
+      const burst = ['❤️', '💖', '💗', '💕', '💓', '🩷', '💘', '✨', '🌟', '⭐'];
+      for (let i = 0; i < 12; i++) {
+        const el = document.createElement('div');
+        el.textContent = burst[Math.floor(Math.random() * burst.length)];
+        el.style.position = 'fixed';
+        el.style.pointerEvents = 'none';
+        el.style.zIndex = '9999';
+        el.style.fontSize = (14 + Math.random() * 20) + 'px';
+        el.style.left = (e.clientX + (Math.random() - 0.5) * 80) + 'px';
+        el.style.top = (e.clientY + (Math.random() - 0.5) * 80) + 'px';
+        el.style.opacity = '1';
+        el.style.transition = 'all 1s ease';
+        document.body.appendChild(el);
+        requestAnimationFrame(() => {
+          el.style.transform = 'translateY(-80px) scale(0.3)';
+          el.style.opacity = '0';
+        });
+        setTimeout(() => el.remove(), 1000);
+      }
+    });
 
     window.addEventListener('load', () => {
 
