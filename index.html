@@ -897,6 +897,112 @@
       .corner-deco { display: none; }
     }
 
+  
+    /* Cake cutting section */
+    .cake-cut-section {
+      margin: 20px 0;
+      padding: 24px;
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+      border-radius: 28px;
+      box-shadow: 0 4px 25px rgba(255,152,0,0.15);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cake-plate {
+      position: relative;
+      display: inline-block;
+      font-size: 5rem;
+      line-height: 1;
+      user-select: none;
+      min-width: 120px;
+      min-height: 100px;
+    }
+    .cake-plate .knife {
+      position: absolute;
+      bottom: 10px;
+      right: -10px;
+      font-size: 2.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 2;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+    }
+    .cake-plate .knife:hover {
+      transform: scale(1.2) rotate(-10deg);
+    }
+    .cake-plate .knife.cutting {
+      animation: cutCakeAnim 0.8s ease forwards;
+    }
+    @keyframes cutCakeAnim {
+      0% { right: -10px; transform: rotate(0deg) scale(1); }
+      30% { right: 35px; transform: rotate(-20deg) scale(1.15); }
+      60% { right: 15px; transform: rotate(5deg) scale(1.05); }
+      80% { right: 8px; transform: rotate(-2deg) scale(1); }
+      100% { right: 40px; transform: rotate(0deg) scale(1); opacity: 0.6; bottom: 30px; }
+    }
+    .cake-main {
+      transition: all 0.3s;
+      display: inline-block;
+      font-size: 5rem;
+    }
+    .cake-main.cut {
+      animation: cakeShake 0.5s ease;
+    }
+    @keyframes cakeShake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-3deg); }
+      75% { transform: rotate(3deg); }
+    }
+    .cut-slice {
+      position: absolute;
+      font-size: 2.5rem;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .cut-slice.flying {
+      animation: sliceFlyAway 1.2s ease forwards;
+    }
+    @keyframes sliceFlyAway {
+      0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+      30% { opacity: 1; transform: translate(30px, -20px) scale(1.2) rotate(-10deg); }
+      100% { opacity: 0; transform: translate(100px, -120px) scale(0.5) rotate(-30deg); }
+    }
+    .cut-message {
+      margin-top: 12px;
+      font-size: 1rem;
+      color: #bf360c;
+      font-weight: 600;
+      min-height: 24px;
+      transition: all 0.5s;
+    }
+    .cut-message.celebrating {
+      font-size: 1.1rem;
+      color: #e91e63;
+      animation: celebrateMsg 0.5s ease;
+    }
+    @keyframes celebrateMsg {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .cut-sparkles {
+      position: absolute;
+      top: 50%; left: 50%;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .cut-sparkle {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0;
+      animation: sparkleBurst 1s ease forwards;
+    }
+    @keyframes sparkleBurst {
+      0% { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.3); }
+    }
+
   </style>
 
 </head>
@@ -1012,6 +1118,19 @@
 
       <div id="wishMessage" style="margin-top:12px; font-weight:600; color:#e91e63; min-height:24px;"></div>
 
+    </div>
+
+    
+  <!-- Cake Cutting Section -->
+    <div class="cake-cut-section">
+      <div style="margin-bottom: 8px; font-family: 'Dancing Script', cursive; font-size: 1.3rem; color: #e65100;">&#x1F382; Time to cut the cake! &#x1F382;</div>
+      <div class="cake-plate" id="cakePlate">
+        <span class="cake-main" id="cakeMain">&#x1F370;</span>
+        <span class="cut-slice" id="cutSlice">&#x1F370;</span>
+        <span class="knife" id="cakeKnife" onclick="cutCake()">&#x1F52A;</span>
+      </div>
+      <div class="cut-message" id="cutMessage">&#x1F52A; Click the knife to cut the cake! &#x1F52A;</div>
+      <div class="cut-sparkles" id="cutSparkles"></div>
     </div>
 
     <!-- Quotes carousel -->
@@ -1733,6 +1852,70 @@
       });
       setTimeout(() => trail.remove(), 800);
     });
+
+
+
+    // ==================== CUT THE CAKE ====================
+    let cakeCut = false;
+    function cutCake() {
+      if (cakeCut) return;
+      cakeCut = true;
+
+      const knife = document.getElementById('cakeKnife');
+      const cakeMain = document.getElementById('cakeMain');
+      const slice = document.getElementById('cutSlice');
+      const msg = document.getElementById('cutMessage');
+
+      knife.classList.add('cutting');
+
+      for (let i = 0; i < 12; i++) {
+        const s = document.createElement('div');
+        s.className = 'cut-sparkle';
+        s.textContent = ['\u2728', '\u2B50', '\u2B50', '\uD83D\uDCAB', '\uD83C\uDF89', '\uD83C\uDF8A', '\uD83D\uDC96', '\u2764\uFE0F'][Math.floor(Math.random() * 8)];
+        const angle = (i / 12) * 360;
+        const dist = 60 + Math.random() * 60;
+        s.style.setProperty('--tx', Math.cos(angle * Math.PI / 180) * dist + 'px');
+        s.style.setProperty('--ty', Math.sin(angle * Math.PI / 180) * dist + 'px');
+        s.style.animationDelay = (Math.random() * 0.3) + 's';
+        document.getElementById('cutSparkles').appendChild(s);
+        setTimeout(() => s.remove(), 1500);
+      }
+
+      setTimeout(() => {
+        cakeMain.classList.add('cut');
+        slice.style.left = '60%';
+        slice.style.top = '20%';
+        slice.classList.add('flying');
+      }, 700);
+
+      setTimeout(() => {
+        msg.innerHTML = '&#x1F389; Cake cut! Happy Birthday, Diksha! &#x1F389;';
+        msg.classList.add('celebrating');
+        if (typeof launchConfetti === 'function') launchConfetti();
+        for (let i = 0; i < 8; i++) {
+          const s = document.createElement('div');
+          s.className = 'cut-sparkle';
+          s.textContent = ['\uD83C\uDF89', '\uD83C\uDF8A', '\uD83D\uDC96', '\u2728'][Math.floor(Math.random() * 4)];
+          const angle = (i / 8) * 360 + 20;
+          const dist = 40 + Math.random() * 40;
+          s.style.setProperty('--tx', Math.cos(angle * Math.PI / 180) * dist + 'px');
+          s.style.setProperty('--ty', Math.sin(angle * Math.PI / 180) * dist + 'px');
+          document.getElementById('cutSparkles').appendChild(s);
+          setTimeout(() => s.remove(), 1500);
+        }
+      }, 1200);
+
+      setTimeout(() => {
+        knife.classList.remove('cutting');
+        cakeMain.classList.remove('cut');
+        slice.classList.remove('flying');
+        slice.style.left = '';
+        slice.style.top = '';
+        msg.innerHTML = '&#x1F52A; Click the knife to cut the cake! &#x1F52A;';
+        msg.classList.remove('celebrating');
+        cakeCut = false;
+      }, 7000);
+    }
 
     window.addEventListener('load', () => {
 
