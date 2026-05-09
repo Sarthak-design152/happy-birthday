@@ -1841,16 +1841,36 @@
     (function() {
       var player = null;
       var playing = false;
+      var started = false;
       var icon = document.getElementById('musicIcon');
       var label = document.getElementById('musicLabel');
       var playerBtn = document.getElementById('musicPlayer');
+
+      function startMusic() {
+        if (started) return;
+        started = true;
+        if (player && typeof player.playVideo === 'function') {
+          player.playVideo();
+          playing = true;
+          if (icon) icon.classList.remove('paused');
+          if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
+          setTimeout(function() {
+            try { player.unMute(); } catch(ex) {}
+          }, 100);
+        } else {
+          tryAudioFallback();
+        }
+      }
+
+      // Start on any click anywhere on the page
+      document.addEventListener('click', startMusic, { once: true });
 
       function onYouTubeReady() {
         player = new YT.Player('ytPlayerWrapper', {
           width: 1, height: 1,
           videoId: '5eCE7-WERrs',
           playerVars: {
-            autoplay: 1,
+            autoplay: 0,
             mute: 0,
             loop: 1,
             playlist: '5eCE7-WERrs',
@@ -1859,13 +1879,7 @@
           },
           events: {
             onReady: function(e) {
-              e.target.playVideo();
-              playing = true;
-              if (icon) icon.classList.remove('paused');
-              if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
-              setTimeout(function() {
-                try { e.target.unMute(); } catch(ex) {}
-              }, 100);
+              if (started) { startMusic(); }
             },
             onError: function() {
               tryAudioFallback();
@@ -1891,8 +1905,11 @@
         onYouTubeReady();
       }
 
+      // Music button still works for toggle
       if (playerBtn) {
-        playerBtn.onclick = function() {
+        playerBtn.onclick = function(e) {
+          e.stopPropagation();
+          if (!started) { startMusic(); return; }
           if (player && typeof player.playVideo === 'function') {
             if (playing) {
               player.pauseVideo();
@@ -1918,7 +1935,7 @@
   <!-- Music Player Button -->
   <div class="music-player" id="musicPlayer">
     <span class="music-icon" id="musicIcon">&#x1F3B5;</span>
-    <span class="music-label" id="musicLabel">&#x1F49B; Happy Birthday &#x266A;</span>
+    <span class="music-label" id="musicLabel">&#x1F49B; Tap anywhere to play &#x266A;</span>
   </div>
 
 </body>
