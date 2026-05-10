@@ -918,6 +918,33 @@
     }
     .side-deco.left { left: 10px; }
     .side-deco.right { right: 10px; }
+
+    /* Floating love notes */
+    .float-notes-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .float-note {
+      position: absolute;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1rem;
+      color: #e91e63;
+      opacity: 0;
+      white-space: nowrap;
+      animation: floatNote linear forwards;
+      pointer-events: none;
+      user-select: none;
+      text-shadow: 0 1px 4px rgba(255,255,255,0.8);
+    }
+    @keyframes floatNote {
+      0% { transform: translateY(110vh) rotate(-5deg) scale(0.6); opacity: 0; }
+      10% { opacity: 0.8; }
+      80% { opacity: 0.8; }
+      100% { transform: translateY(-20vh) rotate(5deg) scale(1.1); opacity: 0; }
+    }
     @media (max-width: 900px) {
       .side-deco { display: none; }
     }
@@ -1065,6 +1092,8 @@
   <div class="petals-container" id="petalsContainer"></div>
 
   <div class="sparkle-container" id="sparkleContainer"></div>
+
+  <div class="float-notes-container" id="floatNotesContainer"></div>
 
   <!-- Confetti canvas -->
 
@@ -1757,6 +1786,41 @@
       setTimeout(function() { launchFireworks(); }, 4000);
 
       window.launchFireworks = launchFireworks;
+    })();
+
+    // ==================== FLOATING LOVE NOTES ====================
+    (function() {
+      var container = document.getElementById('floatNotesContainer');
+      if (!container) return;
+      var notes = [
+        'You are my sunshine &#x2600;&#xFE0F;',
+        'I love you, Diksha! &#x1F49B;',
+        'Happy Birthday, My Love! &#x1F490;',
+        'You mean the world to me &#x1F30D;',
+        'My heart is yours &#x1F49C;',
+        'Every day with you is a dream &#x2728;',
+        'You make my life beautiful &#x1F339;',
+        'Thinking of you &#x1F31F;',
+        'You are my everything &#x1F49A;',
+        'Stay amazing, my love &#x1F496;',
+        'I miss you already &#x1F49B;',
+        'You are the best &#x1F929;'
+      ];
+
+      function spawnNote() {
+        var el = document.createElement('div');
+        el.className = 'float-note';
+        el.innerHTML = notes[Math.floor(Math.random() * notes.length)];
+        el.style.left = (5 + Math.random() * 75) + '%';
+        el.style.fontSize = (0.8 + Math.random() * 0.6) + 'rem';
+        el.style.animationDuration = (8 + Math.random() * 6) + 's';
+        el.style.animationDelay = '0s';
+        container.appendChild(el);
+        setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 15000);
+      }
+
+      setInterval(spawnNote, 3000);
+      for (var i = 0; i < 3; i++) { setTimeout(spawnNote, i * 1000); }
     })();
 
     // ==================== LOVE CONSTELLATION ====================
