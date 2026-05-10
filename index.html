@@ -1035,6 +1035,20 @@
   100% { transform: translateY(-400px) scale(0.3) rotate(-20deg); opacity: 0; }
 }
 @keyframes blink { 50% { opacity: 0; } }
+@keyframes wishPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(10deg); }
+}
+.wish-sparkle {
+  position: fixed;
+  pointer-events: none;
+  font-size: 1.5rem;
+  animation: sparkleFly 1.5s ease-out forwards;
+}
+@keyframes sparkleFly {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-200px) scale(0); opacity: 0; }
+}
 
 /* Cute side decorations */
     .side-deco {
@@ -2520,6 +2534,43 @@
       }
     })();
 
+    var wishCooldown = false;
+    function makeWish() {
+      if (wishCooldown) return;
+      wishCooldown = true;
+      var star = document.getElementById('wishingStar');
+      var msg = document.getElementById('wishStarMsg');
+      star.style.transform = 'scale(1.5) rotate(20deg)';
+      setTimeout(function() { star.style.transform = ''; }, 500);
+      var symbols = ['\u2728', '\u{1F31F}', '\u2B50', '\u{1F4AB}', '\u2764\uFE0F', '\u{1F49B}'];
+      for (var i = 0; i < 12; i++) {
+        (function(delay) {
+          setTimeout(function() {
+            var el = document.createElement('div');
+            el.className = 'wish-sparkle';
+            el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            el.style.left = (20 + Math.random() * 60) + '%';
+            el.style.bottom = '40%';
+            el.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+            el.style.animationDuration = (1 + Math.random()) + 's';
+            document.body.appendChild(el);
+            setTimeout(function() { el.remove(); }, 3000);
+          }, delay);
+        })(i * 80);
+      }
+      msgs = ['\u2728 Wish granted! \u2728', '\u{1F31F} Your wish is heard! \u{1F31F}', '\u{1F49B} May it come true! \u{1F49B}', '\u2728 \u2764\uFE0F Granted with love \u2764\uFE0F \u2728'];
+      msg.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+      msg.style.color = '#c2185b';
+      msg.style.fontSize = '1.2rem';
+      setTimeout(function() {
+        msg.textContent = '\u2728 Make a wish... \u2728';
+        msg.style.color = '#ad1457';
+        msg.style.fontSize = '1rem';
+        wishCooldown = false;
+      }, 3000);
+      launchConfetti();
+    }
+
     var finalDone = false;
     function finalSurprise() {
       if (finalDone) return;
@@ -2641,6 +2692,12 @@
       <div class="final-hearts" id="finalHeartsContainer"></div>
     </div>
     <div class="final-close" onclick="closeFinalSurprise()">&times;</div>
+  </div>
+
+  <!-- Wishing Star -->
+  <div style="text-align:center;margin:16px 0 8px;cursor:pointer;" onclick="makeWish()">
+    <span id="wishingStar" style="font-size:2rem;display:inline-block;animation:wishPulse 2s ease-in-out infinite;transition:transform 0.3s;">&#x2B50;</span>
+    <div id="wishStarMsg" style="font-family:'Dancing Script',cursive;font-size:1rem;color:#ad1457;min-height:28px;">&#x2728; Make a wish... &#x2728;</div>
   </div>
 
   <!-- Final Surprise Button -->
