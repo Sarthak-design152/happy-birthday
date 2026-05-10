@@ -1632,13 +1632,24 @@
     ];
     let reasonIndex = 0;
 
+    var doNotClickCount = 0;
     function doNotClick() {
-      const btn = document.querySelector('.surprise-btn[onclick*="doNotClick"]');
+      doNotClickCount++;
+      if (doNotClickCount < 5) {
+        var teasers = ['Nope, not yet 😏', 'Keep going... 😉', 'Almost there... 🔥', 'One more time! 😈'];
+        var box = document.getElementById('revealBox');
+        box.innerHTML = '<strong style="font-size:1.3rem;color:#e91e63;">' + teasers[doNotClickCount - 1] + '</strong>';
+        box.classList.add('show');
+        box.style.display = 'block';
+        return;
+      }
+      doNotClickCount = 0;
+      var btn = document.querySelector('.surprise-btn[onclick*="doNotClick"]');
       if (btn && !btn.classList.contains('shake-btn')) {
         btn.classList.add('shake-btn');
         setTimeout(function() {
           btn.classList.remove('shake-btn');
-          const box = document.getElementById('revealBox');
+          var box = document.getElementById('revealBox');
           box.innerHTML = '&#x1F440; &#x1F60F; &#x1F440;<br><br><strong style="font-size:1.3rem;color:#e91e63;">I knew you couldn\'t resist! &#x1F609;<br>Now you owe me a cake &#x1F370;</strong><br><br>&#x1F49B; Happy Birthday anyway, Diksha! &#x1F49B;';
           box.classList.add('show');
           box.style.display = 'block';
