@@ -805,7 +805,7 @@
       .quote-text { font-size: 1.2rem; }
 
       .final-letter { font-size: 1.15rem; }
-      .final-content { padding: 28px 20px; margin: 10px; }
+      .final-content { padding: 28px 20px; margin: 10px; max-height: 80vh; }
 
       .main-card div[style*="160px"] { min-width: 120px !important; height: 150px !important; }
       .main-card div[style*="160px"] img { width: 100%; height: 100%; object-fit: cover; }
@@ -831,7 +831,8 @@
       .modal-content h2 { font-size: 1.3rem; }
       .modal-content p { font-size: 0.95rem; }
       .final-letter { font-size: 1rem; }
-      .final-content { padding: 24px 16px; }
+      .final-content { padding: 24px 16px; max-height: 80vh; }
+      .final-overlay { padding: 10px; }
       .gallery-item { font-size: 1.8rem; }
       .main-card div[style*="160px"] { min-width: 90px !important; height: 110px !important; }
       .main-card div[style*="160px"] img { width: 100%; height: 100%; object-fit: cover; }
@@ -975,7 +976,7 @@
 .final-overlay.show { display: flex; }
 .final-content {
   max-width: 650px;
-  width: 100%;
+  width: 95%;
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
   border-radius: 28px;
@@ -985,7 +986,8 @@
   text-align: center;
   cursor: default;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  max-height: 85vh;
   animation: finalScaleIn 0.6s cubic-bezier(0.34,1.56,0.64,1);
 }
 .final-letter {
@@ -993,10 +995,12 @@
   font-size: 1.5rem;
   line-height: 1.9;
   color: #880e4f;
-  min-height: 200px;
+  min-height: 100px;
   position: relative;
   z-index: 2;
   white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .final-hearts {
   position: absolute;
