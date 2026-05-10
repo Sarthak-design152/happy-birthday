@@ -48,26 +48,11 @@ section h2 .icon { margin-right: 8px; }
 .profile-pic { width: 160px; height: 160px; border-radius: 50%; margin: 0 auto 24px; overflow: hidden; border: 4px solid rgba(255,215,0,0.4); box-shadow: 0 0 40px rgba(255,215,0,0.25), 0 0 80px rgba(255,215,0,0.1); animation: profileGlow 3s ease-in-out infinite; } @keyframes profileGlow { 0%,100% { box-shadow: 0 0 30px rgba(255,215,0,0.15); } 50% { box-shadow: 0 0 60px rgba(255,215,0,0.35); } } }
 .profile-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 14px;
-  margin: 16px 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; margin: 16px 0;
 }
-.gallery-card {
-  border-radius: 14px; overflow: hidden; cursor: pointer;
-  border: 2px solid rgba(255,255,255,0.12);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  position: relative; aspect-ratio: 1; background: rgba(255,255,255,0.04);
-}
-.gallery-card:hover {
-  transform: scale(1.04);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.35);
-  border-color: rgba(255,215,0,0.4);
-}
-.gallery-card img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform 0.4s ease;
-}
+.gallery-card { border-radius: 14px; overflow: hidden; cursor: pointer; border: 2px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; position: relative; aspect-ratio: 1; background: rgba(255,255,255,0.04); }
+.gallery-card:hover { transform: scale(1.04); box-shadow: 0 8px 28px rgba(0,0,0,0.35); border-color: rgba(255,215,0,0.4); }
+.gallery-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
 .gallery-card:hover img { transform: scale(1.12); }
 .photo-strip { display: flex; gap: 8px; overflow-x: auto; padding: 8px 0; }
 .photo-strip img { height: 100px; border-radius: 10px; }
@@ -164,7 +149,7 @@ section h2 .icon { margin-right: 8px; }
 .youre-card:active { transform: scale(0.95); }
 .youre-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); background: rgba(0,0,0,0.88); padding: 30px 40px; border-radius: 24px; border: 2px solid rgba(255,215,0,0.3); z-index: 99999; text-align: center; pointer-events: none; animation: puAnim 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
 @keyframes puAnim { 0% { transform: translate(-50%,-50%) scale(0); opacity: 0; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; } }
-.youre-popup .pe { font-size: 3rem; display: block; margin-bottom: 10px; }
+.youre-popup .pe { font-size: 3rem; }
 .youre-popup .pt { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffd700; }
 </style>
 </head>
@@ -476,32 +461,32 @@ function checkPassword() {
 
   // Interactive buttons
   var compliments = [
-    "You have the most beautiful smile Ive ever seen 💛",
-    "Your eyes sparkle brighter than any star ✨",
-    "You make the world a better place just by being in it 🌍",
-    "Your laugh is my favorite sound in the universe 🎵",
-    "You are stronger than you know, and more beautiful than you believe 💫",
-    "Every moment with you feels like a dream come true 🌙"
+    "You have the most beautiful smile I've ever seen!",
+    "Your eyes sparkle brighter than any star!",
+    "You make the world a better place just by being in it!",
+    "Your laugh is my favorite sound in the universe!",
+    "You are stronger than you know, and more beautiful than you believe!",
+    "Every moment with you feels like a dream come true!"
 ];
   var memories = [
-    "That time we laughed until we cried... I want a lifetime of those moments 🌸",
-    "Remember when we first met? My heart knew right then 💛",
-    "The way you look at me makes everything feel right with the world ✨",
-    "Every conversation with you is a memory I treasure 💫",
-    "That day when you made everything better with just a hug 🤗"
+    "That time we laughed until we cried... I want a lifetime of those moments!",
+    "Remember when we first met? My heart knew right then!",
+    "The way you look at me makes everything feel right with the world!",
+    "Every conversation with you is a memory I treasure!",
+    "That day when you made everything better with just a hug!"
 ];
   var hugs = [
-    "Sending you the biggest virtual hug! 🤗💛",
-    "Consider yourself hugged tightly! 🤗",
-    "Wrapping my arms around you with love 🤗💫",
-    "A warm hug just for you! 🤗🌸",
-    "Hugging you from miles away! 🤗✨"
+    "Sending you the biggest virtual hug!",
+    "Consider yourself hugged tightly!",
+    "Wrapping my arms around you with love!",
+    "A warm hug just for you!",
+    "Hugging you from miles away!"
 ];
   var wishes = [
-    "Happy Birthday, Diksha! May your day be filled with love, laughter, and everything beautiful! 🎂💛",
-    "Wishing you a year as amazing as you are! ✨🌟",
-    "May all your dreams come true, my love! 🌙💫",
-    "Heres to you — the most wonderful person I know! Cheers! 🥂💛"
+    "Happy Birthday, Diksha! May your day be filled with love, laughter, and everything beautiful!",
+    "Wishing you a year as amazing as you are!",
+    "May all your dreams come true, my love!",
+    "Here's to you - the most wonderful person I know! Cheers!"
 ];
   function showInteractive(type) {
     var el = document.getElementById('interactiveResult');
