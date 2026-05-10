@@ -782,16 +782,61 @@
 
       .main-card { padding: 28px 16px; border-radius: 32px; }
 
-      h1 { font-size: 2.2rem; }
+      h1 { font-size: 2rem; }
 
-      .surprises-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .surprises-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 
-      .gallery { grid-template-columns: repeat(2, 1fr); }
+      .gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 
-      .photo-frame { width: 150px; height: 150px; }
+      .photo-frame { width: 140px; height: 140px; }
 
-      .photo-frame span { font-size: 3.8rem; }
+      .photo-frame span { font-size: 3.6rem; }
 
+      .blow-hint { font-size: 0.8rem; }
+
+      .cake-section .cake { font-size: 3.5rem; }
+
+      .candle-flame { font-size: 1.6rem; top: -26px; }
+
+      .timeline-item { padding: 10px 12px; }
+
+      .main-card-bottom { font-size: 0.8rem; }
+
+      .quote-text { font-size: 1.2rem; }
+
+      .final-letter { font-size: 1.15rem; }
+      .final-content { padding: 28px 20px; margin: 10px; }
+
+      .main-card div[style*="160px"] { min-width: 120px !important; height: 150px !important; }
+      .main-card div[style*="160px"] img { width: 100%; height: 100%; object-fit: cover; }
+
+    }
+
+    @media (max-width: 400px) {
+      h1 { font-size: 1.7rem; }
+      .main-card { padding: 20px 12px; border-radius: 24px; }
+      .surprises-grid { grid-template-columns: 1fr; gap: 8px; }
+      .surprise-btn { font-size: 0.85rem; padding: 12px 16px; min-height: 52px; }
+      .gallery { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .photo-frame { width: 110px; height: 110px; border-width: 4px; }
+      .photo-frame span { font-size: 2.8rem; }
+      .photo-frame::after { font-size: 1.2rem; top: -4px; right: -4px; }
+      .constellation-box canvas { height: 180px; }
+      .const-label { font-size: 0.8rem; }
+      .love-meter { padding: 16px; }
+      .main-card-bottom { font-size: 0.75rem; letter-spacing: 1px; }
+      .timeline-text { font-size: 0.9rem; }
+      .timeline-item { padding: 8px 10px; }
+      .modal-content { padding: 28px 16px; }
+      .modal-content h2 { font-size: 1.3rem; }
+      .modal-content p { font-size: 0.95rem; }
+      .final-letter { font-size: 1rem; }
+      .final-content { padding: 24px 16px; }
+      .gallery-item { font-size: 1.8rem; }
+      .main-card div[style*="160px"] { min-width: 90px !important; height: 110px !important; }
+      .main-card div[style*="160px"] img { width: 100%; height: 100%; object-fit: cover; }
+      .candle-flame { font-size: 1.4rem; top: -22px; }
+      .qwote-author { font-size: 0.8rem; }
     }
 
     /* Sparkle stars */
