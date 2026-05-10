@@ -148,81 +148,32 @@ section h2 .icon { margin-right: 8px; }
 @keyframes snScale { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 <style>
-.interactive-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin: 10px 0;
-}
+.interactive-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 10px 0; }
 .int-btn {
-  padding: 18px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
-  overflow: hidden;
+  padding: 18px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06); color: #fff;
+  font-family: 'Dancing Script', cursive; font-size: 1.1rem;
+  cursor: pointer; transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  user-select: none; -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden;
 }
-.int-btn:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,215,0,0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-}
+.int-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,215,0,0.3); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 .int-btn:active { transform: scale(0.95); transition-duration: 0.1s; }
 .int-btn .int-icon { font-size: 1.8rem; }
 .int-btn .int-label { font-size: 1rem; }
-.reason-card {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  user-select: none;
-  position: relative;
-  overflow: hidden;
-}
+.reason-card { cursor: pointer; transition: all 0.3s ease; user-select: none; position: relative; overflow: hidden; }
 .reason-card:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,215,0,0.2); transform: translateX(4px); }
 .reason-card:active { transform: scale(0.97); }
-.reason-card .hb {
-  position: absolute; pointer-events: none;
-  animation: hbAnim 0.8s ease-out forwards;
-  font-size: 1.2rem; left: 50%; top: 50%;
-}
-@keyframes hbAnim {
-  0% { transform: translate(0,0) scale(0.5); opacity: 1; }
-  100% { transform: translate(var(--x),var(--y)) scale(1.5); opacity: 0; }
-}
-.youre-card {
-  cursor: pointer; transition: all 0.3s ease; user-select: none;
-}
+.reason-card .hb { position: absolute; pointer-events: none; animation: hbAnim 0.8s ease-out forwards; font-size: 1.2rem; left: 50%; top: 50%; }
+@keyframes hbAnim { 0% { transform: translate(0,0) scale(0.5); opacity: 1; } 100% { transform: translate(var(--x),var(--y)) scale(1.5); opacity: 0; } }
+.youre-card { cursor: pointer; transition: all 0.3s ease; user-select: none; }
 .youre-card:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,215,0,0.2); transform: scale(1.05); }
 .youre-card:active { transform: scale(0.95); }
-.youre-popup {
-  position: fixed; top: 50%; left: 50%;
-  transform: translate(-50%,-50%) scale(0);
-  background: rgba(0,0,0,0.88);
-  padding: 30px 40px; border-radius: 24px;
-  border: 2px solid rgba(255,215,0,0.3);
-  z-index: 99999; text-align: center; pointer-events: none;
-  animation: puAnim 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-@keyframes puAnim {
-  0% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
-  100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
-}
+.youre-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); background: rgba(0,0,0,0.88); padding: 30px 40px; border-radius: 24px; border: 2px solid rgba(255,215,0,0.3); z-index: 99999; text-align: center; pointer-events: none; animation: puAnim 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
+@keyframes puAnim { 0% { transform: translate(-50%,-50%) scale(0); opacity: 0; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; } }
 .youre-popup .pe { font-size: 3rem; display: block; margin-bottom: 10px; }
 .youre-popup .pt { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffd700; }
-@keyframes clickRipple {
-  to { transform: scale(4); opacity: 0; }
-}
+@keyframes clickRipple { to { transform: scale(4); opacity: 0; } }
 </style>
 </head>
 <body>
@@ -418,24 +369,24 @@ function checkPassword() {
 
     <h3 style="font-family:'Dancing Script',cursive;font-size:1.3rem;color:#ffd700;margin:20px 0 12px;text-align:center;">&#x1F49B; Precious Moments</h3>
     <div class="gallery-grid">
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg" alt="Us">
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg" alt="Us">
+      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg" alt="Us"></div>
+      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg" alt="Us"></div>
       <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/1_gallery.jpg" alt="Us"></div>
     </div>
 
     <h3 style="font-family:'Dancing Script',cursive;font-size:1.3rem;color:#ffd700;margin:24px 0 12px;text-align:center;">&#x2728; Together Forever</h3>
     <div class="gallery-grid">
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg" alt="Us">
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg" alt="Us">
+      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg" alt="Us"></div>
+      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg" alt="Us"></div>
       <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo6.webp" alt="Us"></div>
     </div>
 
     <h3 style="font-family:'Dancing Script',cursive;font-size:1.3rem;color:#ffd700;margin:24px 0 12px;text-align:center;">&#x1F338; Beautiful You</h3>
     <div class="gallery-grid">
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg" alt="Cherished Moments" >
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo67.jpg" alt="Beautiful Smile">
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo83.jpg" alt="Pure Joy">
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo85.jpg" alt="Endless Love">
+      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg" alt="Cherished Moments"></div>
+      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo67.jpg" alt="Beautiful Smile"></div>
+      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo83.jpg" alt="Pure Joy"></div>
+      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo85.jpg" alt="Endless Love"></div>
       <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo96.jpg" alt="Together Forever"></div>
     </div>
   </section>
@@ -494,26 +445,12 @@ function checkPassword() {
   <section id="interactive">
     <h2><span class="icon">&#x1F49B;</span>Interactive Buttons</h2>
     <div class="interactive-grid">
-      <button class="int-btn" onclick="showInteractive('compliment')">
-        <span class="int-icon">&#x1F31F;</span>
-        <span class="int-label">Compliment</span>
-      </button>
-      <button class="int-btn" onclick="showInteractive('memory')">
-        <span class="int-icon">&#x1F4AC;</span>
-        <span class="int-label">Sweet Memory</span>
-      </button>
-      <button class="int-btn" onclick="showInteractive('hug')">
-        <span class="int-icon">&#x1F917;</span>
-        <span class="int-label">Hug</span>
-      </button>
-      <button class="int-btn" onclick="showInteractive('wish')">
-        <span class="int-icon">&#x2728;</span>
-        <span class="int-label">Birthday Wish</span>
-      </button>
+      <button class="int-btn" onclick="showInteractive('compliment')"><span class="int-icon">&#x1F31F;</span><span class="int-label">Compliment</span></button>
+      <button class="int-btn" onclick="showInteractive('memory')"><span class="int-icon">&#x1F4AC;</span><span class="int-label">Sweet Memory</span></button>
+      <button class="int-btn" onclick="showInteractive('hug')"><span class="int-icon">&#x1F917;</span><span class="int-label">Hug</span></button>
+      <button class="int-btn" onclick="showInteractive('wish')"><span class="int-icon">&#x2728;</span><span class="int-label">Birthday Wish</span></button>
     </div>
-    <div id="interactiveResult" style="text-align:center;margin-top:16px;padding:20px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);min-height:60px;font-family:'Dancing Script',cursive;font-size:1.2rem;color:#ffd700;transition:all 0.4s;">
-      &#x1F49B; Tap a button above...
-    </div>
+    <div id="interactiveResult" style="text-align:center;margin-top:16px;padding:20px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);min-height:60px;font-family:'Dancing Script',cursive;font-size:1.2rem;color:#ffd700;transition:all 0.4s;">&#x1F49B; Tap a button above...</div>
   </section>
   
 
@@ -1566,24 +1503,23 @@ document.addEventListener('keydown', function(e) {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Reason cards click -> heart burst
+  // Reason cards -> hearts
   document.querySelectorAll('.reason-card').forEach(function(card) {
-    card.addEventListener('click', function(e) {
-      var hearts = ['&#x2764;&#xFE0F;','&#x1F49B;','&#x1F49D;','&#x1F493;','&#x1F498;'];
+    card.addEventListener('click', function() {
+      var h = ['&#x2764;&#xFE0F;','&#x1F49B;','&#x1F49D;','&#x1F493;','&#x1F498;'];
       for (var i = 0; i < 6; i++) {
-        var h = document.createElement('span');
-        h.className = 'hb';
-        h.innerHTML = hearts[Math.floor(Math.random()*hearts.length)];
+        var e = document.createElement('span');
+        e.className = 'hb'; e.innerHTML = h[Math.floor(Math.random()*h.length)];
         var a = Math.random()*Math.PI*2, d = 40+Math.random()*60;
-        h.style.setProperty('--x', Math.cos(a)*d+'px');
-        h.style.setProperty('--y', Math.sin(a)*d+'px');
-        h.style.animationDelay = (i*0.05)+'s';
-        card.appendChild(h);
-        setTimeout(function() { h.remove(); }, 1000);
+        e.style.setProperty('--x', Math.cos(a)*d+'px');
+        e.style.setProperty('--y', Math.sin(a)*d+'px');
+        e.style.animationDelay = (i*0.05)+'s';
+        card.appendChild(e);
+        setTimeout(function(){e.remove();}, 1000);
       }
     });
   });
-  // You're my cards click -> popup
+  // You're my cards -> popup
   document.querySelectorAll('.youre-card').forEach(function(card) {
     card.addEventListener('click', function() {
       var em = this.querySelector('.youre-emoji')?.textContent||'&#x1F49B;';
@@ -1592,27 +1528,21 @@ document.addEventListener('DOMContentLoaded', function() {
       p.className = 'youre-popup';
       p.innerHTML = '<span class="pe">'+em+'</span><div class="pt">'+lb+'</div>';
       document.body.appendChild(p);
-      setTimeout(function() {
-        p.style.transform = 'translate(-50%,-50%) scale(0.8)';
-        p.style.opacity = '0';
-        setTimeout(function() { p.remove(); }, 400);
-      }, 1800);
+      setTimeout(function(){p.style.transform='translate(-50%,-50%) scale(0.8)';p.style.opacity='0';setTimeout(function(){p.remove();},400);},1800);
     });
   });
-  // Ripple on all buttons/clickables
-  document.querySelectorAll('.int-btn, .mischief-btn, .supernova-btn, .love-meter, .reason-card, .youre-card').forEach(function(el) {
+  // Ripple effect on buttons
+  document.querySelectorAll('.int-btn, .mischief-btn, .supernova-btn, .love-meter').forEach(function(el) {
     el.addEventListener('click', function(e) {
-      if (el.classList.contains('love-note')) return;
       var r = document.createElement('span');
       r.style.cssText = 'position:absolute;border-radius:50%;background:rgba(255,255,255,0.2);transform:scale(0);animation:clickRipple 0.6s ease-out forwards;pointer-events:none;';
       var rect = el.getBoundingClientRect();
-      var size = Math.max(rect.width, rect.height);
-      r.style.width = r.style.height = size+'px';
-      r.style.left = (e.clientX - rect.left - size/2)+'px';
-      r.style.top = (e.clientY - rect.top - size/2)+'px';
-      el.style.position = el.style.position || 'relative';
-      el.appendChild(r);
-      setTimeout(function() { r.remove(); }, 600);
+      var s = Math.max(rect.width, rect.height);
+      r.style.width = r.style.height = s+'px';
+      r.style.left = (e.clientX - rect.left - s/2)+'px';
+      r.style.top = (e.clientY - rect.top - s/2)+'px';
+      el.style.position = 'relative'; el.appendChild(r);
+      setTimeout(function(){r.remove();},600);
     });
   });
 });
