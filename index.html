@@ -70,6 +70,11 @@
       width: 100%; height: 100%;
       z-index: 0; pointer-events: none;
     }
+    #heartRainCanvas {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
 
     /* ============ HERO ============ */
     .hero {
@@ -258,6 +263,42 @@
     .reason-card:hover { background: rgba(255,215,0,0.08); border-color: rgba(255,215,0,0.2); transform: translateY(-2px); }
     .reason-card .num { color: #ffd700; font-weight: 700; display: block; margin-bottom: 4px; }
 
+    /* ============ YOU'RE MY... ============ */
+    .youre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .youre-card {
+      padding: 20px 12px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 20px;
+      border: 1px solid rgba(255,215,0,0.1);
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .youre-card::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle at center, rgba(255,105,180,0.1), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .youre-card:hover { transform: translateY(-6px) scale(1.03); border-color: rgba(255,215,0,0.3); box-shadow: 0 12px 40px rgba(255,105,180,0.15); }
+    .youre-card:hover::before { opacity: 1; }
+    .youre-card .youre-emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+    .youre-card .youre-label {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.1rem;
+      color: #e8d5f5;
+      position: relative;
+      z-index: 1;
+    }
+
     /* ============ CAKE ============ */
     .cake-section { text-align: center; padding: 20px 0; }
     .cake-emoji { font-size: 4.5rem; display: inline-block; position: relative; }
@@ -441,6 +482,7 @@
       section h2 { font-size: 1.8rem; }
       .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
       .reasons-grid { grid-template-columns: repeat(2, 1fr); }
+      .youre-grid { grid-template-columns: repeat(3, 1fr); }
       #loveLetter { font-size: 1.2rem; }
       .sn-text { font-size: 1.2rem; }
       .supernova-content { padding: 28px 20px; }
@@ -474,6 +516,9 @@
 
   <!-- Rose Petals Rain -->
   <canvas id="petalsCanvas"></canvas>
+
+  <!-- Heart Rain -->
+  <canvas id="heartRainCanvas"></canvas>
 
   <!-- Shooting Star -->
   <div class="shooting-star" id="shootingStar"></div>
@@ -578,6 +623,12 @@
   <section id="reasons">
     <h2><span class="icon">&#x1F49D;</span>Reasons I Love You</h2>
     <div class="reasons-grid" id="reasonsGrid"></div>
+  </section>
+
+  <!-- ============ YOU'RE MY... ============ -->
+  <section id="youreMy">
+    <h2><span class="icon">&#x1F49B;</span>You're My...</h2>
+    <div class="youre-grid" id="youreGrid"></div>
   </section>
 
   <!-- ============ CAKE ============ -->
@@ -706,6 +757,56 @@
         requestAnimationFrame(drawPetals);
       }
       drawPetals();
+    })();
+
+    // ==================== HEART RAIN ====================
+    (function() {
+      var c = document.getElementById('heartRainCanvas');
+      var ctx = c.getContext('2d');
+      var hearts = [], w, h;
+      function resize() { w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
+      resize();
+      window.addEventListener('resize', resize);
+      var heartColors = ['#ff6b9d', '#ff4d6d', '#ffd700', '#ff1493', '#ff69b4', '#ff8fab', '#ffb3c6', '#ff0a54'];
+      function addHeart() {
+        hearts.push({
+          x: Math.random() * w, y: -20,
+          size: 8 + Math.random() * 16,
+          speed: 0.3 + Math.random() * 0.8,
+          sway: Math.random() * 3 + 1,
+          phase: Math.random() * Math.PI * 2,
+          color: heartColors[Math.floor(Math.random() * heartColors.length)],
+          opacity: 0.3 + Math.random() * 0.5,
+          rot: Math.random() * 360,
+          rr: 0.5 + Math.random() * 1.5
+        });
+      }
+      for (var i = 0; i < 20; i++) addHeart();
+      setInterval(addHeart, 800);
+      function drawHearts() {
+        ctx.clearRect(0, 0, w, h);
+        for (var i = hearts.length - 1; i >= 0; i--) {
+          var hh = hearts[i];
+          hh.y += hh.speed;
+          hh.x += Math.sin(hh.y * 0.02 + hh.phase) * 0.4;
+          hh.rot += hh.rr;
+          if (hh.y > h + 30) { hearts.splice(i, 1); continue; }
+          ctx.save();
+          ctx.translate(hh.x, hh.y);
+          ctx.rotate(hh.rot * Math.PI / 180);
+          ctx.globalAlpha = hh.opacity;
+          ctx.shadowColor = hh.color;
+          ctx.shadowBlur = 15;
+          ctx.font = hh.size + 'px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = hh.color;
+          ctx.fillText('❤️', 0, 0);
+          ctx.restore();
+        }
+        requestAnimationFrame(drawHearts);
+      }
+      drawHearts();
     })();
 
     // ==================== SPARKLE ON CLICK ====================
@@ -975,6 +1076,34 @@
       };
     })();
 
+    // ==================== YOU'RE MY... ====================
+    (function() {
+      var items = [
+        { emoji: '☀️', label: 'Sunshine' },
+        { emoji: '🌙', label: 'Moonlight' },
+        { emoji: '💖', label: 'Everything' },
+        { emoji: '🌟', label: 'Dream Come True' },
+        { emoji: '♾️', label: 'Forever' },
+        { emoji: '🏠', label: 'Home' },
+        { emoji: '💓', label: 'Heartbeat' },
+        { emoji: '👼', label: 'Angel' },
+        { emoji: '🦋', label: 'Butterfly' },
+        { emoji: '🌈', label: 'Rainbow' },
+        { emoji: '🌹', label: 'Rose' },
+        { emoji: '✨', label: 'Magic' },
+        { emoji: '🎵', label: 'Favorite Song' },
+        { emoji: '☕', label: 'Morning Coffee' }
+      ];
+      var grid = document.getElementById('youreGrid');
+      for (var i = 0; i < items.length; i++) {
+        var d = document.createElement('div');
+        d.className = 'youre-card';
+        d.innerHTML = '<span class="youre-emoji">' + items[i].emoji + '</span><div class="youre-label">You\'re my ' + items[i].label + '</div>';
+        d.style.transitionDelay = (i * 0.05) + 's';
+        grid.appendChild(d);
+      }
+    })();
+
     // ==================== LOVE LETTER ====================
     (function() {
       var text = 'My Dearest Diksha, From the moment you came into my life, everything changed. You are the light that guides me, the warmth that comforts me, and the love that completes me. Every day with you is a gift I treasure with all my heart. You are my dream come true, my forever, my everything. Happy Birthday, my love. Here\'s to a lifetime of beautiful moments together.';
@@ -1179,7 +1308,15 @@
         'My heart is yours \u{1F49D}',
         'You are my everything \u2B50',
         'Stay amazing, my love \u{1F31F}',
-        'Forever and always \u{1F48D}'
+        'Forever and always \u{1F48D}',
+        'Sending you a kiss \u{1F48B}',
+        'You\u2019re my whole world \u{1F30D}',
+        'I miss you already \u{1F49B}',
+        'You\u2019re so beautiful \u{1F49D}',
+        'Can\u2019t stop thinking of you \u{1F60D}',
+        'You make my heart sing \u{1F3B5}',
+        'I\u2019m so lucky to have you \u{1F48D}',
+        'You\u2019re perfect just as you are \u2728'
       ];
       setInterval(function() {
         var note = document.createElement('div');
