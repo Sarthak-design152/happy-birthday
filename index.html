@@ -1753,130 +1753,142 @@
       var cCtx = cCanvas.getContext('2d');
       var box = document.getElementById('constellationBox');
 
+      var connState = false;
+      var clock = 0;
+      var stars = [];
+      var cx, cy, scale;
+      var animId = null;
+
       function resizeConst() {
         var rect = box.getBoundingClientRect();
-        var w = rect.width - 4;
-        cCanvas.width = w * 2;
-        cCanvas.height = 440;
+        var w = Math.floor(rect.width - 8);
+        var h = Math.floor(Math.min(w * 0.4, 240));
+        cCanvas.width = w;
+        cCanvas.height = h;
         cCanvas.style.width = w + 'px';
-        cCanvas.style.height = '220px';
+        cCanvas.style.height = h + 'px';
+        cx = w / 2;
+        cy = h / 2;
+        scale = Math.min(w, h * 2) / 450;
+        generateStars();
       }
-      resizeConst();
-      window.addEventListener('resize', resizeConst);
 
-      // Heart-shaped star positions
-      function generateHeartStars(count) {
-        var stars = [];
+      function generateStars() {
+        stars = [];
+        var count = Math.floor(35 + scale * 10);
         for (var i = 0; i < count; i++) {
           var t = Math.random() * Math.PI * 2;
-          var r = Math.random();
           var x = 16 * Math.pow(Math.sin(t), 3);
           var y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
           x += (Math.random() - 0.5) * 0.8;
           y += (Math.random() - 0.5) * 0.8;
-          stars.push({ x: x * 7 + 200, y: y * 7 + 160, size: 1.5 + Math.random() * 2.5, phase: Math.random() * Math.PI * 2, connected: false });
+          stars.push({
+            x: x * scale * 7 + cx,
+            y: y * scale * 7 + cy,
+            size: (1.5 + Math.random() * 2.5) * scale,
+            phase: Math.random() * Math.PI * 2
+          });
         }
-        return stars;
       }
 
-      var starCount = 40;
-      var stars = generateHeartStars(starCount);
-      var connected = false;
-      var twinkle = 0;
+      resizeConst();
+      window.addEventListener('resize', function() { resizeConst(); });
 
-      function distance(a, b) {
-        return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+      function dist(a, b) {
+        return Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
       }
 
-      function drawConstellation() {
+      function draw() {
         var w = cCanvas.width, h = cCanvas.height;
         cCtx.clearRect(0, 0, w, h);
 
-        // Background gradient
-        var grad = cCtx.createRadialGradient(w/2, h/2, 0, w/2, h/2, 300);
-        grad.addColorStop(0, 'rgba(233,30,99,0.05)');
-        grad.addColorStop(0.5, 'rgba(233,30,99,0.02)');
+        // glow bg
+        var grad = cCtx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(w, h) * 0.5);
+        grad.addColorStop(0, 'rgba(233,30,99,0.06)');
         grad.addColorStop(1, 'rgba(0,0,0,0)');
         cCtx.fillStyle = grad;
         cCtx.fillRect(0, 0, w, h);
 
-        // Draw connections if connected
-        if (connected) {
+        clock += 0.04;
+
+        // connections
+        if (connState) {
           for (var i = 0; i < stars.length; i++) {
             for (var j = i + 1; j < stars.length; j++) {
-              var d = distance(stars[i], stars[j]);
-              if (d < 60) {
+              var d = dist(stars[i], stars[j]);
+              var maxD = 70 * scale + 20;
+              if (d < maxD) {
                 cCtx.beginPath();
                 cCtx.moveTo(stars[i].x, stars[i].y);
                 cCtx.lineTo(stars[j].x, stars[j].y);
-                cCtx.strokeStyle = 'rgba(233,30,99,' + (0.15 * (1 - d/60)) + ')';
-                cCtx.lineWidth = 0.5;
+                cCtx.strokeStyle = 'rgba(233,30,99,' + (0.2 * (1 - d/maxD)) + ')';
+                cCtx.lineWidth = 0.6 + 0.3 * Math.sin(clock + i);
                 cCtx.stroke();
               }
             }
           }
         }
 
-        // Draw stars
-        twinkle += 0.03;
+        // stars
         for (var i = 0; i < stars.length; i++) {
           var s = stars[i];
-          var alpha = 0.5 + 0.5 * Math.sin(twinkle + s.phase);
-          var size = s.size * (0.7 + 0.3 * Math.sin(twinkle + s.phase));
+          var alpha = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(clock * 2 + s.phase));
+          var sz = s.size * (0.7 + 0.3 * Math.sin(clock + s.phase));
 
-          // Glow
-          var glow = cCtx.createRadialGradient(s.x, s.y, 0, s.x, s.y, size * 6);
-          glow.addColorStop(0, 'rgba(233,30,99,' + (0.3 * alpha) + ')');
+          if (connState) {
+            var pulse = 0.8 + 0.2 * Math.sin(clock * 3 + i);
+            sz *= pulse;
+          }
+
+          // glow
+          var glow = cCtx.createRadialGradient(s.x, s.y, 0, s.x, s.y, sz * 8);
+          glow.addColorStop(0, 'rgba(233,30,99,' + (0.4 * alpha) + ')');
           glow.addColorStop(1, 'rgba(233,30,99,0)');
           cCtx.fillStyle = glow;
           cCtx.beginPath();
-          cCtx.arc(s.x, s.y, size * 6, 0, Math.PI * 2);
+          cCtx.arc(s.x, s.y, sz * 8, 0, Math.PI * 2);
           cCtx.fill();
 
-          // Star dot
+          // star body
           cCtx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
           cCtx.beginPath();
-          cCtx.arc(s.x, s.y, size, 0, Math.PI * 2);
+          cCtx.arc(s.x, s.y, sz, 0, Math.PI * 2);
           cCtx.fill();
 
-          // Pink center
-          cCtx.fillStyle = 'rgba(255,200,220,' + (0.7 * alpha) + ')';
+          // pink core
+          cCtx.fillStyle = 'rgba(255,180,200,' + (0.8 * alpha) + ')';
           cCtx.beginPath();
-          cCtx.arc(s.x, s.y, size * 0.4, 0, Math.PI * 2);
+          cCtx.arc(s.x, s.y, sz * 0.4, 0, Math.PI * 2);
           cCtx.fill();
         }
 
-        // Heart outline guide (subtle)
-        if (!connected) {
-          cCtx.strokeStyle = 'rgba(233,30,99,0.08)';
+        // guide outline when disconnected
+        if (!connState) {
+          cCtx.strokeStyle = 'rgba(233,30,99,0.07)';
           cCtx.lineWidth = 0.5;
-          cCtx.setLineDash([3, 5]);
+          cCtx.setLineDash([4, 6]);
           cCtx.beginPath();
+          var first = true;
           for (var t = 0; t <= Math.PI * 2; t += 0.05) {
-            var px = 16 * Math.pow(Math.sin(t), 3) * 7 + 200;
-            var py = (-(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t))) * 7 + 160;
-            if (t === 0) cCtx.moveTo(px, py);
+            var px = 16 * Math.pow(Math.sin(t), 3) * scale * 7 + cx;
+            var py = (-(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t))) * scale * 7 + cy;
+            if (first) { cCtx.moveTo(px, py); first = false; }
             else cCtx.lineTo(px, py);
           }
           cCtx.stroke();
           cCtx.setLineDash([]);
         }
 
-        requestAnimationFrame(drawConstellation);
+        animId = requestAnimationFrame(draw);
       }
 
-      drawConstellation();
+      draw();
 
-      // Click to connect
       box.addEventListener('click', function() {
-        connected = !connected;
+        connState = !connState;
         var label = box.querySelector('.const-label');
-        if (connected) {
-          label.innerHTML = '&#x1F49C; Our love constellation &#x1F49C;';
-          launchConfetti();
-        } else {
-          label.innerHTML = '&#x2728; Click the stars to connect our love &#x2728;';
-        }
+        label.innerHTML = connState ? '&#x1F49C; Our love constellation &#x1F49C;' : '&#x2728; Click the stars to connect our love &#x2728;';
+        if (connState) launchConfetti();
       });
     })();
 
