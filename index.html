@@ -913,6 +913,79 @@
   animation: shake 0.5s ease-in-out !important;
 }
 
+/* Final Surprise Overlay */
+.final-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(ellipse at center, #fff0f5 0%, #f8bbd0 40%, #e91e63 100%);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  cursor: pointer;
+  animation: finalFadeIn 1s ease-out;
+}
+.final-overlay.show { display: flex; }
+.final-content {
+  max-width: 650px;
+  width: 100%;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 80px rgba(233,30,99,0.3);
+  border: 2px solid rgba(233,30,99,0.15);
+  text-align: center;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+  animation: finalScaleIn 0.6s cubic-bezier(0.34,1.56,0.64,1);
+}
+.final-letter {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  line-height: 1.9;
+  color: #880e4f;
+  min-height: 200px;
+  position: relative;
+  z-index: 2;
+  white-space: pre-wrap;
+}
+.final-hearts {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.final-heart {
+  position: absolute;
+  font-size: 1.2rem;
+  opacity: 0;
+  animation: heartFloat 6s ease-out forwards;
+  pointer-events: none;
+}
+.final-close {
+  position: absolute;
+  top: 20px; right: 30px;
+  font-size: 2.8rem;
+  color: #fff;
+  cursor: pointer;
+  text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+  z-index: 3001;
+  transition: transform 0.3s;
+}
+.final-close:hover { transform: scale(1.2); }
+.final-cursor { animation: blink 0.8s step-end infinite; }
+@keyframes finalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes finalScaleIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes heartFloat {
+  0% { transform: translateY(0) scale(0) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.8; transform: scale(1) rotate(10deg); }
+  100% { transform: translateY(-400px) scale(0.3) rotate(-20deg); opacity: 0; }
+}
+@keyframes blink { 50% { opacity: 0; } }
+
 /* Cute side decorations */
     .side-deco {
       position: fixed;
@@ -1202,6 +1275,12 @@
       <button class="surprise-btn" onclick="openLetter()">
 
         <span class="icon">&#x1F48C;</span> Love Letter
+
+      </button>
+
+      <button class="surprise-btn" onclick="finalSurprise()" style="background:linear-gradient(135deg,#f48fb1,#c2185b);color:#fff;border-color:#f48fb1;">
+
+        <span class="icon">&#x1F49B;</span> One Last Surprise &#x2764;&#xFE0F;
 
       </button>
 
@@ -2397,6 +2476,109 @@
       }
     })();
 
+    var finalDone = false;
+    function finalSurprise() {
+      if (finalDone) return;
+      finalDone = true;
+      var overlay = document.getElementById('finalOverlay');
+      var letterDiv = document.getElementById('finalLetter');
+      var heartsContainer = document.getElementById('finalHeartsContainer');
+      overlay.classList.add('show');
+
+      var lines = [
+        "My Dearest Diksha,",
+        "",
+        "In a world full of chaos, you are my calm.",
+        "Every moment with you feels like a beautiful dream I never want to wake up from.",
+        "",
+        "You have this incredible way of making everything better just by being there.",
+        "Your smile lights up my darkest days,",
+        "and your laughter is the sweetest melody I've ever heard.",
+        "",
+        "I don't know what I did to deserve someone as wonderful as you,",
+        "but I promise to spend every single day trying to be worthy of your love.",
+        "",
+        "You're not just my girlfriend — you're my best friend, my home, my everything.",
+        "",
+        "Happy Birthday, my love.",
+        "Here's to forever with you.",
+        "",
+        "Forever yours,",
+        "Golella \u{1F618}"
+      ];
+
+      var i = 0, charIdx = 0, currentLine = '';
+      function typeLine() {
+        if (i >= lines.length) {
+          launchHearts();
+          launchGentlePetals();
+          return;
+        }
+        var line = lines[i];
+        if (charIdx < line.length) {
+          var span = document.createElement('span');
+          span.textContent = line[charIdx];
+          if (line[charIdx] === ' ') span.innerHTML = '&nbsp;';
+          letterDiv.appendChild(span);
+          charIdx++;
+          setTimeout(typeLine, 50);
+        } else {
+          letterDiv.appendChild(document.createElement('br'));
+          charIdx = 0;
+          i++;
+          setTimeout(typeLine, 200);
+        }
+      }
+      setTimeout(typeLine, 600);
+    }
+
+    function launchHearts() {
+      var container = document.getElementById('finalHeartsContainer');
+      var symbols = ['\u2764\uFE0F', '\u{1F49B}', '\u{1F499}', '\u{1F49C}', '\u{1F49A}', '\u2764\uFE0F'];
+      for (var h = 0; h < 30; h++) {
+        (function(delay) {
+          setTimeout(function() {
+            var heart = document.createElement('div');
+            heart.className = 'final-heart';
+            heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            heart.style.left = (5 + Math.random() * 90) + '%';
+            heart.style.bottom = '0px';
+            heart.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+            heart.style.animationDuration = (4 + Math.random() * 4) + 's';
+            heart.style.animationDelay = '0s';
+            container.appendChild(heart);
+            setTimeout(function() { heart.remove(); }, 8000);
+          }, delay);
+        })(h * 200);
+      }
+    }
+
+    function launchGentlePetals() {
+      var container = document.getElementById('petalsContainer');
+      var petals = ['\u{1F338}', '\u{1F33A}', '\u{1F337}', '\u{1F339}', '\u{1F33B}'];
+      for (var p = 0; p < 20; p++) {
+        (function(delay) {
+          setTimeout(function() {
+            var petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.fontSize = (14 + Math.random() * 18) + 'px';
+            petal.style.animationDuration = (12 + Math.random() * 10) + 's';
+            petal.style.opacity = '0.6';
+            container.appendChild(petal);
+            setTimeout(function() { petal.remove(); }, 25000);
+          }, delay);
+        })(p * 150);
+      }
+    }
+
+    function closeFinalSurprise(e) {
+      if (e && e.target !== document.getElementById('finalOverlay')) return;
+      document.getElementById('finalOverlay').classList.remove('show');
+      finalDone = false;
+    }
+
   </script>
 
   <!-- YouTube Player (hidden) -->
@@ -2406,6 +2588,15 @@
   <div class="music-player" id="musicPlayer">
     <span class="music-icon" id="musicIcon">&#x1F3B5;</span>
     <span class="music-label" id="musicLabel">&#x1F49B; Tap anywhere to play &#x266A;</span>
+  </div>
+
+  <!-- Final Surprise Overlay -->
+  <div class="final-overlay" id="finalOverlay" onclick="closeFinalSurprise(event)">
+    <div class="final-content" id="finalContent">
+      <div class="final-letter" id="finalLetter"></div>
+      <div class="final-hearts" id="finalHeartsContainer"></div>
+    </div>
+    <div class="final-close" onclick="closeFinalSurprise()">&times;</div>
   </div>
 
 </body>
