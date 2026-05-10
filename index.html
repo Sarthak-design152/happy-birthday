@@ -2536,6 +2536,30 @@
       launchConfetti();
     }
 
+    var loveQuotes = [
+      '"You are my sun, my moon, and all my stars." — E.E. Cummings',
+      '"I love you not because of who you are, but because of who I am when I am with you." — Roy Croft',
+      '"In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine." — Maya Angelou',
+      '"The best thing to hold onto in life is each other." — Audrey Hepburn',
+      '"I saw that you were perfect, and so I loved you. Then I saw that you were not perfect and I loved you even more." — Angelita Lim',
+      '"You are the finest, loveliest, tenderest, and most beautiful person I have ever known." — F. Scott Fitzgerald',
+      '"I carry your heart with me, I carry it in my heart." — E.E. Cummings',
+      '"Every love story is beautiful, but ours is my favorite." — Unknown',
+      '"To the world you may be one person, but to one person you are the world." — Dr. Seuss',
+      '"You are my today and all of my tomorrows." — Leo Christopher'
+    ];
+    var loveQuoteIdx = Math.floor(Math.random() * loveQuotes.length);
+    function nextLoveQuote() {
+      var el = document.getElementById('loveQuoteText');
+      el.style.opacity = '0';
+      setTimeout(function() {
+        loveQuoteIdx = (loveQuoteIdx + 1) % loveQuotes.length;
+        el.textContent = loveQuotes[loveQuoteIdx] + ' \u{1F49B}';
+        el.style.opacity = '1';
+      }, 300);
+    }
+    setTimeout(nextLoveQuote, 100);
+
     var finalDone = false;
     function finalSurprise() {
       if (finalDone) return;
@@ -2663,6 +2687,11 @@
   <div style="text-align:center;margin:16px 0 8px;cursor:pointer;" onclick="makeWish()">
     <span id="wishingStar" style="font-size:2rem;display:inline-block;animation:wishPulse 2s ease-in-out infinite;transition:transform 0.3s;">&#x2B50;</span>
     <div id="wishStarMsg" style="font-family:'Dancing Script',cursive;font-size:1rem;color:#ad1457;min-height:28px;">&#x2728; Make a wish... &#x2728;</div>
+  </div>
+
+  <!-- Love Quote Ticker -->
+  <div style="text-align:center;margin:8px 16px;padding:16px 20px;background:rgba(255,255,255,0.5);border-radius:20px;cursor:pointer;transition:all 0.3s;border:1px solid rgba(233,30,99,0.1);" onclick="nextLoveQuote()" id="loveQuoteBox">
+    <div id="loveQuoteText" style="font-family:'Dancing Script',cursive;font-size:1.2rem;color:#880e4f;line-height:1.6;transition:opacity 0.4s;">&#x1F49B;</div>
   </div>
 
   <!-- Final Surprise Button -->
