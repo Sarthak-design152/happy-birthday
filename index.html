@@ -971,7 +971,7 @@
   justify-content: center;
   padding: 20px;
   cursor: pointer;
-  animation: finalFadeIn 1s ease-out;
+  animation: finalFadeIn 0.4s ease-out forwards;
 }
 .final-overlay.show { display: flex; }
 .final-content {
@@ -988,7 +988,7 @@
   position: relative;
   overflow-y: auto;
   max-height: 85vh;
-  animation: finalScaleIn 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  animation: finalScaleIn 0.5s ease-out forwards;
 }
 .final-letter {
   font-family: 'Dancing Script', cursive;
@@ -2455,58 +2455,48 @@
       var label = document.getElementById('musicLabel');
       var playerBtn = document.getElementById('musicPlayer');
 
-      function onPlayerReady(event) {
-        event.target.playVideo();
-        playing = true;
-        if (icon) icon.classList.remove('paused');
-        if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
-      }
-
-      function onPlayerStateChange(event) {
-        if (event.data === YT.PlayerState.ENDED) {
-          event.target.playVideo();
-        }
-      }
-
       function startMusic() {
         if (started) return;
         started = true;
-        if (typeof YT !== 'undefined' && YT.Player) {
-          player = new YT.Player('ytPlayerWrapper', {
-            height: '1',
-            width: '1',
-            videoId: '5eCE7-WERrs',
-            playerVars: {
-              autoplay: 1,
-              loop: 1,
-              playlist: '5eCE7-WERrs',
-              controls: 0,
-              rel: 0
-            },
-            events: {
-              onReady: onPlayerReady,
-              onStateChange: onPlayerStateChange
-            }
-          });
+        if (player && player.playVideo) {
+          player.playVideo();
+          playing = true;
+          if (icon) icon.classList.remove('paused');
+          if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
         }
       }
 
+      function createPlayer() {
+        if (player) return;
+        player = new YT.Player('ytPlayerWrapper', {
+          height: '1', width: '1',
+          videoId: '5eCE7-WERrs',
+          playerVars: { autoplay: 0, loop: 1, playlist: '5eCE7-WERrs', controls: 0, rel: 0 },
+          events: {
+            onReady: function() {
+              if (started) {
+                player.playVideo();
+                playing = true;
+                if (icon) icon.classList.remove('paused');
+                if (label) label.textContent = '\u266A Pentatonix - Happy Birthday Beautiful';
+              }
+            },
+            onStateChange: function(event) {
+              if (event.data === YT.PlayerState.ENDED) {
+                event.target.playVideo();
+              }
+            }
+          }
+        });
+      }
+
       function loadYouTubeAPI() {
-        if (typeof YT !== 'undefined' && YT.Player) { return; }
+        if (typeof YT !== 'undefined' && YT.Player) { createPlayer(); return; }
         var tag = document.createElement('script');
         tag.src = 'https://www.youtube.com/iframe_api';
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        window.onYouTubeIframeAPIReady = function() {
-          if (started) {
-            player = new YT.Player('ytPlayerWrapper', {
-              height: '1', width: '1',
-              videoId: '5eCE7-WERrs',
-              playerVars: { autoplay: 1, loop: 1, playlist: '5eCE7-WERrs', controls: 0, rel: 0 },
-              events: { onReady: onPlayerReady, onStateChange: onPlayerStateChange }
-            });
-          }
-        };
+        window.onYouTubeIframeAPIReady = createPlayer;
       }
 
       loadYouTubeAPI();
