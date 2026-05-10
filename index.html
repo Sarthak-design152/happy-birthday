@@ -152,6 +152,35 @@ section h2 .icon { margin-right: 8px; }
 .youre-popup .pe { font-size: 3rem; }
 .youre-popup .pt { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffd700; }
 </style>
+<style>
+/* Cursor heart trail */
+.cursor-heart { position: fixed; pointer-events: none; z-index: 99999; font-size: 1.2rem; animation: cursorHeartAnim 1s ease-out forwards; }
+@keyframes cursorHeartAnim { 0% { transform: translate(0,0) scale(0.3); opacity: 0.9; } 100% { transform: translate(var(--hx),var(--hy)) scale(0.8); opacity: 0; } }
+
+/* Love Notes Jar */
+.love-jar { text-align: center; padding: 30px 20px; background: rgba(255,255,255,0.06); border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); user-select: none; position: relative; overflow: hidden; }
+.love-jar:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,215,0,0.3); transform: scale(1.02); }
+.love-jar:active { transform: scale(0.96); }
+.love-jar .jar-emoji { font-size: 4rem; display: block; margin-bottom: 8px; transition: transform 0.4s; }
+.love-jar:hover .jar-emoji { transform: scale(1.15) rotate(-5deg); }
+.love-jar .jar-label { font-family: 'Dancing Script', cursive; font-size: 1.3rem; color: #ffd700; }
+.love-jar .jar-note-display { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); background: rgba(0,0,0,0.88); padding: 28px 32px; border-radius: 20px; border: 2px solid rgba(255,215,0,0.3); z-index: 10; min-width: 200px; pointer-events: none; }
+.love-jar .jar-note-display.show { animation: jarNoteAnim 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+@keyframes jarNoteAnim { 0% { transform: translate(-50%,-50%) scale(0); opacity: 0; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; } }
+.love-jar .jar-note-display .jar-note-text { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffd700; }
+.love-jar .jar-glow { position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; background: radial-gradient(circle, rgba(255,215,0,0.15), transparent); border-radius: 50%; transform: translate(-50%,-50%) scale(0); transition: all 0.6s; pointer-events: none; }
+.love-jar:active .jar-glow { transform: translate(-50%,-50%) scale(6); opacity: 0; }
+
+/* Floating love notes animation */
+.floating-love-note { position: fixed; z-index: 9998; pointer-events: none; font-family: 'Dancing Script', cursive; font-size: 1.2rem; color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.3); animation: floatNoteAnim 6s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
+@keyframes floatNoteAnim { 0% { transform: translateY(0) rotate(-5deg) scale(0.5); opacity: 0; } 10% { opacity: 0.8; transform: translateY(-20px) rotate(0deg) scale(1); } 80% { opacity: 0.6; } 100% { transform: translateY(-300px) rotate(5deg) scale(0.8); opacity: 0; } }
+
+/* Together Forever Timer */
+.together-section { text-align: center; padding: 24px; background: rgba(255,255,255,0.06); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+.together-section .together-label { font-family: 'Dancing Script', cursive; font-size: 1.3rem; color: #ffd700; margin-bottom: 8px; }
+.together-section .together-count { font-family: 'Quicksand', sans-serif; font-size: 2.5rem; font-weight: 700; background: linear-gradient(135deg, #f093fb, #f5576c, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.together-section .together-sub { font-size: 0.9rem; color: rgba(255,255,255,0.4); margin-top: 6px; }
+</style>
 </head>
 <body>
 
@@ -232,7 +261,6 @@ function checkPassword() {
 })();
 </script>
 
-
 <div id="loadingOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.8s;">
   <div style="font-family:'Dancing Script',cursive;font-size:2rem;color:#fff;text-align:center;padding:20px;">
     Loading something special for you...
@@ -244,7 +272,6 @@ function checkPassword() {
 <style>
 @keyframes loadSpin { to { transform: rotate(360deg); } }
 </style>
-
 
   <!-- Stars -->
   <canvas id="starsCanvas"></canvas>
@@ -361,10 +388,7 @@ function checkPassword() {
     <h3 style="font-family:'Dancing Script',cursive;font-size:1.3rem;color:#ffd700;margin:24px 0 12px;text-align:center;">&#x1F338; Beautiful You</h3>
     <div class="gallery-grid">
       <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg" alt="Cherished Moments"></div>
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo67.jpg" alt="Beautiful Smile"></div>
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo83.jpg" alt="Pure Joy"></div>
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo85.jpg" alt="Endless Love"></div>
-      <div class="gallery-card" onclick="openLightbox(Array.from(document.querySelectorAll('.gallery-card')).indexOf(this))"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo96.jpg" alt="Together Forever"></div>
+
     </div>
   </section>
   <!-- ============ LOVE METER ============ -->
@@ -419,6 +443,20 @@ function checkPassword() {
 
   <!-- ============ LOVE LETTER ============ -->
   
+  
+  <!-- ============ LOVE NOTES JAR ============ -->
+  <section id="loveJar">
+    <h2><span class="icon">&#x1F3F7;&#xFE0F;</span>A Note From My Heart</h2>
+    <div class="love-jar" onclick="pickJarNote()">
+      <div class="jar-glow" id="jarGlow"></div>
+      <span class="jar-emoji">&#x1F3F7;&#xFE0F;</span>
+      <div class="jar-label">Tap to open a love note 💛</div>
+      <div class="jar-note-display" id="jarNoteDisplay">
+        <div class="jar-note-text" id="jarNoteText"></div>
+      </div>
+    </div>
+  </section>
+  
   <section id="interactive">
     <h2><span class="icon">&#x1F49B;</span>Interactive Buttons</h2>
     <div class="interactive-grid">
@@ -429,9 +467,7 @@ function checkPassword() {
     </div>
     <div id="interactiveResult" style="text-align:center;margin-top:16px;padding:20px;border-radius:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);min-height:60px;font-family:'Dancing Script',cursive;font-size:1.2rem;color:#ffd700;transition:all 0.4s;">&#x1F49B; Tap a button above...</div>
   </section>
-  
 
-  
     <div style="text-align:center;margin:16px 0;padding:16px;background:rgba(255,255,255,0.03);border-radius:16px;border:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:all 0.3s;" onclick="this.innerHTML='<span style=\'font-family:\\'Dancing Script\\',cursive;font-size:1.4rem;color:#ffd700;\'>I love you more than words can say \u2764\ufe0f</span>'" onmouseover="this.style.borderColor='rgba(255,215,0,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
       <span style="font-size:0.85rem;color:rgba(255,255,255,0.3);">\u2764\ufe0f tap to reveal a secret...</span>
     </div>
@@ -442,7 +478,6 @@ function checkPassword() {
     <button class="supernova-btn" onclick="launchSupernova()">&#x1F31F; Light Up the Stars &#x1F31F;</button>
   </section>
 
-  
     <div style="text-align:center;padding:24px 20px;margin:30px 0 40px;background:rgba(255,255,255,0.04);border-radius:20px;border:1px solid rgba(255,255,255,0.08);font-family:'Dancing Script',cursive;">
       <div style="font-size:1.5rem;color:#fff;margin-bottom:8px;">Stay the way you are...</div>
       <div style="font-size:1.2rem;color:#ffd700;">it suits you perfectly <span style="color:#ff6b9d;">💛</span></div>
@@ -1540,6 +1575,103 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+</script>
+<script>
+// ===== Cursor Heart Trail =====
+(function() {
+  var hearts = ['❤️','💛','💜','💖','💗','✨','🌟'];
+  document.addEventListener('mousemove', function(e) {
+    var el = document.createElement('div');
+    el.className = 'cursor-heart';
+    el.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    var x = (Math.random()-0.5)*60;
+    var y = -40 - Math.random()*60;
+    el.style.left = (e.clientX) + 'px';
+    el.style.top = (e.clientY) + 'px';
+    el.style.setProperty('--hx', x + 'px');
+    el.style.setProperty('--hy', y + 'px');
+    el.style.fontSize = (0.8+Math.random()*0.8) + 'rem';
+    document.body.appendChild(el);
+    setTimeout(function() { el.remove(); }, 1000);
+  });
+})();
+
+// ===== Floating Love Notes =====
+(function() {
+  var notes = [
+    "You're my everything 💛",
+    "I love you more every day 💜",
+    "You make life beautiful 💖",
+    "Forever yours, always 💗",
+    "My heart belongs to you ✨",
+    "You are my sunshine 🌟",
+    "Thinking of you always 💛",
+    "You're the best thing in my life 💜",
+    "I miss you when you're gone 💖",
+    "You complete me 💗"
+  ];
+  function spawnNote() {
+    var el = document.createElement('div');
+    el.className = 'floating-love-note';
+    el.textContent = notes[Math.floor(Math.random()*notes.length)];
+    el.style.left = (10 + Math.random()*80) + '%';
+    el.style.bottom = '-20px';
+    el.style.animationDuration = (5 + Math.random()*4) + 's';
+    document.body.appendChild(el);
+    setTimeout(function() { el.remove(); }, 10000);
+  }
+  setInterval(spawnNote, 8000 + Math.random()*4000);
+  // Spawn one immediately
+  setTimeout(spawnNote, 2000);
+})();
+
+// ===== Love Notes Jar =====
+var jarNotes = [
+  "You are the most beautiful person I know, inside and out 💛",
+  "Every day with you is a gift I cherish deeply 💜",
+  "Your smile lights up my entire world 🌟",
+  "I fall in love with you more and more each day 💖",
+  "You're my best friend, my love, my everything 💗",
+  "The way you laugh is my favorite sound in the universe ✨",
+  "You make even the simplest moments feel magical 💛",
+  "I thank the stars every day for bringing you into my life 🌟",
+  "Your strength and kindness inspire me always 💜",
+  "There's no one else I'd rather share this journey with 💖",
+  "You are proof that true love exists 💗",
+  "My world is brighter because you're in it ✨",
+  "You're the sweetest dream I never want to wake up from 💛",
+  "Every touch from you feels like coming home 🌟",
+  "You have the purest heart I've ever known 💜"
+];
+function pickJarNote() {
+  var display = document.getElementById('jarNoteDisplay');
+  var text = document.getElementById('jarNoteText');
+  var glow = document.getElementById('jarGlow');
+  if (!display || !text) return;
+  text.textContent = jarNotes[Math.floor(Math.random()*jarNotes.length)];
+  display.classList.add('show');
+  if (glow) { glow.style.transform = 'translate(-50%,-50%) scale(6)'; glow.style.opacity = '0'; setTimeout(function() { glow.style.transform = ''; glow.style.opacity = ''; }, 600); }
+  setTimeout(function() { display.classList.remove('show'); }, 2500);
+}
+
+// ===== Together Forever Timer =====
+(function() {
+  function updateTimer() {
+    var el = document.getElementById('togetherCount');
+    if (!el) return;
+    // A beautiful beginning - adjust this date if you'd like!
+    var start = new Date('2024-02-14T00:00:00');
+    var now = new Date();
+    var diff = Math.floor((now - start) / 1000);
+    var days = Math.floor(diff / 86400);
+    var hours = Math.floor((diff % 86400) / 3600);
+    var mins = Math.floor((diff % 3600) / 60);
+    var secs = diff % 60;
+    el.textContent = days + ' days, ' + hours + 'h ' + mins + 'm ' + secs + 's';
+  }
+  updateTimer();
+  setInterval(updateTimer, 1000);
+})();
 </script>
 </body>
 </html>
