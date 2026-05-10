@@ -305,9 +305,8 @@
     }
 
     .surprise-btn {
-
+      touch-action: manipulation;
       background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-
       border: 2px solid #f48fb1;
 
       border-radius: 24px;
@@ -799,8 +798,8 @@
       .final-letter { font-size: 1.15rem; }
       .final-content { padding: 28px 20px; margin: 10px; max-height: 80vh; }
 
-      .main-card div[style*="160px"] { min-width: 120px !important; height: 150px !important; }
-      .main-card div[style*="160px"] img { width: 100%; height: 100%; object-fit: cover; }
+      .main-card > div[style*="min-width"] { min-width: 100px !important; height: 130px !important; }
+      .main-card > div[style*="min-width"] img { width: 100%; height: 100%; object-fit: cover; }
 
     }
 
@@ -810,8 +809,9 @@
       .surprises-grid { grid-template-columns: 1fr; gap: 8px; }
       .surprise-btn { font-size: 0.85rem; padding: 12px 16px; min-height: 52px; }
       .gallery { grid-template-columns: repeat(2, 1fr); gap: 6px; }
-      .photo-frame { width: 110px; height: 110px; border-width: 4px; }
-      .photo-frame span { font-size: 2.8rem; }
+      .gallery-item { font-size: 1.8rem; }
+      .photo-frame { width: 100px; height: 100px; border-width: 4px; }
+      .photo-frame span { font-size: 2.5rem; }
       .photo-frame::after { font-size: 1.2rem; top: -4px; right: -4px; }
       .constellation-box canvas { height: 180px; }
       .const-label { font-size: 0.8rem; }
@@ -825,9 +825,8 @@
       .final-letter { font-size: 1rem; }
       .final-content { padding: 24px 16px; max-height: 80vh; }
       .final-overlay { padding: 10px; }
-      .gallery-item { font-size: 1.8rem; }
-      .main-card div[style*="160px"] { min-width: 90px !important; height: 110px !important; }
-      .main-card div[style*="160px"] img { width: 100%; height: 100%; object-fit: cover; }
+      .main-card > div[style*="min-width"] { min-width: 80px !important; height: 100px !important; }
+      .main-card > div[style*="min-width"] img { width: 100%; height: 100%; object-fit: cover; }
       .candle-flame { font-size: 1.4rem; top: -22px; }
       .quote-author { font-size: 0.8rem; }
       .main-card button.surprise-btn { font-size: 1rem !important; padding: 14px 20px !important; }
@@ -1177,6 +1176,7 @@
     .love-meter:hover {
       transform: scale(1.02);
     }
+    button, .surprise-btn, .candle-flame, .gallery-item, .constellation-box, .love-meter, .final-close, .modal-close, #wishingStar { touch-action: manipulation; }
     .meter-bar {
       width: 100%;
       height: 20px;
