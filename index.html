@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Happy Birthday, My Love!</title>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -70,18 +70,64 @@ section h2 .icon { margin-right: 8px; }
 .mischief-btn, .supernova-btn { display: block; margin: 12px auto 0; padding: 14px 32px; border-radius: 50px; border: none; cursor: pointer; font-weight: 700; color: #fff; }
 .mischief-btn { background: linear-gradient(135deg, #f5576c, #ff6f91); }
 .supernova-btn { background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe); font-family: 'Dancing Script', cursive; font-size: 1.2rem; }
-.music-btn { position: fixed; bottom: 20px; right: 20px; z-index: 999; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-#fireworksCanvas, #petalsCanvas, #starsCanvas { display: none; }
-#heartbeatCanvas, #loveStarsCanvas { display: none; }
-.shooting-star { display: none; }
-.float-container, .sparkle-container, .petals-container { display: none; }
-.love-note { display: none; }
+.music-btn { position: fixed; bottom: 20px; right: 20px; z-index: 999; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-size: 1.3rem; }
+.music-btn.paused { opacity: 0.5; }
+#starsCanvas { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+#fireworksCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; pointer-events: none; }
+#petalsCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+#heartbeatCanvas { width: 100%; height: 180px; border-radius: 12px; margin-top: 10px; }
+#loveStarsCanvas { width: 100%; height: 260px; border-radius: 12px; margin-top: 10px; }
+.shooting-star { position: fixed; width: 150px; height: 2px; background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.8)); border-radius: 2px; z-index: 1; pointer-events: none; opacity: 0; }
+.shooting-star::after { content: ''; position: absolute; right: -4px; top: -3px; width: 8px; height: 8px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px #fff, 0 0 40px #fff; }
+@keyframes shoot {
+  0% { transform: translate(0,0) rotate(-35deg); opacity: 0; }
+  5% { opacity: 1; }
+  30% { transform: translate(300px, 200px) rotate(-35deg); opacity: 0.8; }
+  100% { transform: translate(800px, 500px) rotate(-35deg); opacity: 0; }
+}
+.float-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+.float-item { position: absolute; bottom: -60px; opacity: 0.5; animation: floatUp linear infinite; pointer-events: none; }
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.6; }
+  100% { transform: translateY(-120vh) rotate(720deg) scale(0.3); opacity: 0; }
+}
+.sparkle-container, .petals-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+.sparkle { position: absolute; border-radius: 50%; background: #ffd700; box-shadow: 0 0 6px #ffd700; animation: sparklePulse ease-in-out infinite alternate; }
+@keyframes sparklePulse {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+.petal { position: absolute; animation: petalFall linear infinite; }
+@keyframes petalFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 0.6; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
 #ytPlayerWrapper { display: none; }
-.supernova-overlay { display: none; }
-@keyframes heartFloat { 0% { opacity:1; transform:translateY(0) scale(1); } 100% { opacity:0; transform:translateY(-80px) scale(0.3); } }
+.love-note { position: fixed; z-index: 997; bottom: -80px; padding: 10px 24px; background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; color: #fff; font-family: 'Dancing Script', cursive; font-size: 1.1rem; pointer-events: none; animation: noteFloat 8s linear forwards; }
+@keyframes noteFloat {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  10% { opacity: 0.7; transform: scale(1); }
+  100% { transform: translateY(-120vh) scale(0.8); opacity: 0; }
+}
+.supernova-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, #667eea, #764ba2); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
+.supernova-overlay.show { display: flex; }
+.supernova-content { max-width: 600px; width: 95%; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border-radius: 32px; padding: 40px 32px; border: 1px solid rgba(255,255,255,0.15); text-align: center; position: relative; overflow-y: auto; max-height: 85vh; }
+.sn-close { position: absolute; top: 16px; right: 20px; font-size: 2rem; color: rgba(255,255,255,0.5); cursor: pointer; z-index: 3001; }
+.sn-text { font-family: 'Dancing Script', cursive; font-size: 1.5rem; line-height: 2; color: #fff; text-align: center; }
+.sn-particle { position: absolute; pointer-events: none; border-radius: 50%; animation: particleBurst 2s ease-out forwards; }
+@keyframes particleBurst {
+  0% { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+@keyframes heartFloat {
+  0% { opacity:1; transform:translateY(0) scale(1); }
+  100% { opacity:0; transform:translateY(-80px) scale(0.3); }
+}
+@keyframes snFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes snScale { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 </head>
-<body>
 <body>
 
   <!-- Stars -->
@@ -190,7 +236,7 @@ section h2 .icon { margin-right: 8px; }
   <!-- ============ LOVE METER ============ -->
   <section id="lovemeter">
     <h2><span class="icon">&#x2764;&#xFE0F;</span>Our Love Meter</h2>
-    <div class="love-meter" >
+    <div class="love-meter" onclick="fillMeter()">
       <div style="font-family:'Dancing Script',cursive;font-size:1.2rem;color:#ffd700;margin-bottom:6px;">&#x1F49B; Diksha & Golella &#x1F49B;</div>
       <div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div>
       <div class="meter-label" id="meterLabel">&#x2764;&#xFE0F; Tap to check our love meter! &#x2764;&#xFE0F;</div>
@@ -230,7 +276,7 @@ section h2 .icon { margin-right: 8px; }
     <div class="cake-section">
       <div style="position:relative;display:inline-block;">
         <div class="cake-emoji">&#x1F370;</div>
-        <div class="candle" id="candle" >&#x1F525;</div>
+        <div class="candle" id="candle" onclick="blowCandle()">&#x1F525;</div>
       </div>
       <div class="cake-hint" id="cakeHint">&#x1F4A8; Tap the flame to blow the candle! &#x1F4A8;</div>
       <div id="wishMsg" style="margin-top:10px;font-weight:600;color:#ffd700;min-height:22px;"></div>
@@ -241,8 +287,8 @@ section h2 .icon { margin-right: 8px; }
   <section id="letter">
     <h2><span class="icon">&#x1F48C;</span>A Love Letter for You</h2>
     <div id="loveLetter"></div>
-    <button class="mischief-btn" >&#x1F440; Do not click &#x1F440;</button>
-    <button class="supernova-btn" >&#x1F31F; Light Up the Stars &#x1F31F;</button>
+    <button class="mischief-btn" onclick="doMischief()">&#x1F440; Do not click &#x1F440;</button>
+    <button class="supernova-btn" onclick="launchSupernova()">&#x1F31F; Light Up the Stars &#x1F31F;</button>
   </section>
 
   </div><!-- /container -->
@@ -250,12 +296,858 @@ section h2 .icon { margin-right: 8px; }
   <!-- ============ SUPERNOVA OVERLAY ============ -->
   <div class="supernova-overlay" id="supernovaOverlay">
     <div class="supernova-content" id="supernovaContent">
-      <div class="sn-close" >&times;</div>
+      <div class="sn-close" onclick="closeSupernova()">&times;</div>
       <div class="sn-text" id="supernovaText"></div>
     </div>
   </div>
 
-  
-</body>
+  <script>
+    // ==================== SPARKLES ====================
+    (function() {
+      var container = document.getElementById('sparkleContainer');
+      if (!container) return;
+      for (var i = 0; i < 30; i++) {
+        var star = document.createElement('div');
+        star.className = 'sparkle';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.width = (3 + Math.random() * 5) + 'px';
+        star.style.height = star.style.width;
+        star.style.animationDuration = (2 + Math.random() * 4) + 's';
+        star.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(star);
+      }
+    })();
+
+    // ==================== FALLING PETALS ====================
+    (function() {
+      var container = document.getElementById('petalsContainer');
+      if (!container) return;
+      var petals = ['🌸', '🌺', '🌷', '💮', '🌹'];
+      for (var i = 0; i < 15; i++) {
+        var petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+        petal.style.left = Math.random() * 100 + '%';
+        petal.style.fontSize = (16 + Math.random() * 22) + 'px';
+        petal.style.animationDuration = (10 + Math.random() * 12) + 's';
+        petal.style.animationDelay = (Math.random() * 15) + 's';
+        petal.style.opacity = (0.3 + Math.random() * 0.3);
+        container.appendChild(petal);
+      }
+    })();
+
+    // ==================== STARS BACKGROUND ====================
+    (function() {
+      var c = document.getElementById('starsCanvas');
+      var ctx = c.getContext('2d');
+      var stars = [], w, h;
+      function resize() { w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
+      resize();
+      window.addEventListener('resize', resize);
+      for (var i = 0; i < 120; i++) {
+        stars.push({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.8 + 0.3, a: Math.random(), s: 0.005 + Math.random() * 0.02, sp: 0.2 + Math.random() * 0.5 });
+      }
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (var i = 0; i < stars.length; i++) {
+          var s = stars[i];
+          s.a += s.s;
+          var alpha = 0.3 + 0.7 * (Math.sin(s.a) * 0.5 + 0.5);
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+          ctx.fill();
+          if (s.r > 1) {
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,215,0,' + alpha * 0.1 + ')';
+            ctx.fill();
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+      window.addEventListener('resize', function() {
+        for (var i = 0; i < stars.length; i++) { stars[i].x = Math.random() * w; stars[i].y = Math.random() * h; }
+      });
+    })();
+
+    // ==================== STAR MESSAGE "I ♥ U" ====================
+    (function() {
+      var starMsgEl = document.createElement('div');
+      starMsgEl.id = 'starMessage';
+      starMsgEl.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:100;pointer-events:none;text-align:center;opacity:0;transition:all 1.5s cubic-bezier(0.16,1,0.3,1);';
+      starMsgEl.innerHTML = '<div style="font-family:\'Dancing Script\',cursive;font-size:min(12vw,80px);color:#ffd700;text-shadow:0 0 40px rgba(255,215,0,0.6),0 0 80px rgba(255,215,0,0.3),0 0 120px rgba(255,105,180,0.2);">I ♥ U</div><div style="font-family:\'Dancing Script\',cursive;font-size:min(5vw,30px);color:#e8d5f5;opacity:0.7;margin-top:8px;text-shadow:0 0 20px rgba(255,215,0,0.3);">Forever & Always</div>';
+      document.body.appendChild(starMsgEl);
+
+      setTimeout(function() {
+        starMsgEl.style.transform = 'translate(-50%,-50%) scale(1)';
+        starMsgEl.style.opacity = '1';
+
+        // Sparkles around it
+        for (var i = 0; i < 30; i++) {
+          (function(d) {
+            setTimeout(function() {
+              var sp = document.createElement('div');
+              var size = 3 + Math.random() * 5;
+              var angle = Math.random() * Math.PI * 2;
+              var dist = 80 + Math.random() * 150;
+              sp.style.cssText = 'position:fixed;width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:#ffd700;left:50%;top:50%;z-index:99;pointer-events:none;box-shadow:0 0 ' + (size*4) + 'px #ffd700;transform:translate(-50%,-50%);opacity:0;transition:all 1.2s cubic-bezier(0.16,1,0.3,1);';
+              document.body.appendChild(sp);
+              requestAnimationFrame(function() {
+                sp.style.transform = 'translate(calc(-50% + ' + Math.cos(angle)*dist + 'px), calc(-50% + ' + Math.sin(angle)*dist + 'px))';
+                sp.style.opacity = '0.8';
+              });
+              setTimeout(function() {
+                sp.style.opacity = '0';
+                sp.style.transform += ' scale(0.2)';
+                setTimeout(function() { sp.remove(); }, 500);
+              }, 1500);
+            }, d);
+          })(i * 50);
+        }
+      }, 2000);
+
+      setTimeout(function() {
+        starMsgEl.style.opacity = '0';
+        starMsgEl.style.transform = 'translate(-50%,-50%) scale(1.5)';
+        setTimeout(function() { starMsgEl.remove(); }, 2000);
+      }, 6000);
+    })();
+
+    // ==================== FLOATING HEARTS & PETALS ====================
+    (function() {
+      var container = document.getElementById('floatContainer');
+      var items = [];
+      var heartEmojis = ['❤️', '💖', '💗', '💕', '💓', '🩷', '💘', '💝'];
+      var petalEmojis = ['🌸', '🌺', '🌷', '💮', '🌹', '✨'];
+      for (var i = 0; i < 12; i++) {
+        (function(d) {
+          setTimeout(function() {
+            var el = document.createElement('div');
+            el.className = 'float-item';
+            el.textContent = i < 7 ? heartEmojis[Math.floor(Math.random() * heartEmojis.length)] : petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+            el.style.left = Math.random() * 100 + '%';
+            el.style.fontSize = (16 + Math.random() * 18) + 'px';
+            el.style.animationDuration = (14 + Math.random() * 18) + 's';
+            el.style.animationDelay = '0s';
+            container.appendChild(el);
+          }, d);
+        })(i * 200);
+      }
+    })();
+
+    // ==================== PETALS & HEARTS (merged, lighter) ====================
+    setTimeout(function() {
+      var c = document.getElementById('petalsCanvas');
+      var ctx = c.getContext('2d');
+      var items = [], w, h;
+      function resize() { w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
+      resize();
+      window.addEventListener('resize', resize);
+      var colors = ['#ff6b9d', '#ff4d6d', '#e83e5a', '#ffd700', '#ff69b4', '#ff8fab', '#ffb3c6', '#ff85a1'];
+      // Petals
+      for (var i = 0; i < 10; i++) items.push({ t:'p', x:Math.random()*w, y:Math.random()*h, r:4+Math.random()*6, rot:Math.random()*360, sr:0.5+Math.random()*1.5, sv:0.3+Math.random()*0.8, c:colors[Math.floor(Math.random()*colors.length)], o:0.3+Math.random()*0.4 });
+      // Hearts
+      for (var i = 0; i < 6; i++) items.push({ t:'h', x:Math.random()*w, y:Math.random()*h, s:10+Math.random()*12, rot:Math.random()*360, sr:0.5+Math.random()*1, sv:0.3+Math.random()*0.7, c:colors[Math.floor(Math.random()*colors.length)], o:0.3+Math.random()*0.4, p:Math.random()*6 });
+      // New hearts every 2s
+      setInterval(function() { items.push({ t:'h', x:Math.random()*w, y:-20, s:10+Math.random()*12, rot:Math.random()*360, sr:0.5+Math.random()*1, sv:0.3+Math.random()*0.7, c:colors[Math.floor(Math.random()*colors.length)], o:0.3+Math.random()*0.4, p:Math.random()*6 }); }, 2000);
+      var skip = 0;
+      function draw() {
+        skip = (skip + 1) % 2; // 30fps throttle
+        if (skip !== 0) { requestAnimationFrame(draw); return; }
+        ctx.clearRect(0, 0, w, h);
+        for (var i = items.length - 1; i >= 0; i--) {
+          var it = items[i];
+          it.y += it.sv;
+          it.x += Math.sin(it.y * 0.02 + (it.p||0)) * 0.3;
+          it.rot += it.sr;
+          if (it.y > h + 30) { items.splice(i, 1); continue; }
+          ctx.save();
+          ctx.translate(it.x, it.y);
+          ctx.rotate(it.rot * Math.PI / 180);
+          ctx.globalAlpha = it.o;
+          ctx.shadowColor = it.c;
+          ctx.shadowBlur = 10;
+          if (it.t === 'p') {
+            ctx.beginPath();
+            ctx.ellipse(0, 0, it.r, it.r*0.6, 0, 0, Math.PI*2);
+            ctx.fillStyle = it.c;
+            ctx.fill();
+          } else {
+            ctx.font = it.s + 'px sans-serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillStyle = it.c;
+            ctx.fillText('❤️', 0, 0);
+          }
+          ctx.restore();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }, 1000);
+
+    // ==================== FIREWORKS ====================
+    (function() {
+      var c = document.getElementById('fireworksCanvas');
+      var ctx = c.getContext('2d');
+      var w, h;
+      function resize() { w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
+      resize();
+      window.addEventListener('resize', resize);
+
+      var particles = [];
+      function createBurst(cx, cy) {
+        var colors = ['#ffd700', '#ff69b4', '#ff8c00', '#ff1493', '#8a2be2', '#00ced1', '#ff6b6b', '#fff'];
+        for (var i = 0; i < 60; i++) {
+          var angle = Math.random() * Math.PI * 2;
+          var speed = 2 + Math.random() * 6;
+          particles.push({
+            x: cx, y: cy, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+            life: 1, color: colors[Math.floor(Math.random() * colors.length)],
+            size: 3 + Math.random() * 4
+          });
+        }
+      }
+
+      function animateFW() {
+        ctx.clearRect(0, 0, w, h);
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          p.x += p.vx; p.y += p.vy;
+          p.vy += 0.05;
+          p.life -= 0.015;
+          if (p.life <= 0) { particles.splice(i, 1); continue; }
+          ctx.globalAlpha = p.life;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+        requestAnimationFrame(animateFW);
+      }
+      animateFW();
+
+      window.launchFireworks = function() {
+        for (var i = 0; i < 3; i++) {
+          (function(d) {
+            setTimeout(function() {
+              createBurst(w * (0.2 + Math.random() * 0.6), h * (0.15 + Math.random() * 0.4));
+            }, d);
+          })(i * 400);
+        }
+      };
+
+      // Fireworks on load
+      setTimeout(function() { window.launchFireworks(); }, 2000);
+      setTimeout(function() { window.launchFireworks(); }, 4000);
+    })();
+
+    // ==================== SHOOTING STAR ====================
+    function fireShootingStar() {
+      var ss = document.getElementById('shootingStar');
+      ss.style.left = (5 + Math.random() * 60) + '%';
+      ss.style.top = (5 + Math.random() * 25) + '%';
+      ss.style.animation = 'none';
+      ss.offsetHeight;
+      ss.style.animation = 'shoot 3s ease-in-out forwards';
+    }
+    setTimeout(fireShootingStar, 1200);
+    setInterval(fireShootingStar, 8000);
+
+    // ==================== SCROLL REVEAL ====================
+    var sections = document.querySelectorAll('section');
+    function checkScroll() {
+      for (var i = 0; i < sections.length; i++) {
+        var rect = sections[i].getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) { sections[i].classList.add('visible'); }
+      }
+    }
+    window.addEventListener('scroll', checkScroll);
+    window.addEventListener('load', checkScroll);
+    checkScroll();
+
+    // ==================== QUOTES CAROUSEL ====================
+    (function() {
+      var quotes = [
+        { t: '"You are my sun, my moon, and all my stars."', a: 'E.E. Cummings' },
+        { t: '"I love you not because of who you are, but because of who I am when I am with you."', a: 'Roy Croft' },
+        { t: '"The best thing to hold onto in life is each other."', a: 'Audrey Hepburn' },
+        { t: '"I saw that you were perfect, and so I loved you. Then I saw that you were not perfect and I loved you even more."', a: 'Angelita Lim' },
+        { t: '"You are the finest, loveliest, tenderest, and most beautiful person I have ever known."', a: 'F. Scott Fitzgerald' },
+        { t: '"I carry your heart with me, I carry it in my heart."', a: 'E.E. Cummings' },
+        { t: '"Every love story is beautiful, but ours is my favorite."', a: 'Unknown' },
+        { t: '"You are my today and all of my tomorrows."', a: 'Leo Christopher' }
+      ];
+      var idx = Math.floor(Math.random() * quotes.length);
+      var tEl = document.getElementById('quoteText');
+      var aEl = document.getElementById('quoteAuthor');
+      var box = document.getElementById('quoteBox');
+      box.addEventListener('click', function() {
+        tEl.style.opacity = '0';
+        setTimeout(function() {
+          idx = (idx + 1) % quotes.length;
+          tEl.textContent = quotes[idx].t;
+          aEl.textContent = '— ' + quotes[idx].a;
+          tEl.style.opacity = '1';
+        }, 300);
+      });
+    })();
+
+    // ==================== HEARTBEAT OF LOVE ====================
+    (function() {
+      var c = document.getElementById('heartbeatCanvas');
+      var ctx = c.getContext('2d');
+      var w, h, beatPhase = 0, beating = false;
+      var particles = [];
+      var msgEl = document.getElementById('heartbeatMsg');
+
+      function resize() {
+        var rect = c.parentElement.getBoundingClientRect();
+        w = c.width = rect.width - 4 || 600;
+        h = c.height = 180;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      function addParticles(x, y) {
+        var colors = ['#ff6b9d', '#ff4d6d', '#ffd700', '#ff1493', '#ff69b4', '#ff8fab'];
+        for (var i = 0; i < 15; i++) {
+          var angle = Math.random() * Math.PI * 2;
+          var speed = 1 + Math.random() * 3;
+          particles.push({
+            x: x, y: y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 1,
+            life: 1, color: colors[Math.floor(Math.random() * colors.length)],
+            size: 2 + Math.random() * 4, type: Math.random() > 0.5 ? 'heart' : 'circle'
+          });
+        }
+      }
+
+      function drawHeartbeat() {
+        ctx.clearRect(0, 0, w, h);
+
+        // Grid lines
+        ctx.strokeStyle = 'rgba(255,215,0,0.03)';
+        ctx.lineWidth = 1;
+        for (var i = 0; i < w; i += 40) {
+          ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, h); ctx.stroke();
+        }
+        for (var i = 0; i < h; i += 40) {
+          ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(w, i); ctx.stroke();
+        }
+
+        // Beat animation
+        beatPhase += 0.02;
+        var beat = Math.sin(beatPhase * Math.PI * 2);
+        var isPeak = false;
+
+        // ECG line
+        ctx.beginPath();
+        ctx.strokeStyle = '#ff4d6d';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = '#ff4d6d';
+        ctx.shadowBlur = 15;
+
+        var centerY = h / 2;
+        for (var x = 0; x < w; x++) {
+          var t = x / w;
+          var y = centerY;
+
+          // Flat baseline
+          if (t < 0.1 || (t > 0.25 && t < 0.35) || (t > 0.5 && t < 0.6) || t > 0.75) {
+            y = centerY;
+          }
+          // P-wave (small bump)
+          else if (t >= 0.1 && t <= 0.15) {
+            y = centerY - Math.sin((t - 0.1) / 0.05 * Math.PI) * 8;
+          }
+          // QRS complex (big spike)
+          else if (t > 0.35 && t <= 0.4) {
+            y = centerY - Math.sin((t - 0.35) / 0.05 * Math.PI) * 50;
+            if (t > 0.37 && t < 0.39) isPeak = true;
+          }
+          else if (t > 0.4 && t <= 0.45) {
+            y = centerY + Math.sin((t - 0.4) / 0.05 * Math.PI) * 30;
+          }
+          else if (t > 0.45 && t <= 0.5) {
+            y = centerY - Math.sin((t - 0.45) / 0.05 * Math.PI) * 10;
+          }
+          // T-wave (gentle bump)
+          else if (t >= 0.6 && t <= 0.75) {
+            y = centerY - Math.sin((t - 0.6) / 0.15 * Math.PI) * 15;
+          }
+
+          // Apply beat pulse to the whole wave
+          var pulse = 1 + (beat > 0.8 ? (beat - 0.8) * 3 : 0);
+          y = centerY + (y - centerY) * pulse;
+
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Glow dot at the end
+        var lastX = w - 1;
+        var lastY = centerY;
+        ctx.beginPath();
+        ctx.arc(lastX, lastY, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff4d6d';
+        ctx.fill();
+
+        // Particles
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.05;
+          p.life -= 0.02;
+          if (p.life <= 0) { particles.splice(i, 1); continue; }
+          ctx.globalAlpha = p.life;
+          if (p.type === 'heart') {
+            ctx.font = (p.size * 2) + 'px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = p.color;
+            ctx.shadowColor = p.color;
+            ctx.shadowBlur = 10;
+            ctx.fillText('❤️', p.x, p.y);
+            ctx.shadowBlur = 0;
+          } else {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.shadowColor = p.color;
+            ctx.shadowBlur = 8;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        // Trigger particles at peak of beat
+        if (isPeak && !beating) {
+          beating = true;
+          var px = w * 0.39;
+          var py = centerY - 50 * pulse;
+          addParticles(px, py);
+          msgEl.textContent = '💓 Boom! That\'s my heart beating for you! 💓';
+          msgEl.style.color = '#ff4d6d';
+          setTimeout(function() {
+            msgEl.textContent = '❤️ Listen... my heart beats for you ❤️';
+            msgEl.style.color = '#ffd700';
+          }, 1200);
+        }
+        if (!isPeak) beating = false;
+
+        requestAnimationFrame(drawHeartbeat);
+      }
+      drawHeartbeat();
+
+      // Tap to trigger heart shower
+      c.addEventListener('click', function(e) {
+        var rect = c.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        for (var i = 0; i < 5; i++) {
+          setTimeout(function() {
+            addParticles(x + (Math.random() - 0.5) * 40, y + (Math.random() - 0.5) * 20);
+          }, i * 100);
+        }
+        msgEl.textContent = '💖 You make my heart skip a beat! 💖';
+        msgEl.style.color = '#ffd700';
+        setTimeout(function() {
+          msgEl.textContent = '❤️ Listen... my heart beats for you ❤️';
+          msgEl.style.color = '#ffd700';
+        }, 1500);
+      });
+    })();
+
+    // ==================== LOVE STARS ====================
+    (function() {
+      var canvas = document.getElementById('loveStarsCanvas');
+      var ctx = canvas.getContext('2d');
+      var pts = [], connected = false, w, h;
+      function resize() {
+        var rect = canvas.parentElement.getBoundingClientRect();
+        w = canvas.width = rect.width - 4 || 600;
+        h = canvas.height = 260;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+      function genStars() {
+        pts = [];
+        var cx = w / 2, cy = h / 2 + 15;
+        var scale = Math.min(w, h) / 6;
+        for (var i = 0; i < 30; i++) {
+          var t = Math.random() * Math.PI * 2;
+          var hx = 16 * Math.pow(Math.sin(t), 3);
+          var hy = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+          pts.push({ x: cx + hx * scale * 0.1, y: cy - hy * scale * 0.1, r: 2 + Math.random() * 3, a: Math.random() * Math.PI * 2, s: 0.01 + Math.random() * 0.02 });
+        }
+      }
+      genStars();
+      function drawLS() {
+        ctx.clearRect(0, 0, w, h);
+        for (var i = 0; i < pts.length; i++) {
+          var s = pts[i];
+          s.a += s.s;
+          var alpha = 0.4 + 0.6 * (Math.sin(s.a) * 0.5 + 0.5);
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,215,0,' + alpha + ')';
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,215,0,' + alpha * 0.08 + ')';
+          ctx.fill();
+        }
+        if (connected) {
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(255,215,0,0.25)';
+          ctx.lineWidth = 1;
+          for (var i = 0; i < pts.length; i++) {
+            for (var j = i + 1; j < pts.length; j++) {
+              var dx = pts[i].x - pts[j].x;
+              var dy = pts[i].y - pts[j].y;
+              if (Math.sqrt(dx*dx + dy*dy) < 60) {
+                ctx.moveTo(pts[i].x, pts[i].y);
+                ctx.lineTo(pts[j].x, pts[j].y);
+              }
+            }
+          }
+          ctx.stroke();
+        }
+        requestAnimationFrame(drawLS);
+      }
+      drawLS();
+      canvas.addEventListener('click', function() {
+        connected = !connected;
+        if (connected) { launchConfetti(); }
+      });
+    })();
+
+    // ==================== REASONS ====================
+    (function() {
+      var reasons = [
+        'Your smile lights up my world',
+        'The way your eyes sparkle when you talk',
+        'You have the kindest heart I know',
+        'Your laugh is my favorite sound',
+        'You make everything better just by being there',
+        'You believe in me even when I doubt myself',
+        'Your hugs feel like home',
+        'You understand me without words',
+        'You are the strongest person I know',
+        'You care so deeply about everyone',
+        'The way you get excited about little things',
+        'You make me want to be the best version of myself',
+        'You are beautiful inside and out',
+        'You are my best friend and my love'
+      ];
+      var grid = document.getElementById('reasonsGrid');
+      for (var i = 0; i < reasons.length; i++) {
+        var d = document.createElement('div');
+        d.className = 'reason-card';
+        d.innerHTML = '<span class="num">' + (i+1) + '</span>' + reasons[i];
+        grid.appendChild(d);
+      }
+    })();
+
+    // ==================== LOVE METER ====================
+    (function() {
+      var filled = false;
+      var fill = document.getElementById('meterFill');
+      var label = document.getElementById('meterLabel');
+      window.fillMeter = function() {
+        if (filled) return;
+        filled = true;
+        fill.style.width = '100%';
+        label.textContent = '💖 100% — OUR LOVE IS INFINITE! 💖';
+        label.style.color = '#ffd700';
+        var heartsContainer = document.querySelector('.love-meter');
+        for (var hi = 0; hi < 8; hi++) {
+          var h = document.createElement('span');
+          h.textContent = ['❤️','💖','💗','💕','💓','💛','💜','💝'][Math.floor(Math.random()*8)];
+          h.style.cssText = 'position:absolute;font-size:1.5rem;pointer-events:none;animation:heartFloat 1.5s ease-out forwards;left:' + (10 + Math.random()*80) + '%;top:' + (10 + Math.random()*60) + '%;';
+          heartsContainer.appendChild(h);
+          setTimeout(function() { h.remove(); }, 1500);
+        }
+        launchConfetti();
+        setTimeout(launchConfetti, 400);
+        setTimeout(launchConfetti, 800);
+        for (var i = 0; i < 20; i++) {
+          (function(d) {
+            setTimeout(function() {
+              var hh = document.createElement('span');
+              hh.textContent = ['❤️','💖','💗','💕','💓','💛','💜','💝'][Math.floor(Math.random()*8)];
+              hh.style.cssText = 'position:absolute;font-size:1.5rem;pointer-events:none;animation:heartFloat 2s ease-out forwards;left:' + (10 + Math.random()*80) + '%;top:' + (10 + Math.random()*60) + '%;';
+              heartsContainer.appendChild(hh);
+              setTimeout(function() { hh.remove(); }, 2000);
+            }, d);
+          })(i * 100);
+        }
+      };
+    })();
+
+    // ==================== YOU'RE MY... ====================
+    (function() {
+      var items = [
+        { emoji: '☀️', label: 'Sunshine' },
+        { emoji: '🌙', label: 'Moonlight' },
+        { emoji: '💖', label: 'Everything' },
+        { emoji: '🌟', label: 'Dream Come True' },
+        { emoji: '♾️', label: 'Forever' },
+        { emoji: '🏠', label: 'Home' },
+        { emoji: '💓', label: 'Heartbeat' },
+        { emoji: '👼', label: 'Angel' },
+        { emoji: '🦋', label: 'Butterfly' },
+        { emoji: '🌈', label: 'Rainbow' },
+        { emoji: '🌹', label: 'Rose' },
+        { emoji: '✨', label: 'Magic' },
+        { emoji: '🎵', label: 'Favorite Song' },
+        { emoji: '☕', label: 'Morning Coffee' }
+      ];
+      var grid = document.getElementById('youreGrid');
+      for (var i = 0; i < items.length; i++) {
+        var d = document.createElement('div');
+        d.className = 'youre-card';
+        d.innerHTML = '<span class="youre-emoji">' + items[i].emoji + '</span><div class="youre-label">You\'re my ' + items[i].label + '</div>';
+        d.style.transitionDelay = (i * 0.05) + 's';
+        grid.appendChild(d);
+      }
+    })();
+
+    // ==================== LOVE LETTER ====================
+    (function() {
+      var text = 'My Dearest Diksha, From the moment you came into my life, everything changed. You are the light that guides me, the warmth that comforts me, and the love that completes me. Every day with you is a gift I treasure with all my heart. You are my dream come true, my forever, my everything. Happy Birthday, my love. Here\'s to a lifetime of beautiful moments together.';
+      var container = document.getElementById('loveLetter');
+      var idx = 0;
+      function type() {
+        if (idx < text.length) {
+          var span = document.createElement('span');
+          span.className = 'letter-char';
+          span.textContent = text[idx];
+          container.appendChild(span);
+          idx++;
+          setTimeout(type, 25);
+        } else {
+          var sig = document.createElement('div');
+          sig.className = 'sig';
+          sig.textContent = 'Forever yours, Golella \u{1F618}';
+          container.appendChild(sig);
+        }
+      }
+      var observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && idx === 0) { type(); observer.disconnect(); }
+      });
+      observer.observe(container);
+    })();
+
+    // ==================== CAKE ====================
+    function blowCandle() {
+      var candle = document.getElementById('candle');
+      if (candle.classList.contains('blown')) return;
+      candle.classList.add('blown');
+      document.getElementById('cakeHint').textContent = '\u2728 Make a wish, my love! \u2728';
+      document.getElementById('wishMsg').textContent = '\u{1F31F} Happy Birthday, Diksha! May all your dreams come true! \u{1F31F}';
+      launchConfetti();
+      window.launchFireworks();
+    }
+
+    // ==================== DO NOT CLICK ====================
+    var clickCount = 0;
+    function doMischief() {
+      clickCount++;
+      if (clickCount < 5) {
+        var msgs = ['Nope, not yet \u{1F609}', 'Keep trying... \u{1F60F}', 'Almost there... \u{1F525}', 'One more time! \u{1F608}'];
+        var hint = document.createElement('div');
+        hint.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;background:rgba(0,0,0,0.8);color:#ffd700;padding:20px 40px;border-radius:20px;font-family:Dancing Script,cursive;font-size:1.5rem;text-align:center;pointer-events:none;animation:snFade 0.3s ease;';
+        hint.textContent = msgs[clickCount - 1];
+        document.body.appendChild(hint);
+        setTimeout(function() { hint.remove(); }, 800);
+        return;
+      }
+      clickCount = 0;
+      var btn = event && event.target ? event.target : document.querySelector('.mischief-btn');
+      btn.style.animation = 'shake 0.5s ease-in-out';
+      setTimeout(function() {
+        btn.style.animation = '';
+        var box = document.createElement('div');
+        box.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;background:rgba(0,0,0,0.85);color:#fff;padding:24px 32px;border-radius:24px;font-family:Dancing Script,cursive;font-size:1.4rem;text-align:center;border:2px solid #ffd700;pointer-events:none;animation:snFade 0.3s ease;';
+        box.innerHTML = '\u{1F440} \u{1F60F} \u{1F440}<br><br><strong>I knew you couldn\'t resist! \u{1F609}<br>Now you owe me a cake \u{1F370}</strong><br><br>\u{1F49B} Happy Birthday anyway, Diksha! \u{1F49B}';
+        document.body.appendChild(box);
+        setTimeout(function() { box.remove(); }, 3000);
+      }, 550);
+      launchConfetti();
+      window.launchFireworks();
+    }
+
+    // ==================== CONFETTI ====================
+    function launchConfetti() {
+      var colors = ['#ffd700', '#ff6b6b', '#ff8c00', '#ff69b4', '#8a2be2', '#00ced1', '#ff1493', '#ffa07a'];
+      for (var i = 0; i < 50; i++) {
+        (function(d) {
+          setTimeout(function() {
+            var el = document.createElement('div');
+            el.style.cssText = 'position:fixed;width:8px;height:8px;border-radius:2px;background:' + colors[Math.floor(Math.random()*colors.length)] + ';left:' + Math.random()*100 + '%;top:-10px;z-index:9999;pointer-events:none;';
+            el.style.animation = 'confettiFall ' + (1.5 + Math.random()*2) + 's ease-in forwards';
+            document.body.appendChild(el);
+            setTimeout(function() { el.remove(); }, 4000);
+          }, d);
+        })(i * 30);
+      }
+    }
+
+    // ==================== SUPERNOVA ====================
+    function launchSupernova() {
+      var overlay = document.getElementById('supernovaOverlay');
+      var textEl = document.getElementById('supernovaText');
+      overlay.classList.add('show');
+
+      var colors = ['#ffd700', '#ff8c00', '#ff6b6b', '#ff69b4', '#8a2be2', '#00ced1', '#fff'];
+      var content = document.getElementById('supernovaContent');
+      for (var i = 0; i < 80; i++) {
+        (function(d) {
+          setTimeout(function() {
+            var p = document.createElement('div');
+            p.className = 'sn-particle';
+            var sz = 4 + Math.random() * 8;
+            p.style.width = sz + 'px'; p.style.height = sz + 'px';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.boxShadow = '0 0 ' + (sz*2) + 'px ' + p.style.background;
+            p.style.left = '50%'; p.style.top = '50%';
+            p.style.setProperty('--tx', (Math.random() - 0.5) * 500 + 'px');
+            p.style.setProperty('--ty', (Math.random() - 0.5) * 500 + 'px');
+            p.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+            content.appendChild(p);
+            setTimeout(function() { p.remove(); }, 3000);
+          }, d);
+        })(i * 20);
+      }
+
+      setTimeout(function() {
+        var lines = [
+          'My Dearest Diksha,',
+          '',
+          'You are the most beautiful soul I have ever known.',
+          'You light up my world in ways you will never understand.',
+          '',
+          'Every moment with you feels like magic.',
+          'Every memory with you is a treasure I hold close to my heart.',
+          '',
+          'On your special day, I want you to know:',
+          'You are loved beyond measure.',
+          'You are cherished beyond words.',
+          'You are my everything.',
+          '',
+          'Happy Birthday, my love.',
+          'Here\'s to forever with you.',
+          '',
+          'Forever yours,',
+          'Golella \u{1F618}'
+        ];
+        var i = 0, ci = 0;
+        textEl.innerHTML = '';
+        function typeLine() {
+          if (i >= lines.length) return;
+          var line = lines[i];
+          if (ci < line.length) {
+            var span = document.createElement('span');
+            span.textContent = line[ci];
+            if (line[ci] === ' ') span.innerHTML = '&nbsp;';
+            textEl.appendChild(span);
+            ci++;
+            setTimeout(typeLine, 30);
+          } else {
+            textEl.appendChild(document.createElement('br'));
+            ci = 0; i++;
+            setTimeout(typeLine, 120);
+          }
+        }
+        setTimeout(typeLine, 300);
+      }, 600);
+      launchConfetti();
+    }
+
+    function closeSupernova() { document.getElementById('supernovaOverlay').classList.remove('show'); }
+    document.getElementById('supernovaOverlay').addEventListener('click', function(e) { if (e.target === this) closeSupernova(); });
+
+    // ==================== MUSIC ====================
+    (function() {
+      var player = null, started = false, playing = false;
+      var btn = document.getElementById('musicBtn');
+      function createPlayer() {
+        if (player) return;
+        player = new YT.Player('ytPlayerWrapper', {
+          height: '1', width: '1', videoId: '5eCE7-WERrs',
+          playerVars: { autoplay: 0, loop: 1, playlist: '5eCE7-WERrs', controls: 0, rel: 0 },
+          events: {
+            onReady: function() { if (started) { player.playVideo(); playing = true; btn.classList.remove('paused'); } },
+            onStateChange: function(e) { if (e.data === YT.PlayerState.ENDED) e.target.playVideo(); }
+          }
+        });
+      }
+      function loadMusic() {
+        if (typeof YT !== 'undefined' && YT.Player) { createPlayer(); return; }
+        var tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.getElementsByTagName('script')[0].parentNode.insertBefore(tag, document.getElementsByTagName('script')[0]);
+        window.onYouTubeIframeAPIReady = createPlayer;
+      }
+      loadMusic();
+      function startMusic() {
+        if (started) return;
+        started = true;
+        if (player && player.playVideo) { player.playVideo(); playing = true; btn.classList.remove('paused'); }
+      }
+      document.addEventListener('click', startMusic, { once: true });
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (!started) { startMusic(); return; }
+        if (player && player.playVideo) {
+          if (playing) { player.pauseVideo(); btn.classList.add('paused'); playing = false; }
+          else { player.playVideo(); btn.classList.remove('paused'); playing = true; }
+        }
+      });
+    })();
+
+    // ==================== FLOATING LOVE NOTES ====================
+    (function() {
+      var notes = [
+        'I love you more every day \u2764\uFE0F',
+        'You are my sunshine \u2600\uFE0F',
+        'Thinking of you always \u{1F49B}',
+        'You make life beautiful \u{1F338}',
+        'My heart is yours \u{1F49D}',
+        'You are my everything \u2B50',
+        'Stay amazing, my love \u{1F31F}',
+        'Forever and always \u{1F48D}',
+        'Sending you a kiss \u{1F48B}',
+        'You\u2019re my whole world \u{1F30D}',
+        'I miss you already \u{1F49B}',
+        'You\u2019re so beautiful \u{1F49D}',
+        'Can\u2019t stop thinking of you \u{1F60D}',
+        'You make my heart sing \u{1F3B5}',
+        'I\u2019m so lucky to have you \u{1F48D}',
+        'You\u2019re perfect just as you are \u2728'
+      ];
+      setInterval(function() {
+        var note = document.createElement('div');
+        note.className = 'love-note';
+        note.textContent = notes[Math.floor(Math.random() * notes.length)];
+        note.style.left = (5 + Math.random() * 40) + '%';
+        document.body.appendChild(note);
+        setTimeout(function() { note.remove(); }, 9000);
+      }, 4000);
+    })();
+
+    // ==================== SHAKE KEYFRAMES ====================
+    var ss2 = document.createElement('style');
+    ss2.textContent = '@keyframes shake { 0%,100% { transform: translateX(0); } 10%,30%,50%,70%,90% { transform: translateX(-6px) rotate(-2deg); } 20%,40%,60%,80% { transform: translateX(6px) rotate(2deg); } } @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity:1; } 100% { transform: translateY(110vh) rotate(720deg); opacity:0; } }';
+    document.head.appendChild(ss2);
+  </script>
 </body>
 </html>
