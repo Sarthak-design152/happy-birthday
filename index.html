@@ -243,7 +243,7 @@ section h2 { font-family: 'Cormorant Garamond', serif !important; color: #ffd700
     <div style="font-size:3rem;margin-bottom:10px;">🔒</div>
     <div style="font-family:'Alex Brush',cursive;font-size:2.2rem;color:#ffd700;margin-bottom:6px;">A Love Letter for Diksha</div>
     <div style="color:rgba(255,255,255,0.6);font-size:0.95rem;margin-bottom:24px;">Enter the secret word</div>
-    <input type="password" id="passwordInput" placeholder="Enter password..."
+    <input type="password" id="passwordInput" placeholder="Enter the secret word..."
       style="width:100%;padding:14px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:1rem;text-align:center;outline:none;transition:border-color 0.3s;"
       onfocus="this.style.borderColor='#ffd700'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'"
       onkeydown="if(event.key==='Enter')checkPassword()">
@@ -273,7 +273,7 @@ function checkPassword() {
     return;
   }
 
-  if (input.value === '1234') {
+  if (input.value.toLowerCase() === 'ilovediksha') {
     localStorage.setItem('bday_attempts', '0');
     sessionStorage.setItem('bday_unlocked', 'yes');
     gate.style.opacity = '0';
