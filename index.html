@@ -766,7 +766,7 @@
           var t = Math.random() * Math.PI * 2;
           var hx = 16 * Math.pow(Math.sin(t), 3);
           var hy = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-          pts.push({ x: cx + hx * scale * 0.08 + (Math.random() - 0.5) * 30, y: cy - hy * scale * 0.08 + (Math.random() - 0.5) * 30, r: 2 + Math.random() * 3, a: Math.random() * Math.PI * 2, s: 0.01 + Math.random() * 0.02 });
+          pts.push({ x: cx + hx * scale * 0.1, y: cy - hy * scale * 0.1, r: 2 + Math.random() * 3, a: Math.random() * Math.PI * 2, s: 0.01 + Math.random() * 0.02 });
         }
       }
       genStars();
@@ -839,55 +839,36 @@
 
     // ==================== LOVE METER ====================
     (function() {
-      var pct = 0;
+      var filled = false;
       var fill = document.getElementById('meterFill');
       var label = document.getElementById('meterLabel');
-      var tapped = false;
-      var msgs = [
-        '💕 A little spark... keep going!',
-        '💗 The love is growing!',
-        '💖 Halfway to infinity!',
-        '💝 So much love already!',
-        '💜 Almost overflowing!',
-        '💛 Bursting with love!',
-        '✨ Cosmic love level!',
-        '🌌 UNIVERSE OF LOVE!'
-      ];
       window.fillMeter = function() {
-        tapped = true;
-        var add = Math.floor(Math.random() * 5) + 3;
-        pct = Math.min(100, pct + add);
-        fill.style.width = pct + '%';
-        var idx = Math.min(Math.floor(pct / 15), msgs.length - 1);
-        label.textContent = pct + '% — ' + msgs[idx];
-        label.style.color = pct >= 99 ? '#ffd700' : '#e8d5f5';
-        // Hearts burst
+        if (filled) return;
+        filled = true;
+        fill.style.width = '100%';
+        label.textContent = '💖 100% — OUR LOVE IS INFINITE! 💖';
+        label.style.color = '#ffd700';
         var heartsContainer = document.querySelector('.love-meter');
-        for (var hi = 0; hi < 3; hi++) {
+        for (var hi = 0; hi < 8; hi++) {
           var h = document.createElement('span');
           h.textContent = ['❤️','💖','💗','💕','💓','💛','💜','💝'][Math.floor(Math.random()*8)];
-          h.style.cssText = 'position:absolute;font-size:1.2rem;pointer-events:none;animation:heartFloat 1s ease-out forwards;left:' + (30 + Math.random()*40) + '%;top:30%;';
+          h.style.cssText = 'position:absolute;font-size:1.5rem;pointer-events:none;animation:heartFloat 1.5s ease-out forwards;left:' + (10 + Math.random()*80) + '%;top:' + (10 + Math.random()*60) + '%;';
           heartsContainer.appendChild(h);
-          setTimeout(function() { h.remove(); }, 1000);
+          setTimeout(function() { h.remove(); }, 1500);
         }
-        if (pct >= 99) {
-          label.textContent = '💖 100% — OUR LOVE IS INFINITE! 💖';
-          label.style.color = '#ffd700';
-          fill.style.width = '100%';
-          launchConfetti();
-          setTimeout(launchConfetti, 400);
-          setTimeout(launchConfetti, 800);
-          for (var i = 0; i < 15; i++) {
-            (function(d) {
-              setTimeout(function() {
-                var hh = document.createElement('span');
-                hh.textContent = ['❤️','💖','💗','💕','💓','💛','💜','💝'][Math.floor(Math.random()*8)];
-                hh.style.cssText = 'position:absolute;font-size:1.5rem;pointer-events:none;animation:heartFloat 2s ease-out forwards;left:' + (10 + Math.random()*80) + '%;top:' + (10 + Math.random()*60) + '%;';
-                heartsContainer.appendChild(hh);
-                setTimeout(function() { hh.remove(); }, 2000);
-              }, d);
-            })(i * 150);
-          }
+        launchConfetti();
+        setTimeout(launchConfetti, 400);
+        setTimeout(launchConfetti, 800);
+        for (var i = 0; i < 20; i++) {
+          (function(d) {
+            setTimeout(function() {
+              var hh = document.createElement('span');
+              hh.textContent = ['❤️','💖','💗','💕','💓','💛','💜','💝'][Math.floor(Math.random()*8)];
+              hh.style.cssText = 'position:absolute;font-size:1.5rem;pointer-events:none;animation:heartFloat 2s ease-out forwards;left:' + (10 + Math.random()*80) + '%;top:' + (10 + Math.random()*60) + '%;';
+              heartsContainer.appendChild(hh);
+              setTimeout(function() { hh.remove(); }, 2000);
+            }, d);
+          })(i * 100);
         }
       };
     })();
