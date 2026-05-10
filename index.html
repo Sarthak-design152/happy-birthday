@@ -1140,6 +1140,12 @@
 
       </button>
 
+      <button class="surprise-btn" onclick="doNotClick()" style="background:linear-gradient(135deg,#ff5252,#d50000);color:#fff;border-color:#ff5252;animation:gentle-bounce 2s infinite;">
+
+        <span class="icon">&#x1F440;</span> Do not click &#x1F440;
+
+      </button>
+
       <button class="surprise-btn" onclick="showReason()">
 
         <span class="icon">&#x1F49D;</span> Reasons I Love You
@@ -1579,6 +1585,15 @@
       'You always know the right thing to say to make me feel better. &#x1F49B;'
     ];
     let reasonIndex = 0;
+
+    function doNotClick() {
+      const box = document.getElementById('revealBox');
+      box.innerHTML = '&#x1F381; &#x1F370; &#x1F381;<br><br><strong style="font-size:1.4rem;color:#e91e63;">Here\'s the cake for your birthday, enjoy! &#x1F388;</strong><br><br>&#x1F49B; Happy Birthday, Diksha! &#x1F49B;';
+      box.classList.add('show');
+      box.style.display = 'block';
+      launchConfetti();
+      launchFireworks();
+    }
 
     function showReason() {
       const box = document.getElementById('revealBox');
