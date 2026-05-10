@@ -36,14 +36,6 @@
 
     }
 
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Floating Hearts */
-
     .hearts-container {
 
       position: fixed;
@@ -837,7 +829,7 @@
       .main-card div[style*="160px"] { min-width: 90px !important; height: 110px !important; }
       .main-card div[style*="160px"] img { width: 100%; height: 100%; object-fit: cover; }
       .candle-flame { font-size: 1.4rem; top: -22px; }
-      .qwote-author { font-size: 0.8rem; }
+      .quote-author { font-size: 0.8rem; }
       .main-card button.surprise-btn { font-size: 1rem !important; padding: 14px 20px !important; }
     }
 
@@ -1597,23 +1589,6 @@
 
 
     // ==================== FLOATING HEARTS ====================
-
-    function createSparkles() {
-      const container = document.getElementById('sparkleContainer');
-      for (let i = 0; i < 25; i++) {
-        const star = document.createElement('div');
-        star.className = 'sparkle';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.width = (3 + Math.random() * 6) + 'px';
-        star.style.height = star.style.width;
-        star.style.animationDuration = (2 + Math.random() * 4) + 's';
-        star.style.animationDelay = (Math.random() * 5) + 's';
-        star.style.boxShadow = `0 0 ${6 + Math.random() * 10}px #e91e63, 0 0 ${10 + Math.random() * 15}px #ff80ab`;
-        container.appendChild(star);
-      }
-    }
-    createSparkles();
 
     function createPetals() {
       const container = document.getElementById('petalsContainer');
@@ -2548,7 +2523,7 @@
           }, delay);
         })(i * 80);
       }
-      msgs = ['\u2728 Wish granted! \u2728', '\u{1F31F} Your wish is heard! \u{1F31F}', '\u{1F49B} May it come true! \u{1F49B}', '\u2728 \u2764\uFE0F Granted with love \u2764\uFE0F \u2728'];
+      var msgs = ['\u2728 Wish granted! \u2728', '\u{1F31F} Your wish is heard! \u{1F31F}', '\u{1F49B} May it come true! \u{1F49B}', '\u2728 \u2764\uFE0F Granted with love \u2764\uFE0F \u2728'];
       msg.textContent = msgs[Math.floor(Math.random() * msgs.length)];
       msg.style.color = '#c2185b';
       msg.style.fontSize = '1.2rem';
