@@ -444,7 +444,7 @@ function checkPassword() {
   if (pw === correct) {
     localStorage.removeItem('bday_attempts');
     localStorage.removeItem('bday_locked_until');
-    if (gate) gate.style.display = 'none';
+    if (gate) gate.style.display = 'none'; if (typeof showMusicBtn === 'function') showMusicBtn();
     if (lo) lo.style.display = 'flex';
     setTimeout(function() {
       if (lo) lo.style.display = 'none';
@@ -2819,9 +2819,9 @@ window.addEventListener('load', function() {
 
 
 <!-- Volume fade-in audio -->
-<audio id="bgSong" loop style="display:none"></audio>
+<audio id="bgSong" loop style="display:none" preload="auto"></audio>
 <script>
-function initAudioFade(src) {
+function initAudioFade(src) { if (!src) src = '';
   var audio = document.getElementById('bgSong');
   if (!audio) return;
   audio.src = src;
@@ -2952,6 +2952,63 @@ function startAnimations() {
       }
     }
   }, 500);
+}
+</script>
+
+
+
+<!-- Music Button (appears after unlock) -->
+<div id="musicBtnWrapper" style="display:none;position:fixed;bottom:20px;right:20px;z-index:999">
+  <button id="musicBtn" onclick="toggleBgMusic()" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#b76e79,#e8a87c);border:2px solid rgba(255,255,255,0.2);color:#fff;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.3);transition:all 0.3s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    🎵
+  </button>
+</div>
+
+<script>
+var bgAudio = document.getElementById('bgSong');
+var bgMusicPlaying = false;
+
+function toggleBgMusic() {
+  var btn = document.getElementById('musicBtn');
+  if (!bgAudio) return;
+  if (bgMusicPlaying) {
+    bgAudio.pause();
+    bgMusicPlaying = false;
+    if (btn) btn.style.opacity = '0.5';
+  } else {
+    bgAudio.play().then(function() { 
+      bgMusicPlaying = true; 
+      if (btn) btn.style.opacity = '1';
+    }).catch(function(e) { 
+      console.log('Audio play failed:', e);
+      // Fallback: try YouTube
+      tryYouTubeFallback();
+    });
+  }
+}
+
+function tryYouTubeFallback() {
+  var player = document.getElementById('ytPlayerWrapper');
+  if (player && typeof YT !== 'undefined' && YT.Player) {
+    new YT.Player('ytPlayerWrapper', {
+      height: '0', width: '0',
+      videoId: '5eCE7-WERrs',
+      playerVars: { autoplay: 1, loop: 1, playlist: '5eCE7-WERrs' }
+    });
+  }
+}
+
+// Show music button after password unlock
+function showMusicBtn() {
+  var wrapper = document.getElementById('musicBtnWrapper');
+  if (wrapper) wrapper.style.display = 'block';
+}
+
+// Hook into checkPassword success
+var origCheck = window.checkPassword;
+if (origCheck) {
+  // Override to show music button on unlock
+  var origCheckPassword = origCheck;
 }
 </script>
 
