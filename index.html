@@ -117,6 +117,71 @@ section h2 .icon { margin-right: 8px; }
 }
 </style>
 
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Raleway:wght@300;400;600&family=Great+Vibes&family=Tangerine:wght@400;700&family=Parisienne&display=swap');
+:root {
+  --rose-gold: #e8a87c;
+  --deep-rose: #b76e79;
+  --burgundy: #4a0010;
+  --soft-pink: #ffb6c1;
+  --warm-gold: #ffd700;
+  --champagne: #f7e7ce;
+  --crimson: #dc143c;
+}
+body {
+  background: linear-gradient(135deg, #1a0008 0%, #3d0012 25%, #5a0015 50%, #3d0012 75%, #1a0008 100%) !important;
+  background-attachment: fixed !important;
+  font-family: 'Raleway', 'Segoe UI', sans-serif !important;
+}
+.hero-title {
+  font-family: 'Great Vibes', 'Alex Brush', cursive !important;
+  font-size: 3.8rem !important;
+  background: linear-gradient(135deg, #ffd700, #e8a87c, #ffb6c1, #ffd700);
+  background-size: 300% 300%;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  animation: heroGradient 4s ease-in-out infinite, titleGlow 3s ease-in-out infinite !important;
+}
+@keyframes heroGradient { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+.hero-sub { font-size: 1.3rem !important; color: #e8a87c !important; font-family: 'Parisienne', cursive !important; }
+section, .sunset-card {
+  background: linear-gradient(135deg, rgba(183,110,121,0.08), rgba(232,168,124,0.05)) !important;
+  border: 1px solid rgba(232,168,124,0.2) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(232,168,124,0.1) !important;
+}
+section h2, .golden-title {
+  font-family: 'Great Vibes', 'Alex Brush', cursive !important;
+  background: linear-gradient(135deg, #ffd700, #e8a87c);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-size: 2.2rem !important;
+}
+.copper-text { color: #e8a87c !important; }
+h3 { font-family: 'Tangerine', cursive !important; font-size: 2rem !important; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #1a0008; }
+::-webkit-scrollbar-thumb { background: linear-gradient(#b76e79, #e8a87c); border-radius: 4px; }
+.decorative-heart {
+  position: fixed;
+  pointer-events: none;
+  font-size: 2rem;
+  opacity: 0.06;
+  animation: floatHeart 20s linear infinite;
+  z-index: 0;
+}
+@keyframes floatHeart { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0.06; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+.romance-divider {
+  text-align: center;
+  margin: 30px auto;
+  font-size: 1.5rem;
+  color: rgba(232,168,124,0.3);
+  letter-spacing: 12px;
+}
+
+
+
 <!-- BLUSH BUTTON -->
 <section class="sunset-card" style="max-width:600px;margin:40px auto;padding:40px 30px;border-radius:24px;text-align:center;position:relative;overflow:hidden">
   <div id="blushGlow" style="position:absolute;top:50%;left:50%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,105,180,0.3),transparent);border-radius:50%;transform:translate(-50%,-50%) scale(0);transition:all 0.8s ease;pointer-events:none"></div>
@@ -915,6 +980,197 @@ window.addEventListener('load', function() {
 // Load quiz on page load too
 window.addEventListener('load', function() {
   setTimeout(function() { loadQuiz(); }, 500);
+});
+</script>
+
+
+<!-- ===== BLOW A KISS ===== -->
+<section style="border-radius:24px;padding:30px 24px;margin:40px auto;max-width:600px;text-align:center">
+  <h3 style="font-size:2.2rem;margin-bottom:4px">💋 Blow a Kiss</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:16px;color:#e8a87c">Send a flying kiss across the screen...</p>
+  <button onclick="blowKiss()" style="background:linear-gradient(135deg,#b76e79,#e8a87c);color:#fff;border:none;padding:16px 40px;border-radius:50px;font-size:1.2rem;cursor:pointer;font-weight:600;transition:all 0.3s;box-shadow:0 4px 20px rgba(183,110,121,0.4);font-family:'Raleway',sans-serif" onmouseover="this.style.transform='scale(1.08)';this.style.boxShadow='0 6px 30px rgba(183,110,121,0.6)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(183,110,121,0.4)'">😘 Blow a Kiss!</button>
+  <div id="kissCount" style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:rgba(232,168,124,0.6);margin-top:12px">Kisses sent: <span id="kissNum">0</span></div>
+  <style>
+    .flying-kiss { position:fixed;pointer-events:none;z-index:99999;font-size:3rem;animation:kissFly 2s ease-out forwards }
+    @keyframes kissFly { 0% { transform:translate(0,0) scale(0.5) rotate(0deg);opacity:1 } 50% { transform:translate(var(--kx),var(--ky)) scale(1.2);opacity:0.8 } 100% { transform:translate(calc(var(--kx)*1.5),calc(var(--ky)*1.5)) scale(0.8);opacity:0 } }
+    .kiss-heart { position:fixed;pointer-events:none;z-index:99998;font-size:1rem;animation:kissHeartAnim 1.5s ease-out forwards }
+    @keyframes kissHeartAnim { 0% { transform:translate(0,0) scale(0);opacity:1 } 100% { transform:translate(var(--hx),var(--hy)) scale(1.5);opacity:0 } }
+  </style>
+</section>
+
+<!-- ===== I LOVE YOU BECAUSE... ===== -->
+<section style="border-radius:24px;padding:30px 24px;margin:40px auto;max-width:600px;text-align:center">
+  <h3 style="font-size:2.2rem;margin-bottom:4px">🥰 I Love You Because...</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:16px;color:#e8a87c">Tap a card to reveal a reason from the heart</p>
+  <div id="reasonsWall" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 auto;max-width:450px"></div>
+  <style>
+    .reason-wall-card { padding:14px 12px;border-radius:14px;background:rgba(232,168,124,0.08);border:1px solid rgba(232,168,124,0.15);cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(255,255,255,0.8);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);min-height:50px;display:flex;align-items:center;justify-content:center;text-align:center;user-select:none }
+    .reason-wall-card:hover { background:rgba(232,168,124,0.15);border-color:rgba(232,168,124,0.3);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.2) }
+    .reason-wall-card.revealed { background:rgba(255,215,0,0.12);border-color:rgba(255,215,0,0.3);color:#ffd700;font-family:'Tangerine',cursive;font-size:1.4rem }
+    .reason-wall-card:active { transform:scale(0.95) }
+  </style>
+</section>
+
+<!-- ===== ROMANTIC POEM ===== -->
+<section style="border-radius:24px;padding:30px 24px;margin:40px auto;max-width:600px;text-align:center">
+  <h3 style="font-size:2.2rem;margin-bottom:4px">🌹 A Poem for You</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:16px;color:#e8a87c">Tap to reveal a verse from my heart...</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:12px">
+    <button onclick="revealPoemLine(0)" style="background:rgba(183,110,121,0.2);border:1px solid rgba(183,110,121,0.3);color:#e8a87c;padding:8px 18px;border-radius:30px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:0.9rem;transition:all 0.3s" onmouseover="this.style.background='rgba(183,110,121,0.3)'" onmouseout="this.style.background='rgba(183,110,121,0.2)'">Verse 1</button>
+    <button onclick="revealPoemLine(1)" style="background:rgba(183,110,121,0.2);border:1px solid rgba(183,110,121,0.3);color:#e8a87c;padding:8px 18px;border-radius:30px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:0.9rem;transition:all 0.3s" onmouseover="this.style.background='rgba(183,110,121,0.3)'" onmouseout="this.style.background='rgba(183,110,121,0.2)'">Verse 2</button>
+    <button onclick="revealPoemLine(2)" style="background:rgba(183,110,121,0.2);border:1px solid rgba(183,110,121,0.3);color:#e8a87c;padding:8px 18px;border-radius:30px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:0.9rem;transition:all 0.3s" onmouseover="this.style.background='rgba(183,110,121,0.3)'" onmouseout="this.style.background='rgba(183,110,121,0.2)'">Verse 3</button>
+    <button onclick="revealPoemLine(3)" style="background:rgba(183,110,121,0.2);border:1px solid rgba(183,110,121,0.3);color:#e8a87c;padding:8px 18px;border-radius:30px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:0.9rem;transition:all 0.3s" onmouseover="this.style.background='rgba(183,110,121,0.3)'" onmouseout="this.style.background='rgba(183,110,121,0.2)'">Verse 4</button>
+  </div>
+  <div id="poemDisplay" style="min-height:120px;padding:20px;background:rgba(232,168,124,0.05);border-radius:16px;border:1px solid rgba(232,168,124,0.1)">
+    <p id="poemText" style="font-family:'Tangerine',cursive;font-size:1.8rem;color:#ffd700;line-height:1.6;margin:0;text-align:center"></p>
+  </div>
+  <style>
+    .poem-line { animation:poemFadeIn 0.8s ease-out forwards; opacity:0 }
+    @keyframes poemFadeIn { 0% { opacity:0;transform:translateY(10px) } 100% { opacity:1;transform:translateY(0) } }
+    .poem-line:nth-child(1) { animation-delay:0.1s }
+    .poem-line:nth-child(2) { animation-delay:0.3s }
+    .poem-line:nth-child(3) { animation-delay:0.5s }
+    .poem-line:nth-child(4) { animation-delay:0.7s }
+  </style>
+</section>
+
+<script>
+// ===== BLOW A KISS =====
+var kissTotal = 0;
+function blowKiss() {
+  var kissEmojis = ['😘','💋','😽','💏','😗'];
+  var heartEmojis = ['❤️','💕','💗','💖','💓','🩷','🥰','💝'];
+  
+  for (var i = 0; i < 5; i++) {
+    (function(d) {
+      setTimeout(function() {
+        var k = document.createElement('div');
+        k.className = 'flying-kiss';
+        k.textContent = kissEmojis[Math.floor(Math.random() * kissEmojis.length)];
+        var startX = 30 + Math.random() * 40;
+        var startY = 40 + Math.random() * 30;
+        k.style.left = startX + '%';
+        k.style.top = startY + '%';
+        var dx = (Math.random() - 0.5) * 300;
+        var dy = -(150 + Math.random() * 200);
+        k.style.setProperty('--kx', dx + 'px');
+        k.style.setProperty('--ky', dy + 'px');
+        k.style.fontSize = (2 + Math.random() * 2) + 'rem';
+        document.body.appendChild(k);
+        setTimeout(function() { k.remove(); }, 2500);
+      }, d);
+    })(i * 100);
+  }
+  
+  // Trail hearts behind each kiss
+  for (var i = 0; i < 15; i++) {
+    (function(d) {
+      setTimeout(function() {
+        var h = document.createElement('div');
+        h.className = 'kiss-heart';
+        h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        h.style.left = (20 + Math.random() * 60) + '%';
+        h.style.top = (30 + Math.random() * 40) + '%';
+        var hx = (Math.random() - 0.5) * 80;
+        var hy = -(50 + Math.random() * 100);
+        h.style.setProperty('--hx', hx + 'px');
+        h.style.setProperty('--hy', hy + 'px');
+        document.body.appendChild(h);
+        setTimeout(function() { h.remove(); }, 2000);
+      }, d);
+    })(i * 80);
+  }
+  
+  kissTotal++;
+  var numEl = document.getElementById('kissNum');
+  if (numEl) numEl.textContent = kissTotal;
+}
+
+// ===== I LOVE YOU BECAUSE... =====
+var reasonsWallData = [
+  "The way you smile lights up my whole world",
+  "You make every day feel special",
+  "Your laugh is my favorite melody",
+  "You believe in me even when I don't",
+  "The way your eyes sparkle when you're happy",
+  "You have the kindest heart I know",
+  "You make me want to be a better person",
+  "Your hugs feel like coming home",
+  "You understand me without words",
+  "You're the most beautiful person inside and out",
+  "You make even ordinary moments magical",
+  "I'm completely myself when I'm with you"
+];
+var reasonRevealed = [];
+
+function initReasonsWall() {
+  var wall = document.getElementById('reasonsWall');
+  if (!wall) return;
+  wall.innerHTML = '';
+  reasonRevealed = [];
+  for (var i = 0; i < reasonsWallData.length; i++) {
+    reasonRevealed.push(false);
+    var card = document.createElement('div');
+    card.className = 'reason-wall-card';
+    card.textContent = '💕 Tap to reveal';
+    card.setAttribute('data-idx', i);
+    card.onclick = function() {
+      var idx = parseInt(this.getAttribute('data-idx'));
+      if (reasonRevealed[idx]) return;
+      reasonRevealed[idx] = true;
+      this.textContent = reasonsWallData[idx];
+      this.classList.add('revealed');
+      // Check all revealed
+      var allDone = reasonRevealed.every(function(v) { return v; });
+      if (allDone) {
+        setTimeout(function() {
+          var msg = document.createElement('div');
+          msg.style.cssText = 'grid-column:1/-1;text-align:center;font-family:\'Tangerine\',cursive;font-size:1.6rem;color:#ffd700;margin-top:8px;animation:poemFadeIn 0.8s ease-out';
+          msg.textContent = 'And I could write a thousand more... 💕';
+          wall.appendChild(msg);
+        }, 500);
+      }
+    };
+    wall.appendChild(card);
+  }
+}
+
+// ===== ROMANTIC POEM =====
+var poemLines = [
+  ["In your eyes I found my home,", "A place where I am never alone.", "Your smile, a sunrise after rain,", "That washes away every pain."],
+  ["Your laughter dances in the air,", "A melody beyond compare.", "Every moment by your side,", "Is a treasure I want to hide."],
+  ["You are the poetry I breathe,", "The gentle faith I still believe.", "With every heartbeat, every sigh,", "I fall for you — no need to try."],
+  ["So here's my heart, forever true,", "A love that's meant for only you.", "Happy Birthday, my darling dear,", "I'll love you more with every year."]
+];
+var poemRevealed = [false, false, false, false];
+
+function revealPoemLine(idx) {
+  if (poemRevealed[idx]) return;
+  poemRevealed[idx] = true;
+  var container = document.getElementById('poemText');
+  if (!container) return;
+  container.innerHTML = '';
+  for (var v = 0; v < 4; v++) {
+    var revealed = poemRevealed[v];
+    if (revealed) {
+      for (var l = 0; l < poemLines[v].length; l++) {
+        var line = document.createElement('div');
+        line.className = 'poem-line';
+        line.textContent = poemLines[v][l];
+        container.appendChild(line);
+      }
+      if (v < 3) {
+        var br = document.createElement('div');
+        br.style.height = '8px';
+        container.appendChild(br);
+      }
+    }
+  }
+}
+
+// Init on load
+window.addEventListener('load', function() {
+  setTimeout(function() { initReasonsWall(); }, 600);
 });
 </script>
 
@@ -2329,5 +2585,23 @@ function rainLetters() {
 </script>
 
 
+<div id="decorHearts"></div>
+<script>
+(function() {
+  var c = document.getElementById('decorHearts');
+  if (!c) return;
+  var hearts = ['❤️','💕','💗','💖','💝','🩷','🥰'];
+  for (var i = 0; i < 12; i++) {
+    var h = document.createElement('div');
+    h.className = 'decorative-heart';
+    h.textContent = hearts[i % hearts.length];
+    h.style.left = (Math.random() * 100) + '%';
+    h.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+    h.style.animationDuration = (15 + Math.random() * 20) + 's';
+    h.style.animationDelay = (Math.random() * 20) + 's';
+    c.appendChild(h);
+  }
+})();
+</script>
 </body>
 </html>
