@@ -204,8 +204,7 @@ body {
 </style>
 
 </head>
-<body><!-- Birthday Song --><div style="display:none;"><audio id="birthdaySong" autoplay loop><source src="birthday.mp3" onerror="this.parentElement.pause();this.parentElement.style.display='none'" type="audio/mpeg">Your browser does not support the audio element.</audio></div>
-
+<body>
 <!-- Password Gate -->
 <div id="passwordGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);z-index:100000;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Quicksand',sans-serif;">
   <div style="text-align:center;padding:30px;max-width:380px;width:90%;">
@@ -1855,19 +1854,108 @@ function rainLetters() {
 </script>
 
 
-<div style="position:fixed;top:10px;right:10px;z-index:1000;">
-  <button id="audioToggle" onclick="toggleAudio()" style="background:rgba(0,0,0,0.5);color:white;border:none;padding:8px 12px;border-radius:50%;font-size:1.4rem;cursor:pointer;">🔊</button>
-</div>
-<script>
-var birthdaySong = document.getElementById("birthdaySong");
-if (birthdaySong) birthdaySong.muted = true;
-function toggleAudio() {
-  var s = document.getElementById("birthdaySong");
-  var b = document.getElementById("audioToggle");
-  if (!s || !b) return;
-  if (s.paused) { s.play(); b.innerHTML = "🔊"; }
-  else { s.pause(); b.innerHTML = "🔇"; }
-}
-</script>
+
 </body>
 </html>
+<div style="position:fixed;top:10px;right:10px;z-index:10000;">
+  <button id="audioToggleBtn" onclick="toggleMusic()" style="background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);color:white;border:1px solid rgba(255,215,0,0.3);padding:8px 12px;border-radius:50%;font-size:1.4rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.3);transition:all 0.3s;">🔇</button>
+</div>
+<script>
+// Birthday melody using Web Audio API
+var audioCtx = null;
+var isPlaying = false;
+var gainNode = null;
+var melodyInterval = null;
+
+function initAudio() {
+  if (audioCtx) return;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0.15;
+    gainNode.connect(audioCtx.destination);
+  } catch(e) { console.log('Web Audio not supported'); }
+}
+
+function playNote(freq, duration, startTime) {
+  if (!audioCtx || !gainNode) return;
+  var osc = audioCtx.createOscillator();
+  var noteGain = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  noteGain.gain.value = 0;
+  noteGain.gain.setValueAtTime(0, startTime);
+  noteGain.gain.linearRampToValueAtTime(1, startTime + 0.05);
+  noteGain.gain.linearRampToValueAtTime(0.7, startTime + duration * 0.5);
+  noteGain.gain.linearRampToValueAtTime(0, startTime + duration);
+  osc.connect(noteGain);
+  noteGain.connect(audioCtx.destination);
+  osc.start(startTime);
+  osc.stop(startTime + duration);
+}
+
+function playMelody() {
+  if (!audioCtx) initAudio();
+  if (!audioCtx) return;
+  if (melodyInterval) { clearInterval(melodyInterval); melodyInterval = null; }
+  
+  // Happy Birthday notes: [frequency, duration(beats)]
+  var notes = [
+    // "Happy birthday to you"
+    [262, 0.4], [262, 0.4], [294, 0.8], [262, 0.8], [349, 0.8], [330, 1.2],
+    // "Happy birthday to you"
+    [262, 0.4], [262, 0.4], [294, 0.8], [262, 0.8], [392, 0.8], [349, 1.2],
+    // "Happy birthday dear Diksha"
+    [262, 0.4], [262, 0.4], [523, 0.8], [440, 0.8], [349, 0.8], [330, 0.8], [294, 0.8],
+    // "Happy birthday to you"
+    [494, 0.4], [494, 0.4], [440, 0.8], [349, 0.8], [392, 0.8], [349, 1.2]
+  ];
+  
+  var bpm = 120; // beats per minute
+  var beatDuration = 60 / bpm;
+  var currentTime = audioCtx.currentTime + 0.1;
+  
+  notes.forEach(function(note) {
+    playNote(note[0], note[1] * beatDuration, currentTime);
+    currentTime += note[1] * beatDuration + 0.02;
+  });
+  
+  // Loop: schedule next play after melody ends (plus pause)
+  var melodyLength = currentTime - audioCtx.currentTime - 0.1;
+  melodyInterval = setTimeout(function() {
+    if (isPlaying) playMelody();
+  }, (melodyLength + 3) * 1000);
+}
+
+function toggleMusic() {
+  var btn = document.getElementById('audioToggleBtn');
+  if (!btn) return;
+  if (isPlaying) {
+    isPlaying = false;
+    if (melodyInterval) { clearInterval(melodyInterval); melodyInterval = null; }
+    if (gainNode) gainNode.gain.value = 0;
+    btn.innerHTML = '🔇';
+    btn.style.borderColor = 'rgba(255,215,0,0.3)';
+  } else {
+    isPlaying = true;
+    initAudio();
+    if (gainNode) gainNode.gain.value = 0.15;
+    btn.innerHTML = '🔊';
+    btn.style.borderColor = '#ffd700';
+    btn.style.boxShadow = '0 0 15px rgba(255,215,0,0.4)';
+    // Play immediately
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    playMelody();
+  }
+}
+
+// Start muted — user clicks to play
+setTimeout(function() {
+  var btn = document.getElementById('audioToggleBtn');
+  if (btn) {
+    btn.innerHTML = '🔊';
+    btn.title = 'Click to play birthday song';
+  }
+}, 1000);
+</script>
+
