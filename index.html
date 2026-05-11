@@ -430,6 +430,51 @@ body {
 </div>
 <div id="loadingOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#1a0008;z-index:99999;align-items:center;justify-content:center;flex-direction:column;">
   <div style="font-size:3rem;margin-bottom:10px;animation:pulse 1s ease-in-out infinite">💖</div>
+
+<script>
+function checkPassword() {
+  var input = document.getElementById('passwordInput');
+  var error = document.getElementById('passwordError');
+  var gate = document.getElementById('passwordGate');
+  var lo = document.getElementById('loadingOverlay');
+  var pw = input ? input.value.trim().toLowerCase() : '';
+  var correct = 'ilovediksha';
+  var attempts = parseInt(localStorage.getItem('bday_attempts') || '0');
+  var lockedUntil = parseInt(localStorage.getItem('bday_locked_until') || '0');
+  var now = Date.now();
+  if (lockedUntil > now) {
+    var mins = Math.ceil((lockedUntil - now) / 60000);
+    if (error) error.textContent = 'Too many attempts. Try again in ' + mins + ' min.';
+    return;
+  }
+  if (pw === correct) {
+    localStorage.removeItem('bday_attempts');
+    localStorage.removeItem('bday_locked_until');
+    if (gate) gate.style.display = 'none';
+    if (lo) lo.style.display = 'flex';
+    setTimeout(function() {
+      if (lo) lo.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      if (window.startAnimations) window.startAnimations();
+    }, 1500);
+    if (window.confettiBurst) setTimeout(window.confettiBurst, 1600);
+  } else {
+    attempts++;
+    localStorage.setItem('bday_attempts', attempts);
+    if (error) {
+      if (attempts >= 5) {
+        var lockTime = 5 * 60 * 1000;
+        localStorage.setItem('bday_locked_until', now + lockTime);
+        error.textContent = 'Too many attempts! Locked for 5 min.';
+      } else {
+        error.textContent = 'Wrong password! ' + (5 - attempts) + ' attempts left.';
+      }
+    }
+    if (input) { input.value = ''; input.focus(); }
+  }
+}
+</script>
+
   <div style="font-family:'Great Vibes',cursive;font-size:1.5rem;color:#e8a87c;">Loading your surprise...</div>
 </div>
 <div class="container">
