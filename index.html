@@ -410,123 +410,29 @@ body {
 </head>
 <body>
 <!-- Password Gate -->
-<div id="passwordGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);z-index:100000;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Quicksand',sans-serif;">
+<div id="passwordGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a0008,#4a0010);z-index:100000;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Raleway',sans-serif;">
   <div style="text-align:center;padding:30px;max-width:380px;width:90%;">
-    <div style="font-size:3rem;margin-bottom:10px;">🔒</div>
-  <div class="music-btn" id="musicBtn">🎵;</div>
-
-    <div style="font-family:'Dancing Script',cursive;font-size:2rem;color:#fff;margin-bottom:6px;">Secret Surprise</div>
-    <div style="color:rgba(255,255,255,0.6);font-size:0.95rem;margin-bottom:24px;">Enter the password to unlock</div>
+    <div style="font-size:3rem;margin-bottom:10px;">💕</div>
+    <div style="font-family:'Great Vibes',cursive;font-size:2.2rem;color:#ffd700;margin-bottom:6px;">A Birthday Surprise</div>
+    <div style="color:rgba(232,168,124,0.6);font-size:0.95rem;margin-bottom:24px;font-family:'Cormorant Garamond',serif;">Enter the password to unlock</div>
     <input type="password" id="passwordInput" placeholder="Enter password..."
-      style="width:100%;padding:14px 18px;border-radius:50px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:1rem;text-align:center;outline:none;transition:border-color 0.3s;"
-      onfocus="this.style.borderColor='#ffd700'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'"
+      style="width:100%;padding:14px 18px;border-radius:50px;border:2px solid rgba(232,168,124,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:1rem;text-align:center;outline:none;transition:border-color 0.3s;"
+      onfocus="this.style.borderColor='#e8a87c'" onblur="this.style.borderColor='rgba(232,168,124,0.2)'"
       onkeydown="if(event.key==='Enter')checkPassword()">
     <button onclick="checkPassword()"
-      style="margin-top:14px;width:100%;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#ffd700,#ffaa00);color:#764ba2;font-weight:700;font-size:1rem;cursor:pointer;transition:transform 0.2s;"
+      style="margin-top:14px;width:100%;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#b76e79,#e8a87c);color:#fff;font-weight:700;font-size:1rem;cursor:pointer;transition:transform 0.2s;font-family:'Raleway',sans-serif;"
       onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-      Unlock &#x1F49B;
+      Unlock 💕
     </button>
     <div id="passwordError" style="margin-top:12px;font-size:0.85rem;color:#ff6b6b;min-height:20px;"></div>
-    <div style="margin-top:20px;font-size:0.8rem;color:rgba(255,255,255,0.3);">&#x2728; A special surprise awaits &#x2728;</div>
+    <div style="margin-top:20px;font-size:0.8rem;color:rgba(232,168,124,0.3);font-family:'Cormorant Garamond',serif;">✨ A special surprise awaits ✨</div>
   </div>
 </div>
-
-<script>
-function checkPassword() {
-  var input = document.getElementById('passwordInput');
-  var error = document.getElementById('passwordError');
-  var gate = document.getElementById('passwordGate');
-  var lo = document.getElementById('loadingOverlay');
-  var attempts = parseInt(localStorage.getItem('bday_attempts') || '0');
-  var lockedUntil = parseInt(localStorage.getItem('bday_locked_until') || '0');
-  var now = Date.now();
-
-  if (lockedUntil > now) {
-    var mins = Math.ceil((lockedUntil - now) / 60000);
-    error.innerHTML = '&#x1F512; Locked for ' + mins + ' more minute(s).';
-    return;
-  }
-
-  if (input.value === 'ilovediksha') {
-    localStorage.setItem('bday_attempts', '0');
-    sessionStorage.setItem('bday_unlocked', 'yes');
-    gate.style.opacity = '0';
-    setTimeout(function() {
-      gate.style.display = 'none';
-      if (lo) { lo.style.display = 'flex'; lo.style.opacity = '1';
-        setTimeout(function() { lo.style.opacity = '0'; setTimeout(function() { lo.style.display = 'none'; }, 600); }, 600);
-      }
-    }, 400);
-  } else {
-    attempts++;
-    localStorage.setItem('bday_attempts', attempts.toString());
-    var remaining = 5 - attempts;
-    if (remaining <= 0) {
-      var lockTime = now + 60 * 60 * 1000;
-      localStorage.setItem('bday_locked_until', lockTime.toString());
-      error.innerHTML = '&#x1F512; Too many attempts! Locked for 1 hour.';
-      input.value = '';
-    } else {
-      error.innerHTML = '&#x274C; Wrong password. ' + remaining + ' attempt(s) remaining.';
-      input.value = '';
-    }
-  }
-}
-
-(function() {
-  var lockedUntil = parseInt(localStorage.getItem('bday_locked_until') || '0');
-  if (lockedUntil > 0 && lockedUntil < Date.now()) {
-    localStorage.removeItem('bday_locked_until');
-    localStorage.setItem('bday_attempts', '0');
-  }
-  if (sessionStorage.getItem('bday_unlocked') === 'yes') {
-    var gate = document.getElementById('passwordGate');
-    if (gate) gate.style.display = 'none';
-  }
-  var lo = document.getElementById('loadingOverlay');
-  if (lo) { lo.style.display = 'none'; }
-})();
-</script>
-
-<div id="loadingOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.8s;">
-  <div style="font-family:'Dancing Script',cursive;font-size:2rem;color:#fff;text-align:center;padding:20px;">
-    Loading something special for you...
-    <div style="font-size:3rem;margin-top:16px;">💛</div>
-    <div style="margin-top:20px;font-size:1rem;color:rgba(255,255,255,0.6);">Just a moment...</div>
-    <div style="margin-top:16px;width:60px;height:60px;border:4px solid rgba(255,255,255,0.2);border-top-color:#ffd700;border-radius:50%;animation:loadSpin 0.8s linear infinite;"></div>
-  </div>
+<div id="loadingOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#1a0008;z-index:99999;align-items:center;justify-content:center;flex-direction:column;">
+  <div style="font-size:3rem;margin-bottom:10px;animation:pulse 1s ease-in-out infinite">💖</div>
+  <div style="font-family:'Great Vibes',cursive;font-size:1.5rem;color:#e8a87c;">Loading your surprise...</div>
 </div>
-<style>
-@keyframes loadSpin { to { transform: rotate(360deg); } }
-</style>
-
-  <!-- Stars -->
-  <canvas id="starsCanvas"></canvas>
-
-  <!-- Floating Hearts & Petals Container -->
-  <div class="float-container" id="floatContainer"></div>
-
-  <!-- Fireworks -->
-  <canvas id="fireworksCanvas"></canvas>
-
-  <!-- Rose Petals Rain -->
-  <canvas id="petalsCanvas"></canvas>
-
-  <!-- Sparkle Stars -->
-  <div class="sparkle-container" id="sparkleContainer"></div>
-
-  <!-- Falling Petals -->
-  <div class="petals-container" id="petalsContainer"></div>
-
-  <!-- Shooting Star -->
-  <div class="shooting-star" id="shootingStar"></div>
-
-  <!-- Music -->
-  <div id="ytPlayerWrapper"></div>
-  
-
-  <!-- ============ CONTENT CONTAINER ============ -->
-  <div class="container">
+<div class="container">
 
   <!-- ============ HERO ============ -->
   <div class="hero">
