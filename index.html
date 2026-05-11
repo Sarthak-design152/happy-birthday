@@ -115,7 +115,121 @@ section h2 .icon { margin-right: 8px; }
   10% { opacity: 0.7; transform: scale(1); }
   100% { transform: translateY(-120vh) scale(0.8); opacity: 0; }
 }
-.supernova-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, #667eea, #764ba2); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
+.
+<!-- BLUSH BUTTON -->
+<section class="sunset-card" style="max-width:600px;margin:40px auto;padding:40px 30px;border-radius:24px;text-align:center;position:relative;overflow:hidden">
+  <div id="blushGlow" style="position:absolute;top:50%;left:50%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,105,180,0.3),transparent);border-radius:50%;transform:translate(-50%,-50%) scale(0);transition:all 0.8s ease;pointer-events:none"></div>
+  <h3 class="golden-title" style="font-size:2.2rem;margin-bottom:8px">💕 Something Just for You 💕</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:20px">Tap below and watch your heart bloom...</p>
+  <button onclick="showBlush()" style="background:linear-gradient(135deg,#ff1493,#ff69b4);color:white;border:none;padding:16px 40px;border-radius:50px;font-size:1.2rem;cursor:pointer;font-weight:600;transition:all 0.3s;box-shadow:0 4px 20px rgba(255,105,180,0.4);position:relative;overflow:hidden" onmouseover="this.style.transform='scale(1.08)';this.style.boxShadow='0 6px 30px rgba(255,105,180,0.6)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(255,105,180,0.4)'">💗 Make Me Blush 💗</button>
+  <div id="blushMessage" style="max-height:0;overflow:hidden;transition:max-height 0.8s ease,opacity 0.6s ease;opacity:0;margin-top:20px">
+    <div style="padding:24px;background:rgba(255,105,180,0.08);border-radius:16px;border:1px solid rgba(255,105,180,0.2);position:relative">
+      <div id="blushEmoji" style="font-size:3rem;margin-bottom:10px">💗</div>
+      <p id="blushText" class="golden-title" style="font-size:1.4rem;line-height:1.6;margin:0;padding:0 10px"></p>
+      <div id="blushHeartsContainer" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden"></div>
+    </div>
+  </div>
+  <style>
+    #blushMessage.show { max-height: 500px; opacity: 1; }
+    .blush-heart { position:absolute;font-size:1.2rem;pointer-events:none;animation:blushHeartFloat 2s ease-out forwards }
+    @keyframes blushHeartFloat { 0% { transform:translateY(0) scale(0);opacity:1 } 50% { opacity:0.8 } 100% { transform:translateY(-100px) scale(1.5);opacity:0 } }
+    .click-heart { position:fixed;pointer-events:none;z-index:99999;font-size:1.5rem;animation:clickHeartAnim 1.5s ease-out forwards }
+    @keyframes clickHeartAnim { 0% { transform:translate(0,0) scale(0.5);opacity:1 } 100% { transform:translate(var(--cx),var(--cy)) scale(1.2);opacity:0 } }
+  </style>
+</section>
+<script>
+var blushMsgs = [
+  "The way your eyes light up when you smile... it's the most beautiful thing I've ever seen.",
+  "Every time you say my name, my heart does a little flip. You have no idea.",
+  "You're the most gorgeous person inside and out, and I fall for you more every single day.",
+  "I catch myself smiling for no reason, and then I realize — I was thinking of you.",
+  "Your laugh is my favorite melody. I could listen to it all day, every day.",
+  "The way you look at me makes me feel like I'm the luckiest person alive.",
+  "You make my world brighter just by being in it. Don't ever change.",
+  "I love the little things about you — the way you tilt your head, the way you blush, the way you care.",
+  "You're not just beautiful, you're breathtaking. And I'm not exaggerating.",
+  "Every moment with you feels like a dream I never want to wake up from.",
+  "You have this magic that makes everything better. Your presence is a gift.",
+  "I still get butterflies when I talk to you. That's how I know it's real.",
+  "You are my happy place. My calm. My home.",
+  "I love you not just for who you are, but for who I become when I'm with you.",
+  "If I could give you one thing, it would be the ability to see yourself through my eyes."
+];
+var blushIdx = 0;
+function showBlush() {
+  var msg = document.getElementById('blushMessage');
+  var txt = document.getElementById('blushText');
+  var emoji = document.getElementById('blushEmoji');
+  var glow = document.getElementById('blushGlow');
+  var heartsC = document.getElementById('blushHeartsContainer');
+  if (!msg || !txt) return;
+  
+  // Show message
+  txt.textContent = blushMsgs[blushIdx % blushMsgs.length];
+  blushIdx++;
+  
+  // Change emoji
+  var emojis = ['💗','❤️','💖','💕','💓','🩷','🥰','😊','💝','✨'];
+  emoji.textContent = emojis[blushIdx % emojis.length];
+  
+  msg.classList.add('show');
+  
+  // Glow effect
+  if (glow) {
+    glow.style.transform = 'translate(-50%,-50%) scale(4)';
+    glow.style.opacity = '0';
+    setTimeout(function() { glow.style.transform = 'translate(-50%,-50%) scale(0)'; glow.style.opacity = '1'; }, 800);
+  }
+  
+  // Burst small hearts in the container
+  if (heartsC) {
+    for (var i = 0; i < 12; i++) {
+      (function(d) {
+        setTimeout(function() {
+          var h = document.createElement('div');
+          h.className = 'blush-heart';
+          h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          h.style.left = (10 + Math.random() * 80) + '%';
+          h.style.top = (40 + Math.random() * 40) + '%';
+          h.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+          h.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+          heartsC.appendChild(h);
+          setTimeout(function() { h.remove(); }, 3000);
+        }, d);
+      })(i * 80);
+    }
+  }
+  
+  // Also pop hearts across screen
+  popHeart(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+  setTimeout(function() { popHeart(Math.random() * window.innerWidth, Math.random() * window.innerHeight); }, 200);
+  setTimeout(function() { popHeart(Math.random() * window.innerWidth, Math.random() * window.innerHeight); }, 400);
+}
+
+// Click anywhere to create hearts
+function popHeart(x, y) {
+  var h = document.createElement('div');
+  h.className = 'click-heart';
+  var emojis = ['💗','❤️','💖','💕','💓','🥰','💛','✨','🌟'];
+  h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  h.style.left = x + 'px';
+  h.style.top = y + 'px';
+  var dx = (Math.random() - 0.5) * 60;
+  var dy = -(40 + Math.random() * 60);
+  h.style.setProperty('--cx', dx + 'px');
+  h.style.setProperty('--cy', dy + 'px');
+  document.body.appendChild(h);
+  setTimeout(function() { h.remove(); }, 2000);
+}
+
+document.addEventListener('click', function(e) {
+  if (Math.random() < 0.15) { // 15% chance on each click
+    popHeart(e.clientX, e.clientY);
+  }
+});
+</script>
+
+supernova-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, #667eea, #764ba2); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
 .supernova-overlay.show { display: flex; }
 .supernova-content { max-width: 600px; width: 95%; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border-radius: 32px; padding: 40px 32px; border: 1px solid rgba(255,255,255,0.15); text-align: center; position: relative; overflow-y: auto; max-height: 85vh; }
 .sn-close { position: absolute; top: 16px; right: 20px; font-size: 2rem; color: rgba(255,255,255,0.5); cursor: pointer; z-index: 3001; }
