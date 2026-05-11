@@ -325,7 +325,7 @@ function checkPassword() {
 
   <!-- Music -->
   <div id="ytPlayerWrapper"></div>
-  <div class="music-btn" id="musicBtn">&#x1F3B5;</div>
+  
 
   <!-- ============ CONTENT CONTAINER ============ -->
   <div class="container">
@@ -1867,7 +1867,31 @@ function rainLetters() {
 <style>
 #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9997; pointer-events: none; }
 </style>
+
+
+
+
+
+
+<style>
+#confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9997; pointer-events: none; }
+.music-btn-new {
+  position: fixed; top: 10px; right: 10px; z-index: 10000;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+  color: white; border: 1px solid rgba(255,215,0,0.3);
+  padding: 8px 12px; border-radius: 50%; font-size: 1.4rem;
+  cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  transition: all 0.3s;
+}
+.music-btn-new:hover { transform: scale(1.1); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.3), 0 0 40px rgba(255,215,0,0.1); }
+  50% { text-shadow: 0 0 30px rgba(255,215,0,0.6), 0 0 60px rgba(255,215,0,0.3), 0 0 100px rgba(255,215,0,0.1); }
+}
+.hero-title { animation: titleGlow 3s ease-in-out infinite !important; }
+</style>
 <canvas id="confettiCanvas"></canvas>
+<button id="musicToggleBtn" class="music-btn-new" onclick="toggleMusic()">🔇</button>
 <script>
 // ===== CONFETTI CELEBRATION =====
 (function() {
@@ -1878,9 +1902,7 @@ function rainLetters() {
   function resize() { w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
   resize();
   window.addEventListener('resize', resize);
-  
   var colors = ['#ffd700','#ff6b9d','#ff8c00','#ff1493','#8a2be2','#00ced1','#fff','#ff69b4','#ffa07a','#98fb98'];
-  
   for (var i = 0; i < 150; i++) {
     particles.push({
       x: Math.random() * w, y: Math.random() * h,
@@ -1888,24 +1910,17 @@ function rainLetters() {
       w: 5 + Math.random() * 8, h: 4 + Math.random() * 6,
       color: colors[Math.floor(Math.random() * colors.length)],
       rot: Math.random() * 360, vr: (Math.random() - 0.5) * 6,
-      o: 0.6 + Math.random() * 0.4,
-      life: 1
+      o: 0.6 + Math.random() * 0.4, life: 1
     });
   }
-  
-  function drawConfetti() {
+  function draw() {
     ctx.clearRect(0, 0, w, h);
     var alive = false;
     for (var i = 0; i < particles.length; i++) {
       var p = particles[i];
       if (p.life <= 0) continue;
       alive = true;
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.05;
-      p.rot += p.vr;
-      p.life -= 0.002;
-      if (p.life <= 0) continue;
+      p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.rot += p.vr; p.life -= 0.002;
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rot * Math.PI / 180);
@@ -1914,201 +1929,96 @@ function rainLetters() {
       ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
       ctx.restore();
     }
-    if (alive) requestAnimationFrame(drawConfetti);
-    else {
-      // Refill after a delay
-      setTimeout(function() {
-        for (var i = 0; i < particles.length; i++) {
-          var p = particles[i];
-          p.x = Math.random() * w; p.y = -20;
-          p.vx = (Math.random() - 0.5) * 4; p.vy = Math.random() * 3 + 1;
-          p.life = 0.6 + Math.random() * 0.4;
-        }
-        drawConfetti();
-      }, 3000);
-    }
+    if (alive) requestAnimationFrame(draw);
+    else setTimeout(function() {
+      for (var i = 0; i < particles.length; i++) {
+        particles[i].x = Math.random() * w; particles[i].y = -20;
+        particles[i].vx = (Math.random() - 0.5) * 4; particles[i].vy = Math.random() * 3 + 1;
+        particles[i].life = 0.6 + Math.random() * 0.4;
+      }
+      draw();
+    }, 3000);
   }
-  
-  // Start confetti after 1s delay
-  setTimeout(drawConfetti, 1000);
+  setTimeout(draw, 1000);
 })();
-</script>
 
+// ===== BIRTHDAY MELODY (Web Audio API) =====
+var ac = null, isPlaying = false, melodyTimer = null, musicStarted = false;
 
-<script>
-// ===== BIRTHDAY SONG (Web Audio API) =====
-var audioCtx, isPlaying = false, audioGain, currentTimeout;
-
-function getAudioCtx() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    audioGain = audioCtx.createGain();
-    audioGain.gain.value = 0.3;
-    audioGain.connect(audioCtx.destination);
+function initAC() {
+  if (!ac) {
+    try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; }
   }
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
+  if (ac.state === 'suspended') ac.resume();
+  return ac;
 }
 
-// Happy Birthday melody notes (frequency, duration)
-var birthdayMelody = [
-  [261.63, 0.4], [261.63, 0.4], [293.66, 0.5], [261.63, 0.4], [349.23, 0.5], [329.63, 0.6],
-  [261.63, 0.4], [261.63, 0.4], [293.66, 0.5], [261.63, 0.4], [392.00, 0.5], [349.23, 0.6],
-  [261.63, 0.4], [261.63, 0.4], [523.25, 0.5], [440.00, 0.4], [349.23, 0.5], [329.63, 0.4], [293.66, 0.6],
-  [466.16, 0.4], [466.16, 0.4], [440.00, 0.5], [349.23, 0.4], [392.00, 0.5], [349.23, 0.8]
-];
-
-function playMelody() {
-  var ctx = getAudioCtx();
-  var t = ctx.currentTime + 0.1;
-  birthdayMelody.forEach(function(note) {
-    var osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = note[0];
-    var g = ctx.createGain();
-    g.gain.value = 0;
-    g.gain.linearRampToValueAtTime(0.3, t + 0.02);
-    g.gain.linearRampToValueAtTime(0.2, t + note[1] * 0.7);
-    g.gain.linearRampToValueAtTime(0, t + note[1]);
-    osc.connect(g);
-    g.connect(audioGain);
-    osc.start(t);
-    osc.stop(t + note[1] + 0.05);
-    t += note[1] + 0.05;
-  });
-  // Loop after 2 second pause
-  currentTimeout = setTimeout(function() { playMelody(); }, t - ctx.currentTime + 2);
-}
-
-function toggleBirthdaySong() {
-  var btn = document.getElementById('audioToggle');
-  if (!btn) return;
-  if (isPlaying) {
-    clearTimeout(currentTimeout);
-    if (audioCtx) audioCtx.suspend();
-    isPlaying = false;
-    btn.innerHTML = '\uD83D\uDD07';
-    btn.style.opacity = '0.5';
-  } else {
-    getAudioCtx();
-    playMelody();
-    isPlaying = true;
-    btn.innerHTML = '\uD83D\uDD0A';
-    btn.style.opacity = '1';
-  }
-}
-
-// Start music on first user interaction
-function startMusic() {
-  if (!isPlaying && !window._musicStarted) {
-    window._musicStarted = true;
-    toggleBirthdaySong();
-  }
-}
-document.addEventListener('click', startMusic);
-document.addEventListener('touchstart', startMusic);
-</script>
-</body>
-</html>
-<div style="position:fixed;top:10px;right:10px;z-index:10000;">
-  <button id="audioToggleBtn" onclick="toggleMusic()" style="background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);color:white;border:1px solid rgba(255,215,0,0.3);padding:8px 12px;border-radius:50%;font-size:1.4rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.3);transition:all 0.3s;">🔇</button>
-</div>
-<script>
-// Birthday melody using Web Audio API
-var audioCtx = null;
-var isPlaying = false;
-var gainNode = null;
-var melodyInterval = null;
-
-function initAudio() {
-  if (audioCtx) return;
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    gainNode = audioCtx.createGain();
-    gainNode.gain.value = 0.15;
-    gainNode.connect(audioCtx.destination);
-  } catch(e) { console.log('Web Audio not supported'); }
-}
-
-function playNote(freq, duration, startTime) {
-  if (!audioCtx || !gainNode) return;
-  var osc = audioCtx.createOscillator();
-  var noteGain = audioCtx.createGain();
+function playNote(freq, dur, start) {
+  var ctx = initAC();
+  if (!ctx) return;
+  var osc = ctx.createOscillator();
+  var g = ctx.createGain();
   osc.type = 'sine';
   osc.frequency.value = freq;
-  noteGain.gain.value = 0;
-  noteGain.gain.setValueAtTime(0, startTime);
-  noteGain.gain.linearRampToValueAtTime(1, startTime + 0.05);
-  noteGain.gain.linearRampToValueAtTime(0.7, startTime + duration * 0.5);
-  noteGain.gain.linearRampToValueAtTime(0, startTime + duration);
-  osc.connect(noteGain);
-  noteGain.connect(audioCtx.destination);
-  osc.start(startTime);
-  osc.stop(startTime + duration);
+  g.gain.setValueAtTime(0, start);
+  g.gain.linearRampToValueAtTime(0.25, start + 0.05);
+  g.gain.linearRampToValueAtTime(0.15, start + dur * 0.6);
+  g.gain.linearRampToValueAtTime(0, start + dur);
+  osc.connect(g);
+  g.connect(ctx.destination);
+  osc.start(start);
+  osc.stop(start + dur);
 }
 
 function playMelody() {
-  if (!audioCtx) initAudio();
-  if (!audioCtx) return;
-  if (melodyInterval) { clearInterval(melodyInterval); melodyInterval = null; }
-  
-  // Happy Birthday notes: [frequency, duration(beats)]
+  var ctx = initAC();
+  if (!ctx) return;
+  if (melodyTimer) { clearTimeout(melodyTimer); melodyTimer = null; }
   var notes = [
-    // "Happy birthday to you"
-    [262, 0.4], [262, 0.4], [294, 0.8], [262, 0.8], [349, 0.8], [330, 1.2],
-    // "Happy birthday to you"
-    [262, 0.4], [262, 0.4], [294, 0.8], [262, 0.8], [392, 0.8], [349, 1.2],
-    // "Happy birthday dear Diksha"
-    [262, 0.4], [262, 0.4], [523, 0.8], [440, 0.8], [349, 0.8], [330, 0.8], [294, 0.8],
-    // "Happy birthday to you"
-    [494, 0.4], [494, 0.4], [440, 0.8], [349, 0.8], [392, 0.8], [349, 1.2]
+    [262,0.4],[262,0.4],[294,0.8],[262,0.8],[349,0.8],[330,1.2],
+    [262,0.4],[262,0.4],[294,0.8],[262,0.8],[392,0.8],[349,1.2],
+    [262,0.4],[262,0.4],[523,0.8],[440,0.8],[349,0.8],[330,0.8],[294,0.8],
+    [494,0.4],[494,0.4],[440,0.8],[349,0.8],[392,0.8],[349,1.2]
   ];
-  
-  var bpm = 120; // beats per minute
-  var beatDuration = 60 / bpm;
-  var currentTime = audioCtx.currentTime + 0.1;
-  
-  notes.forEach(function(note) {
-    playNote(note[0], note[1] * beatDuration, currentTime);
-    currentTime += note[1] * beatDuration + 0.02;
+  var bpm = 110;
+  var beat = 60 / bpm;
+  var t = ctx.currentTime + 0.05;
+  notes.forEach(function(n) {
+    playNote(n[0], n[1] * beat, t);
+    t += n[1] * beat + 0.03;
   });
-  
-  // Loop: schedule next play after melody ends (plus pause)
-  var melodyLength = currentTime - audioCtx.currentTime - 0.1;
-  melodyInterval = setTimeout(function() {
-    if (isPlaying) playMelody();
-  }, (melodyLength + 3) * 1000);
+  var len = (t - ctx.currentTime) * 1000;
+  melodyTimer = setTimeout(function() { if (isPlaying) playMelody(); }, len + 3000);
 }
 
 function toggleMusic() {
-  var btn = document.getElementById('audioToggleBtn');
+  var btn = document.getElementById('musicToggleBtn');
   if (!btn) return;
   if (isPlaying) {
     isPlaying = false;
-    if (melodyInterval) { clearInterval(melodyInterval); melodyInterval = null; }
-    if (gainNode) gainNode.gain.value = 0;
+    if (melodyTimer) { clearTimeout(melodyTimer); melodyTimer = null; }
     btn.innerHTML = '🔇';
     btn.style.borderColor = 'rgba(255,215,0,0.3)';
   } else {
     isPlaying = true;
-    initAudio();
-    if (gainNode) gainNode.gain.value = 0.15;
     btn.innerHTML = '🔊';
     btn.style.borderColor = '#ffd700';
-    btn.style.boxShadow = '0 0 15px rgba(255,215,0,0.4)';
-    // Play immediately
-    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     playMelody();
   }
 }
 
-// Start muted — user clicks to play
-setTimeout(function() {
-  var btn = document.getElementById('audioToggleBtn');
-  if (btn) {
-    btn.innerHTML = '🔊';
-    btn.title = 'Click to play birthday song';
+// Start on first click
+function firstClick() {
+  if (!musicStarted) {
+    musicStarted = true;
+    toggleMusic();
+    document.removeEventListener('click', firstClick);
+    document.removeEventListener('touchstart', firstClick);
   }
-}, 1000);
+}
+document.addEventListener('click', firstClick);
+document.addEventListener('touchstart', firstClick);
 </script>
 
+</body>
+</html>
