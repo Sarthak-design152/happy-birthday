@@ -203,6 +203,14 @@ body {
 .copper-text { color: #e8c88a !important; }
 </style>
 
+
+<style>
+@keyframes titleGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.3), 0 0 40px rgba(255,215,0,0.1); }
+  50% { text-shadow: 0 0 30px rgba(255,215,0,0.6), 0 0 60px rgba(255,215,0,0.3), 0 0 100px rgba(255,215,0,0.1); }
+}
+.hero-title { animation: titleGlow 3s ease-in-out infinite !important; }
+</style>
 </head>
 <body>
 <!-- Password Gate -->
@@ -1855,6 +1863,151 @@ function rainLetters() {
 
 
 
+
+<style>
+#confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9997; pointer-events: none; }
+</style>
+<canvas id="confettiCanvas"></canvas>
+<script>
+// ===== CONFETTI CELEBRATION =====
+(function() {
+  var c = document.getElementById('confettiCanvas');
+  if (!c) return;
+  var ctx = c.getContext('2d');
+  var w, h, particles = [];
+  function resize() { w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  
+  var colors = ['#ffd700','#ff6b9d','#ff8c00','#ff1493','#8a2be2','#00ced1','#fff','#ff69b4','#ffa07a','#98fb98'];
+  
+  for (var i = 0; i < 150; i++) {
+    particles.push({
+      x: Math.random() * w, y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 4, vy: Math.random() * 3 + 1,
+      w: 5 + Math.random() * 8, h: 4 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * 360, vr: (Math.random() - 0.5) * 6,
+      o: 0.6 + Math.random() * 0.4,
+      life: 1
+    });
+  }
+  
+  function drawConfetti() {
+    ctx.clearRect(0, 0, w, h);
+    var alive = false;
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      if (p.life <= 0) continue;
+      alive = true;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.05;
+      p.rot += p.vr;
+      p.life -= 0.002;
+      if (p.life <= 0) continue;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = p.life * p.o;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    }
+    if (alive) requestAnimationFrame(drawConfetti);
+    else {
+      // Refill after a delay
+      setTimeout(function() {
+        for (var i = 0; i < particles.length; i++) {
+          var p = particles[i];
+          p.x = Math.random() * w; p.y = -20;
+          p.vx = (Math.random() - 0.5) * 4; p.vy = Math.random() * 3 + 1;
+          p.life = 0.6 + Math.random() * 0.4;
+        }
+        drawConfetti();
+      }, 3000);
+    }
+  }
+  
+  // Start confetti after 1s delay
+  setTimeout(drawConfetti, 1000);
+})();
+</script>
+
+
+<script>
+// ===== BIRTHDAY SONG (Web Audio API) =====
+var audioCtx, isPlaying = false, audioGain, currentTimeout;
+
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    audioGain = audioCtx.createGain();
+    audioGain.gain.value = 0.3;
+    audioGain.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+// Happy Birthday melody notes (frequency, duration)
+var birthdayMelody = [
+  [261.63, 0.4], [261.63, 0.4], [293.66, 0.5], [261.63, 0.4], [349.23, 0.5], [329.63, 0.6],
+  [261.63, 0.4], [261.63, 0.4], [293.66, 0.5], [261.63, 0.4], [392.00, 0.5], [349.23, 0.6],
+  [261.63, 0.4], [261.63, 0.4], [523.25, 0.5], [440.00, 0.4], [349.23, 0.5], [329.63, 0.4], [293.66, 0.6],
+  [466.16, 0.4], [466.16, 0.4], [440.00, 0.5], [349.23, 0.4], [392.00, 0.5], [349.23, 0.8]
+];
+
+function playMelody() {
+  var ctx = getAudioCtx();
+  var t = ctx.currentTime + 0.1;
+  birthdayMelody.forEach(function(note) {
+    var osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = note[0];
+    var g = ctx.createGain();
+    g.gain.value = 0;
+    g.gain.linearRampToValueAtTime(0.3, t + 0.02);
+    g.gain.linearRampToValueAtTime(0.2, t + note[1] * 0.7);
+    g.gain.linearRampToValueAtTime(0, t + note[1]);
+    osc.connect(g);
+    g.connect(audioGain);
+    osc.start(t);
+    osc.stop(t + note[1] + 0.05);
+    t += note[1] + 0.05;
+  });
+  // Loop after 2 second pause
+  currentTimeout = setTimeout(function() { playMelody(); }, t - ctx.currentTime + 2);
+}
+
+function toggleBirthdaySong() {
+  var btn = document.getElementById('audioToggle');
+  if (!btn) return;
+  if (isPlaying) {
+    clearTimeout(currentTimeout);
+    if (audioCtx) audioCtx.suspend();
+    isPlaying = false;
+    btn.innerHTML = '\uD83D\uDD07';
+    btn.style.opacity = '0.5';
+  } else {
+    getAudioCtx();
+    playMelody();
+    isPlaying = true;
+    btn.innerHTML = '\uD83D\uDD0A';
+    btn.style.opacity = '1';
+  }
+}
+
+// Start music on first user interaction
+function startMusic() {
+  if (!isPlaying && !window._musicStarted) {
+    window._musicStarted = true;
+    toggleBirthdaySong();
+  }
+}
+document.addEventListener('click', startMusic);
+document.addEventListener('touchstart', startMusic);
+</script>
 </body>
 </html>
 <div style="position:fixed;top:10px;right:10px;z-index:10000;">
