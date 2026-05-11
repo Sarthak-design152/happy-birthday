@@ -2838,5 +2838,122 @@ function initAudioFade(src) {
 </script>
 
 
+
+
+<script>
+// ===== LOVE METER =====
+var meterLevel = 0;
+function fillMeter() {
+  var fill = document.getElementById('meterFill');
+  var label = document.getElementById('meterLabel');
+  if (!fill) return;
+  meterLevel += 8 + Math.floor(Math.random() * 5);
+  if (meterLevel > 100) meterLevel = 0;
+  fill.style.width = meterLevel + '%';
+  if (meterLevel < 20) {
+    fill.style.background = 'linear-gradient(90deg, #b76e79, #e8a87c)';
+    if (label) label.textContent = '💕 We just met...';
+  } else if (meterLevel < 40) {
+    fill.style.background = 'linear-gradient(90deg, #e8a87c, #ffd700)';
+    if (label) label.textContent = '💗 Starting to feel it...';
+  } else if (meterLevel < 60) {
+    fill.style.background = 'linear-gradient(90deg, #ffd700, #ff8c00)';
+    if (label) label.textContent = '💖 Love is growing!';
+  } else if (meterLevel < 80) {
+    fill.style.background = 'linear-gradient(90deg, #ff8c00, #ff1493)';
+    if (label) label.textContent = '💝 This is real love!';
+  } else if (meterLevel < 100) {
+    fill.style.background = 'linear-gradient(90deg, #ff1493, #ff69b4)';
+    if (label) label.textContent = '💘 Head over heels!';
+  } else {
+    fill.style.background = 'linear-gradient(90deg, #ff69b4, #ffd700, #ff1493)';
+    if (label) label.textContent = '✨💕 PERFECT LOVE! You two are soulmates! 💕✨';
+  }
+}
+
+// ===== CONFETTI BURST =====
+function confettiBurst() {
+  var canvas = document.getElementById('confettiCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  canvas.style.display = 'block';
+  var w = canvas.width = window.innerWidth;
+  var h = canvas.height = window.innerHeight;
+  var colors = ['#ffd700','#ff6b9d','#ff8c00','#ff1493','#8a2be2','#00ced1','#fff','#ff69b4','#e8a87c','#b76e79'];
+  var particles = [];
+  for (var i = 0; i < 200; i++) {
+    particles.push({
+      x: Math.random() * w, y: -20 - Math.random() * 200,
+      vx: (Math.random() - 0.5) * 6, vy: Math.random() * 4 + 2,
+      w: 4 + Math.random() * 10, h: 3 + Math.random() * 8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * 360, vr: (Math.random() - 0.5) * 8,
+      o: 0.6 + Math.random() * 0.4
+    });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    var alive = false;
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      if (p.y > h + 50) continue;
+      alive = true;
+      p.x += p.vx; p.y += p.vy; p.vy += 0.04; p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = p.o;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    }
+    if (alive) requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ===== START ANIMATIONS =====
+function startAnimations() {
+  // Initialize various animations
+  setTimeout(function() {
+    // Fire confetti
+    confettiBurst();
+    // Heartbeat canvas
+    var hbCanvas = document.getElementById('heartbeatCanvas');
+    if (hbCanvas && hbCanvas.getContext) {
+      var ctx = hbCanvas.getContext('2d');
+      if (ctx) {
+        var w = hbCanvas.width = hbCanvas.offsetWidth;
+        var h = hbCanvas.height = 180;
+        var t = 0;
+        function drawHeartbeat() {
+          if (!hbCanvas.parentNode) return;
+          ctx.clearRect(0, 0, w, h);
+          ctx.beginPath();
+          ctx.strokeStyle = '#ff6b9d';
+          ctx.lineWidth = 3;
+          ctx.shadowColor = '#ff6b9d';
+          ctx.shadowBlur = 10;
+          var baseY = h / 2;
+          ctx.moveTo(0, baseY);
+          for (var x = 0; x < w; x++) {
+            var y = baseY + Math.sin(x * 0.05 + t) * 10 + Math.sin(x * 0.1 + t * 2) * 5;
+            if (x > w * 0.3 && x < w * 0.33) y = baseY - 40;
+            if (x > w * 0.45 && x < w * 0.48) y = baseY - 50;
+            if (x > w * 0.6 && x < w * 0.63) y = baseY - 35;
+            ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+          t += 0.05;
+          requestAnimationFrame(drawHeartbeat);
+        }
+        drawHeartbeat();
+      }
+    }
+  }, 500);
+}
+</script>
+
 </body>
 </html>
