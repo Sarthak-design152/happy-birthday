@@ -793,198 +793,7 @@ function checkPassword() {
   </div>
 </section>
 
-<script>
-// ===== QUIZ =====
-var quizData = [
-  { q: "What makes your heart melt the most?", o: ["Sarthak's warm hugs 💑", "Dark chocolate 🍫", "Sunset walks 🌇"], a: 0 },
-  { q: "What is your superpower?", o: ["Making everyone around her smile ✨", "Reading minds 🔮", "Time travel ⏰"], a: 0 },
-  { q: "What's the best thing about Sarthak?", o: ["His adorable smile 😊", "His warm hugs 🤗", "His kind and loving heart 💗"], a: 2 },
-  { q: "What does Sarthak love most about Diksha?", o: ["Her beautiful eyes 👀", "Every little thing about her 💕", "Her sense of humor 😂"], a: 1 },
-  { q: "Diksha's love language is...", o: ["Words of affirmation 💌", "Quality time together 🥰", "Both — she deserves it all 💖"], a: 2 },
-  { q: "What makes their bond unbreakable?", o: ["Trust and understanding 🤝", "Matching outfits 👫", "Same favorite food 🍕"], a: 0 }
-];
-var quizIdx = 0, quizScore = 0, quizAnswered = false;
 
-function loadQuiz() {
-  var qEl = document.getElementById('quizQuestion');
-  var oEl = document.getElementById('quizOptions');
-  var rEl = document.getElementById('quizResult');
-  var pEl = document.getElementById('quizProgress');
-  var restartBtn = document.getElementById('quizRestartBtn');
-  if (!qEl || !oEl || !rEl) return;
-  if (quizIdx >= quizData.length) {
-    var total = quizData.length;
-    var percent = Math.round((quizScore / total) * 100);
-    var msg = percent === 100 ? "💯 Perfect score! You know her better than anyone! You're the one! 😍" :
-              percent >= 80 ? "🌟 Amazing! You really know your girl! She'll be so impressed! 💕" :
-              percent >= 60 ? "💗 Good job! You know her pretty well! Keep loving her! 🥰" :
-              "💪 Not bad! Spend more time with her and you'll know everything! 😊";
-    qEl.textContent = '';
-    oEl.innerHTML = '';
-    rEl.innerHTML = '<div style="padding:16px"><div style="font-size:3rem;margin-bottom:8px">' + (percent === 100 ? '🏆' : percent >= 80 ? '🌟' : percent >= 60 ? '💗' : '💪') + '</div><div style="font-family:\'Alex Brush\',cursive;font-size:1.8rem;color:#ffd700">' + quizScore + '/' + total + '</div><div style="font-family:\'Cormorant Garamond\',serif;font-size:1.1rem;color:rgba(255,255,255,0.7);margin-top:6px">' + msg + '</div></div>';
-    if (pEl) pEl.textContent = '🎉 Quiz complete!';
-    if (restartBtn) restartBtn.style.display = 'block';
-    return;
-  }
-  var q = quizData[quizIdx];
-  qEl.textContent = q.q;
-  if (pEl) pEl.textContent = 'Question ' + (quizIdx + 1) + ' of ' + quizData.length;
-  oEl.innerHTML = '';
-  rEl.textContent = '';
-  quizAnswered = false;
-  for (var i = 0; i < q.o.length; i++) {
-    var btn = document.createElement('button');
-    btn.textContent = q.o[i];
-    btn.style.cssText = 'padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;transition:all 0.3s;text-align:left';
-    btn.onmouseover = function() { if (!this.classList.contains('quiz-correct') && !this.classList.contains('quiz-wrong')) { this.style.background = 'rgba(255,255,255,0.12)'; this.style.borderColor = 'rgba(255,215,0,0.3)'; } };
-    btn.onmouseout = function() { if (!this.classList.contains('quiz-correct') && !this.classList.contains('quiz-wrong')) { this.style.background = 'rgba(255,255,255,0.06)'; this.style.borderColor = 'rgba(255,255,255,0.1)'; } };
-    btn.onclick = (function(idx, btnEl) { return function() { if (quizAnswered) return; quizAnswered = true; var allBtns = oEl.querySelectorAll('button'); for (var j = 0; j < allBtns.length; j++) { allBtns[j].style.cursor = 'default'; allBtns[j].onmouseover = null; allBtns[j].onmouseout = null; } if (idx === q.a) { btnEl.classList.add('quiz-correct'); quizScore++; rEl.innerHTML = '<span style=\"color:#00ff88;font-size:1.2rem\">✅ Correct! You know her so well! 🎉</span>'; } else { btnEl.classList.add('quiz-wrong'); allBtns[q.a].style.background = 'rgba(0,255,100,0.15)'; allBtns[q.a].style.borderColor = 'rgba(0,255,100,0.4)'; rEl.innerHTML = '<span style=\"color:#ff6b6b;font-size:1.1rem\">❌ Oops! But you still love her! 💕</span>'; } setTimeout(function() { quizIdx++; loadQuiz(); }, 1500); }; })(i, btn);
-    oEl.appendChild(btn);
-  }
-}
-function resetQuiz() { quizIdx = 0; quizScore = 0; var restartBtn = document.getElementById('quizRestartBtn'); if (restartBtn) restartBtn.style.display = 'none'; loadQuiz(); }
-
-// ===== VIRTUAL GIFT BOX =====
-// Gift box - replaced with burst display
-  "You are the most beautiful gift life has ever given me. Every day with you feels like a celebration. 💝",
-  "If I could wrap the entire universe for you, I would. But for now, here's my heart — it has been yours all along. 💖",
-  "You deserve all the happiness in the world. And I'll spend my whole life trying to give it to you. ✨",
-  "Some people search their whole lives for what we have. I found you, and I found everything. 💕",
-  "You are my greatest adventure. Every moment with you is a treasure I'll cherish forever. 🌟"
-];
-var giftOpened = false;
-function openGift() {
-  if (giftOpened) return;
-  giftOpened = true;
-  var icon = document.getElementById('giftIcon');
-  var reveal = document.getElementById('giftReveal');
-  var ribbon = document.getElementById('giftRibbon');
-  var wrapper = document.getElementById('giftBoxWrapper');
-  if (icon) icon.textContent = '🎉';
-  if (ribbon) ribbon.style.display = 'none';
-  if (wrapper) { wrapper.onmouseover = null; wrapper.onmouseout = null; wrapper.style.cursor = 'default'; }
-  if (reveal) reveal.classList.add('open');
-  // Burst sparkles
-  var container = document.getElementById('giftParticles');
-  var emojis = ['🎉','🎊','✨','🌟','💖','💕','❤️','⭐','🌈','🎀','🥂'];
-  if (container) {
-    for (var i = 0; i < 25; i++) {
-      (function(d) {
-        setTimeout(function() {
-          var s = document.createElement('div');
-          s.className = 'gift-sparkle';
-          s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-          var angle = Math.random() * Math.PI * 2;
-          var dist = 50 + Math.random() * 120;
-          s.style.setProperty('--gx', Math.cos(angle) * dist + 'px');
-          s.style.setProperty('--gy', Math.sin(angle) * dist + 'px');
-          s.style.left = '50%';
-          s.style.top = '100%';
-          container.appendChild(s);
-          setTimeout(function() { s.remove(); }, 2000);
-        }, d);
-      })(i * 50);
-    }
-  }
-}
-
-// ===== LOVE LETTER// ===== LOVE LETTER =====
-var letterTyping = false;
-var letterFullText = "From the very first moment I saw you, I knew my heart had found its home. Your smile lights up even my darkest days, and your laughter is the most beautiful melody I have ever heard. Every day with you feels like a dream I never want to wake up from. You are my sunshine, my peace, my everything. I love the way you scrunch your nose when you laugh, the way your eyes sparkle when you talk about something you love, and the way you care so deeply about everyone around you. You have made me a better person, just by being in my life. I promise to cherish you, to support you, to make you smile every single day, and to love you with everything I have — today, tomorrow, and always. You are my forever. Happy Birthday, my love. 💕";
-var letterIdx = 0;
-function startLoveLetter() {
-  if (letterTyping) return;
-  letterTyping = true;
-  var paper = document.getElementById('letterPaper');
-  var textEl = document.getElementById('letterTypewriter');
-  var cursor = document.getElementById('letterCursor');
-  var btn = document.getElementById('letterBtn');
-  if (!paper || !textEl) return;
-  paper.classList.add('open');
-  if (btn) btn.style.display = 'none';
-  textEl.textContent = '';
-  letterIdx = 0;
-  function typeChar() {
-    if (letterIdx < letterFullText.length) {
-      textEl.textContent += letterFullText[letterIdx];
-      letterIdx++;
-      var delay = letterFullText[letterIdx - 1] === '.' || letterFullText[letterIdx - 1] === ',' || letterFullText[letterIdx - 1] === '!' ? 60 : 20;
-      setTimeout(typeChar, delay);
-    } else {
-      if (cursor) cursor.style.display = 'none';
-    }
-  }
-  setTimeout(typeChar, 500);
-}
-
-// ===== PHOTO CAROUSEL =====
-var carouselData = [
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg', cap: 'That smile that stole my heart ❤️' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg', cap: 'Every moment with you is magic ✨' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/1_gallery.jpg', cap: 'Us against the world 🌍💕' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg', cap: 'You make everything beautiful 🌸' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg', cap: 'My favorite view is you 🌅' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo6.webp', cap: 'Together is my favorite place 🏠💗' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg', cap: 'Caught in your charm 🥰' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg', cap: 'Beautiful inside and out 💖' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg', cap: 'Radiant like the sun ☀️' },
-  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg', cap: 'My forever crush 💘' }
-];
-var carouselIdx = 0;
-var carouselTimer = null;
-var carouselPlaying = true;
-
-function showCarouselImg(idx, instant) {
-  var img = document.getElementById('carouselImg');
-  var cap = document.getElementById('carouselCaption');
-  var dots = document.getElementById('carouselDots');
-  if (!img || !cap || !dots) return;
-  if (idx < 0) idx = carouselData.length - 1;
-  if (idx >= carouselData.length) idx = 0;
-  carouselIdx = idx;
-  if (instant) {
-    img.src = carouselData[idx].src;
-  } else {
-    img.style.opacity = '0';
-    setTimeout(function() {
-      img.src = carouselData[idx].src;
-      setTimeout(function() { img.style.opacity = '1'; }, 50);
-    }, 300);
-  }
-  cap.textContent = carouselData[idx].cap;
-  // Update dots
-  var dotHtml = '';
-  for (var i = 0; i < carouselData.length; i++) {
-    dotHtml += '<div style="width:8px;height:8px;border-radius:50%;background:' + (i === idx ? '#ffd700' : 'rgba(255,255,255,0.3)') + ';transition:background 0.3s;cursor:pointer" onclick="showCarouselImg(' + i + ',false)"></div>';
-  }
-  dots.innerHTML = dotHtml;
-}
-function carouselNext() { showCarouselImg(carouselIdx + 1, false); }
-function carouselPrev() { showCarouselImg(carouselIdx - 1, false); }
-function toggleCarousel() {
-  var btn = document.getElementById('carouselPlayBtn');
-  if (carouselPlaying) {
-    carouselPlaying = false;
-    if (carouselTimer) { clearInterval(carouselTimer); carouselTimer = null; }
-    if (btn) btn.textContent = '▶';
-  } else {
-    carouselPlaying = true;
-    if (btn) btn.textContent = '⏸';
-    carouselTimer = setInterval(function() { showCarouselImg(carouselIdx + 1, false); }, 3500);
-  }
-}
-// Auto-start carousel
-carouselTimer = setInterval(function() { if (carouselPlaying) showCarouselImg(carouselIdx + 1, false); }, 3500);
-// Initial load
-window.addEventListener('load', function() {
-  setTimeout(function() { showCarouselImg(0, true); }, 1000);
-});
-
-// Load quiz on page load too
-window.addEventListener('load', function() {
-  setTimeout(function() { loadQuiz(); }, 500);
-});
-</script>
 
 
 <!-- ===== BLOW A KISS ===== -->
@@ -1037,145 +846,7 @@ window.addEventListener('load', function() {
   </style>
 </section>
 
-<script>
-// ===== BLOW A KISS =====
-var kissTotal = 0;
-function blowKiss() {
-  var kissEmojis = ['😘','💋','😽','💏','😗'];
-  var heartEmojis = ['❤️','💕','💗','💖','💓','🩷','🥰','💝'];
-  
-  for (var i = 0; i < 5; i++) {
-    (function(d) {
-      setTimeout(function() {
-        var k = document.createElement('div');
-        k.className = 'flying-kiss';
-        k.textContent = kissEmojis[Math.floor(Math.random() * kissEmojis.length)];
-        var startX = 30 + Math.random() * 40;
-        var startY = 40 + Math.random() * 30;
-        k.style.left = startX + '%';
-        k.style.top = startY + '%';
-        var dx = (Math.random() - 0.5) * 300;
-        var dy = -(150 + Math.random() * 200);
-        k.style.setProperty('--kx', dx + 'px');
-        k.style.setProperty('--ky', dy + 'px');
-        k.style.fontSize = (2 + Math.random() * 2) + 'rem';
-        document.body.appendChild(k);
-        setTimeout(function() { k.remove(); }, 2500);
-      }, d);
-    })(i * 100);
-  }
-  
-  // Trail hearts behind each kiss
-  for (var i = 0; i < 15; i++) {
-    (function(d) {
-      setTimeout(function() {
-        var h = document.createElement('div');
-        h.className = 'kiss-heart';
-        h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-        h.style.left = (20 + Math.random() * 60) + '%';
-        h.style.top = (30 + Math.random() * 40) + '%';
-        var hx = (Math.random() - 0.5) * 80;
-        var hy = -(50 + Math.random() * 100);
-        h.style.setProperty('--hx', hx + 'px');
-        h.style.setProperty('--hy', hy + 'px');
-        document.body.appendChild(h);
-        setTimeout(function() { h.remove(); }, 2000);
-      }, d);
-    })(i * 80);
-  }
-  
-  kissTotal++;
-  var numEl = document.getElementById('kissNum');
-  if (numEl) numEl.textContent = kissTotal;
-}
 
-// ===== I LOVE YOU BECAUSE... =====
-var reasonsWallData = [
-  "The way you smile lights up my whole world",
-  "You make every day feel special",
-  "Your laugh is my favorite melody",
-  "You believe in me even when I don't",
-  "The way your eyes sparkle when you're happy",
-  "You have the kindest heart I know",
-  "You make me want to be a better person",
-  "Your hugs feel like coming home",
-  "You understand me without words",
-  "You're the most beautiful person inside and out",
-  "You make even ordinary moments magical",
-  "I'm completely myself when I'm with you"
-];
-var reasonRevealed = [];
-
-function initReasonsWall() {
-  var wall = document.getElementById('reasonsWall');
-  if (!wall) return;
-  wall.innerHTML = '';
-  reasonRevealed = [];
-  for (var i = 0; i < reasonsWallData.length; i++) {
-    reasonRevealed.push(false);
-    var card = document.createElement('div');
-    card.className = 'reason-wall-card';
-    card.textContent = '💕 Tap to reveal';
-    card.setAttribute('data-idx', i);
-    card.onclick = function() {
-      var idx = parseInt(this.getAttribute('data-idx'));
-      if (reasonRevealed[idx]) return;
-      reasonRevealed[idx] = true;
-      this.textContent = reasonsWallData[idx];
-      this.classList.add('revealed');
-      // Check all revealed
-      var allDone = reasonRevealed.every(function(v) { return v; });
-      if (allDone) {
-        setTimeout(function() {
-          var msg = document.createElement('div');
-          msg.style.cssText = 'grid-column:1/-1;text-align:center;font-family:\'Tangerine\',cursive;font-size:1.6rem;color:#ffd700;margin-top:8px;animation:poemFadeIn 0.8s ease-out';
-          msg.textContent = 'And I could write a thousand more... 💕';
-          wall.appendChild(msg);
-        }, 500);
-      }
-    };
-    wall.appendChild(card);
-  }
-}
-
-// ===== ROMANTIC POEM =====
-var poemLines = [
-  ["In your eyes I found my home,", "A place where I am never alone.", "Your smile, a sunrise after rain,", "That washes away every pain."],
-  ["Your laughter dances in the air,", "A melody beyond compare.", "Every moment by your side,", "Is a treasure I want to hide."],
-  ["You are the poetry I breathe,", "The gentle faith I still believe.", "With every heartbeat, every sigh,", "I fall for you — no need to try."],
-  ["So here's my heart, forever true,", "A love that's meant for only you.", "Happy Birthday, my darling dear,", "I'll love you more with every year."]
-];
-var poemRevealed = [false, false, false, false];
-
-function revealPoemLine(idx) {
-  if (poemRevealed[idx]) return;
-  poemRevealed[idx] = true;
-  var container = document.getElementById('poemText');
-  if (!container) return;
-  container.innerHTML = '';
-  for (var v = 0; v < 4; v++) {
-    var revealed = poemRevealed[v];
-    if (revealed) {
-      for (var l = 0; l < poemLines[v].length; l++) {
-        var line = document.createElement('div');
-        line.className = 'poem-line';
-        line.textContent = poemLines[v][l];
-        container.appendChild(line);
-      }
-      if (v < 3) {
-        var br = document.createElement('div');
-        br.style.height = '8px';
-        container.appendChild(br);
-      }
-    }
-  }
-}
-
-// Init on load
-window.addEventListener('load', function() {
-  setTimeout(function() { initReasonsWall(); }, 600);
-});
-</script>
 
 <!-- LOCKED HEART -->
 <section class="sunset-card" style="max-width:600px;margin:40px auto;padding:30px;border-radius:20px;text-align:center;position:relative;overflow:hidden">
@@ -2605,6 +2276,295 @@ function rainLetters() {
     c.appendChild(h);
   }
 })();
+</script>
+
+<script>
+// ===== QUIZ =====
+var quizData = [
+  { q: "What makes your heart melt the most?", o: ["Sarthak's warm hugs 💑", "Dark chocolate 🍫", "Sunset walks 🌇"], a: 0 },
+  { q: "What is your superpower?", o: ["Making everyone around you smile ✨", "Reading minds 🔮", "Time travel ⏰"], a: 0 },
+  { q: "What's the best thing about Sarthak?", o: ["His adorable smile 😊", "His warm hugs 🤗", "His kind and loving heart 💗"], a: 2 },
+  { q: "What does Sarthak love most about Diksha?", o: ["Her beautiful eyes 👀", "Every little thing about her 💕", "Her sense of humor 😂"], a: 1 },
+  { q: "Diksha's love language is...", o: ["Words of affirmation 💌", "Quality time together 🥰", "Both — she deserves it all 💖"], a: 2 },
+  { q: "What makes your bond unbreakable?", o: ["Trust and understanding 🤝", "Matching outfits 👫", "Same favorite food 🍕"], a: 0 }
+];
+var quizIdx = 0, quizScore = 0, quizAnswered = false;
+function loadQuiz() {
+  var qEl = document.getElementById('quizQuestion');
+  var oEl = document.getElementById('quizOptions');
+  var rEl = document.getElementById('quizResult');
+  var pEl = document.getElementById('quizProgress');
+  var restartBtn = document.getElementById('quizRestartBtn');
+  if (!qEl || !oEl || !rEl) return;
+  if (quizIdx >= quizData.length) {
+    var total = quizData.length;
+    var percent = Math.round((quizScore / total) * 100);
+    var msg = percent === 100 ? "💯 Perfect score! You know her better than anyone!" : percent >= 80 ? "🌟 Amazing! You really know her!" : percent >= 60 ? "💗 Good job! You know her pretty well!" : "💪 Spend more time with her!";
+    qEl.textContent = ''; oEl.innerHTML = '';
+    rEl.innerHTML = '<div style="padding:16px"><div style="font-size:3rem;margin-bottom:8px">' + (percent === 100 ? '🏆' : '🌟') + '</div><div style=\"font-family:Alex Brush,cursive;font-size:1.8rem;color:#ffd700\">' + quizScore + '/' + total + '</div><div style=\"font-family:Cormorant Garamond,serif;font-size:1.1rem;color:rgba(255,255,255,0.7);margin-top:6px\">' + msg + '</div></div>';
+    if (pEl) pEl.textContent = '🎉 Complete!';
+    if (restartBtn) restartBtn.style.display = 'block';
+    return;
+  }
+  var q = quizData[quizIdx];
+  qEl.textContent = q.q;
+  if (pEl) pEl.textContent = 'Question ' + (quizIdx + 1) + ' of ' + quizData.length;
+  oEl.innerHTML = ''; rEl.textContent = ''; quizAnswered = false;
+  for (var i = 0; i < q.o.length; i++) {
+    var btn = document.createElement('button');
+    btn.textContent = q.o[i];
+    btn.style.cssText = 'padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-family:Cormorant Garamond,serif;font-size:1.05rem;transition:all 0.3s;text-align:left';
+    btn.onmouseover = function() { if (!this.classList.contains('quiz-correct') && !this.classList.contains('quiz-wrong')) { this.style.background = 'rgba(255,255,255,0.12)'; this.style.borderColor = 'rgba(255,215,0,0.3)'; } };
+    btn.onmouseout = function() { if (!this.classList.contains('quiz-correct') && !this.classList.contains('quiz-wrong')) { this.style.background = 'rgba(255,255,255,0.06)'; this.style.borderColor = 'rgba(255,255,255,0.1)'; } };
+    btn.onclick = (function(idx, btnEl) { return function() { if (quizAnswered) return; quizAnswered = true; var allBtns = oEl.querySelectorAll('button'); for (var j = 0; j < allBtns.length; j++) { allBtns[j].style.cursor = 'default'; allBtns[j].onmouseover = null; allBtns[j].onmouseout = null; } if (idx === q.a) { btnEl.classList.add('quiz-correct'); quizScore++; rEl.innerHTML = '<span style=\"color:#00ff88;font-size:1.2rem\">✅ Correct! 🎉</span>'; } else { btnEl.classList.add('quiz-wrong'); allBtns[q.a].style.background = 'rgba(0,255,100,0.15)'; allBtns[q.a].style.borderColor = 'rgba(0,255,100,0.4)'; rEl.innerHTML = '<span style=\"color:#ff6b6b;font-size:1.1rem\">❌ You still love her! 💕</span>'; } setTimeout(function() { quizIdx++; loadQuiz(); }, 1500); }; })(i, btn);
+    oEl.appendChild(btn);
+  }
+}
+function resetQuiz() { quizIdx = 0; quizScore = 0; var btn = document.getElementById('quizRestartBtn'); if (btn) btn.style.display = 'none'; loadQuiz(); }
+
+// ===== VIRTUAL GIFT BOX =====
+var giftOpened = false;
+function openGift() {
+  if (giftOpened) return;
+  giftOpened = true;
+  var icon = document.getElementById('giftIcon');
+  var reveal = document.getElementById('giftReveal');
+  var ribbon = document.getElementById('giftRibbon');
+  var wrapper = document.getElementById('giftBoxWrapper');
+  if (icon) icon.textContent = '🎉';
+  if (ribbon) ribbon.style.display = 'none';
+  if (wrapper) { wrapper.onmouseover = null; wrapper.onmouseout = null; wrapper.style.cursor = 'default'; }
+  if (reveal) reveal.classList.add('open');
+  var container = document.getElementById('giftParticles');
+  var emojis = ['🎉','🎊','✨','🌟','💖','💕','❤️','⭐','🌈','🎀','🥂'];
+  if (container) {
+    for (var i = 0; i < 25; i++) {
+      (function(d) {
+        setTimeout(function() {
+          var s = document.createElement('div');
+          s.className = 'gift-sparkle';
+          s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          var angle = Math.random() * Math.PI * 2;
+          var dist = 50 + Math.random() * 120;
+          s.style.setProperty('--gx', Math.cos(angle) * dist + 'px');
+          s.style.setProperty('--gy', Math.sin(angle) * dist + 'px');
+          s.style.left = '50%';
+          s.style.top = '100%';
+          container.appendChild(s);
+          setTimeout(function() { s.remove(); }, 2000);
+        }, d);
+      })(i * 50);
+    }
+  }
+}
+
+// ===== LOVE LETTER TYPEWRITER =====
+var letterTyping = false;
+var letterFullText = "From the very first moment I saw you, I knew my heart had found its home. Your smile lights up even my darkest days, and your laughter is the most beautiful melody I have ever heard. Every day with you feels like a dream I never want to wake up from. You are my sunshine, my peace, my everything. I love the way you scrunch your nose when you laugh, the way your eyes sparkle when you talk about something you love, and the way you care so deeply about everyone around you. You have made me a better person, just by being in my life. I promise to cherish you, to support you, to make you smile every single day, and to love you with everything I have — today, tomorrow, and always. You are my forever. Happy Birthday, my love. 💕";
+var letterIdx = 0;
+function startLoveLetter() {
+  if (letterTyping) return;
+  letterTyping = true;
+  var paper = document.getElementById('letterPaper');
+  var textEl = document.getElementById('letterTypewriter');
+  var cursor = document.getElementById('letterCursor');
+  var btn = document.getElementById('letterBtn');
+  if (!paper || !textEl) return;
+  paper.classList.add('open');
+  if (btn) btn.style.display = 'none';
+  textEl.textContent = '';
+  letterIdx = 0;
+  function typeChar() {
+    if (letterIdx < letterFullText.length) {
+      textEl.textContent += letterFullText[letterIdx];
+      letterIdx++;
+      var delay = letterFullText[letterIdx - 1] === '.' || letterFullText[letterIdx - 1] === ',' || letterFullText[letterIdx - 1] === '!' ? 60 : 20;
+      setTimeout(typeChar, delay);
+    } else {
+      if (cursor) cursor.style.display = 'none';
+    }
+  }
+  setTimeout(typeChar, 500);
+}
+
+// ===== PHOTO CAROUSEL =====
+var carouselData = [
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg', cap: 'That smile that stole my heart ❤️' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg', cap: 'Every moment with you is magic ✨' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/1_gallery.jpg', cap: 'Us against the world 🌍💕' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg', cap: 'You make everything beautiful 🌸' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg', cap: 'My favorite view is you 🌅' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo6.webp', cap: 'Together is my favorite place 🏠💗' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg', cap: 'Caught in your charm 🥰' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg', cap: 'Beautiful inside and out 💖' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg', cap: 'Radiant like the sun ☀️' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg', cap: 'My forever crush 💘' }
+];
+var carouselIdx = 0;
+var carouselTimer = null;
+var carouselPlaying = true;
+function showCarouselImg(idx, instant) {
+  var img = document.getElementById('carouselImg');
+  var cap = document.getElementById('carouselCaption');
+  var dots = document.getElementById('carouselDots');
+  if (!img || !cap || !dots) return;
+  if (idx < 0) idx = carouselData.length - 1;
+  if (idx >= carouselData.length) idx = 0;
+  carouselIdx = idx;
+  if (instant) { img.src = carouselData[idx].src; }
+  else {
+    img.style.opacity = '0';
+    setTimeout(function() { img.src = carouselData[idx].src; setTimeout(function() { img.style.opacity = '1'; }, 50); }, 300);
+  }
+  cap.textContent = carouselData[idx].cap;
+  var dotHtml = '';
+  for (var i = 0; i < carouselData.length; i++) {
+    dotHtml += '<div style="width:8px;height:8px;border-radius:50%;background:' + (i === idx ? '#ffd700' : 'rgba(255,255,255,0.3)') + ';transition:background 0.3s;cursor:pointer" onclick="showCarouselImg(' + i + ',false)"></div>';
+  }
+  dots.innerHTML = dotHtml;
+}
+function carouselNext() { showCarouselImg(carouselIdx + 1, false); }
+function carouselPrev() { showCarouselImg(carouselIdx - 1, false); }
+function toggleCarousel() {
+  var btn = document.getElementById('carouselPlayBtn');
+  if (carouselPlaying) {
+    carouselPlaying = false;
+    if (carouselTimer) { clearInterval(carouselTimer); carouselTimer = null; }
+    if (btn) btn.textContent = '▶';
+  } else {
+    carouselPlaying = true;
+    if (btn) btn.textContent = '⏸';
+    carouselTimer = setInterval(function() { showCarouselImg(carouselIdx + 1, false); }, 3500);
+  }
+}
+
+// ===== BLOW A KISS =====
+var kissTotal = 0;
+function blowKiss() {
+  var kissEmojis = ['😘','💋','😽','💏','😗'];
+  var heartEmojis = ['❤️','💕','💗','💖','💓','🩷','🥰','💝'];
+  for (var i = 0; i < 5; i++) {
+    (function(d) {
+      setTimeout(function() {
+        var k = document.createElement('div');
+        k.className = 'flying-kiss';
+        k.textContent = kissEmojis[Math.floor(Math.random() * kissEmojis.length)];
+        k.style.left = (30 + Math.random() * 40) + '%';
+        k.style.top = (40 + Math.random() * 30) + '%';
+        var dx = (Math.random() - 0.5) * 300;
+        var dy = -(150 + Math.random() * 200);
+        k.style.setProperty('--kx', dx + 'px');
+        k.style.setProperty('--ky', dy + 'px');
+        k.style.fontSize = (2 + Math.random() * 2) + 'rem';
+        document.body.appendChild(k);
+        setTimeout(function() { k.remove(); }, 2500);
+      }, d);
+    })(i * 100);
+  }
+  for (var i = 0; i < 15; i++) {
+    (function(d) {
+      setTimeout(function() {
+        var h = document.createElement('div');
+        h.className = 'kiss-heart';
+        h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        h.style.left = (20 + Math.random() * 60) + '%';
+        h.style.top = (30 + Math.random() * 40) + '%';
+        var hx = (Math.random() - 0.5) * 80;
+        var hy = -(50 + Math.random() * 100);
+        h.style.setProperty('--hx', hx + 'px');
+        h.style.setProperty('--hy', hy + 'px');
+        document.body.appendChild(h);
+        setTimeout(function() { h.remove(); }, 2000);
+      }, d);
+    })(i * 80);
+  }
+  kissTotal++;
+  var numEl = document.getElementById('kissNum');
+  if (numEl) numEl.textContent = kissTotal;
+}
+
+// ===== I LOVE YOU BECAUSE... =====
+var reasonsWallData = [
+  "The way you smile lights up my whole world",
+  "You make every day feel special",
+  "Your laugh is my favorite melody",
+  "You believe in me even when I don't",
+  "The way your eyes sparkle when you're happy",
+  "You have the kindest heart I know",
+  "You make me want to be a better person",
+  "Your hugs feel like coming home",
+  "You understand me without words",
+  "You're the most beautiful person inside and out",
+  "You make even ordinary moments magical",
+  "I'm completely myself when I'm with you"
+];
+var reasonRevealed = [];
+function initReasonsWall() {
+  var wall = document.getElementById('reasonsWall');
+  if (!wall) return;
+  wall.innerHTML = ''; reasonRevealed = [];
+  for (var i = 0; i < reasonsWallData.length; i++) {
+    reasonRevealed.push(false);
+    var card = document.createElement('div');
+    card.className = 'reason-wall-card';
+    card.textContent = '💕 Tap to reveal';
+    card.setAttribute('data-idx', i);
+    card.onclick = function() {
+      var idx = parseInt(this.getAttribute('data-idx'));
+      if (reasonRevealed[idx]) return;
+      reasonRevealed[idx] = true;
+      this.textContent = reasonsWallData[idx];
+      this.classList.add('revealed');
+      var allDone = reasonRevealed.every(function(v) { return v; });
+      if (allDone) {
+        setTimeout(function() {
+          var msg = document.createElement('div');
+          msg.style.cssText = 'grid-column:1/-1;text-align:center;font-family:Tangerine,cursive;font-size:1.6rem;color:#ffd700;margin-top:8px;animation:poemFadeIn 0.8s ease-out';
+          msg.textContent = 'And I could write a thousand more... 💕';
+          wall.appendChild(msg);
+        }, 500);
+      }
+    };
+    wall.appendChild(card);
+  }
+}
+
+// ===== ROMANTIC POEM =====
+var poemLines = [
+  ["In your eyes I found my home,", "A place where I am never alone.", "Your smile, a sunrise after rain,", "That washes away every pain."],
+  ["Your laughter dances in the air,", "A melody beyond compare.", "Every moment by your side,", "Is a treasure I want to hide."],
+  ["You are the poetry I breathe,", "The gentle faith I still believe.", "With every heartbeat, every sigh,", "I fall for you — no need to try."],
+  ["So here's my heart, forever true,", "A love that's meant for only you.", "Happy Birthday, my darling dear,", "I'll love you more with every year."]
+];
+var poemRevealed = [false, false, false, false];
+function revealPoemLine(idx) {
+  if (poemRevealed[idx]) return;
+  poemRevealed[idx] = true;
+  var container = document.getElementById('poemText');
+  if (!container) return;
+  container.innerHTML = '';
+  for (var v = 0; v < 4; v++) {
+    if (poemRevealed[v]) {
+      for (var l = 0; l < poemLines[v].length; l++) {
+        var line = document.createElement('div');
+        line.className = 'poem-line';
+        line.textContent = poemLines[v][l];
+        container.appendChild(line);
+      }
+      if (v < 3) { var br = document.createElement('div'); br.style.height = '8px'; container.appendChild(br); }
+    }
+  }
+}
+
+// ===== INIT ON LOAD =====
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    loadQuiz();
+    initReasonsWall();
+    showCarouselImg(0, true);
+    if (!carouselTimer) carouselTimer = setInterval(function() { if (carouselPlaying) showCarouselImg(carouselIdx + 1, false); }, 3500);
+  }, 500);
+});
 </script>
 </body>
 </html>
