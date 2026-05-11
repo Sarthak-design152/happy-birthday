@@ -115,7 +115,8 @@ section h2 .icon { margin-right: 8px; }
   10% { opacity: 0.7; transform: scale(1); }
   100% { transform: translateY(-120vh) scale(0.8); opacity: 0; }
 }
-.
+</style>
+
 <!-- BLUSH BUTTON -->
 <section class="sunset-card" style="max-width:600px;margin:40px auto;padding:40px 30px;border-radius:24px;text-align:center;position:relative;overflow:hidden">
   <div id="blushGlow" style="position:absolute;top:50%;left:50%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,105,180,0.3),transparent);border-radius:50%;transform:translate(-50%,-50%) scale(0);transition:all 0.8s ease;pointer-events:none"></div>
@@ -228,6 +229,7 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
+<style>
 
 supernova-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, #667eea, #764ba2); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
 .supernova-overlay.show { display: flex; }
@@ -642,6 +644,283 @@ function checkPassword() {
 
   <!-- ============ SUPERNOVA OVERLAY ============ -->
   <div class="supernova-overlay" id="
+
+<!-- ===== QUIZ: HOW WELL DO YOU KNOW DIKSHA? ===== -->
+<section style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:24px;padding:30px 24px;margin:40px auto;max-width:600px;backdrop-filter:blur(10px)">
+  <h3 class="golden-title" style="font-size:2rem;text-align:center;margin-bottom:6px">🧐 How Well Do You Know Diksha?</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;text-align:center;margin-bottom:20px;color:rgba(255,215,0,0.6)">Answer these and prove your love! 💕</p>
+  <div id="quizArea">
+    <div id="quizCard" style="background:rgba(255,255,255,0.06);border-radius:16px;padding:20px 18px;border:1px solid rgba(255,255,255,0.08);min-height:200px">
+      <div id="quizProgress" style="font-size:0.85rem;color:rgba(255,215,0,0.5);margin-bottom:12px;text-align:center"></div>
+      <p id="quizQuestion" style="font-family:'Alex Brush',cursive;font-size:1.5rem;color:#ffd700;text-align:center;margin-bottom:16px;min-height:50px"></p>
+      <div id="quizOptions" style="display:flex;flex-direction:column;gap:10px"></div>
+      <div id="quizResult" style="text-align:center;padding:10px;font-family:'Cormorant Garamond',serif;font-size:1.2rem;min-height:40px"></div>
+    </div>
+    <button id="quizRestartBtn" onclick="resetQuiz()" style="display:none;margin:16px auto 0;padding:10px 30px;border-radius:30px;border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.1);color:#ffd700;cursor:pointer;font-size:0.95rem;font-family:'Cormorant Garamond',serif">🔄 Do it again!</button>
+  </div>
+</section>
+
+<!-- ===== VIRTUAL GIFT BOX ===== -->
+<section style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:24px;padding:30px 24px;margin:40px auto;max-width:600px;backdrop-filter:blur(10px);text-align:center">
+  <h3 class="golden-title" style="font-size:2rem;margin-bottom:6px">🎁 A Special Gift for You</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:20px;color:rgba(255,215,0,0.6)">Tap the box to unwrap your surprise...</p>
+  <div onclick="openGift()" id="giftBoxWrapper" style="cursor:pointer;display:inline-block;padding:20px;border-radius:20px;background:rgba(255,215,0,0.08);transition:all 0.3s;position:relative" onmouseover="this.style.transform='scale(1.06)';this.style.boxShadow='0 0 30px rgba(255,215,0,0.2)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">
+    <div id="giftIcon" style="font-size:5rem;transition:transform 0.5s ease;filter:drop-shadow(0 0 10px rgba(255,215,0,0.3))">🎁</div>
+    <div id="giftRibbon" style="position:absolute;top:20px;left:50%;transform:translateX(-50%);width:60px;height:60px;border:3px dashed rgba(255,215,0,0.3);border-radius:50%;animation:ribbonSpin 3s linear infinite"></div>
+  </div>
+  <div id="giftReveal" style="max-height:0;overflow:hidden;transition:max-height 0.8s ease,opacity 0.6s ease;opacity:0;margin-top:15px">
+    <div style="padding:20px;background:rgba(255,105,180,0.08);border-radius:16px;border:1px solid rgba(255,105,180,0.2)">
+      <div id="giftEmoji" style="font-size:2.5rem;margin-bottom:8px">💝</div>
+      <p id="giftMessage" class="golden-title" style="font-size:1.3rem;line-height:1.6;margin:0"></p>
+      <div id="giftParticles" style="position:relative;height:0"></div>
+    </div>
+  </div>
+  <style>
+    #giftReveal.open { max-height: 500px; opacity: 1; }
+    @keyframes ribbonSpin { 0% { transform:translateX(-50%) rotate(0deg); } 100% { transform:translateX(-50%) rotate(360deg); } }
+    @keyframes giftBurst { 0% { transform:translate(0,0) scale(0);opacity:1 } 100% { transform:translate(var(--gx),var(--gy)) scale(1.2);opacity:0 } }
+    .gift-sparkle { position:absolute;pointer-events:none;font-size:1.2rem;animation:giftBurst 1.5s ease-out forwards }
+    @keyframes quizPulse { 0%,100% { transform:scale(1) } 50% { transform:scale(1.03) } }
+    .quiz-correct { animation:quizPulse 0.5s ease-in-out;background:rgba(0,255,100,0.15)!important;border-color:rgba(0,255,100,0.4)!important }
+    .quiz-wrong { animation:shake 0.4s ease-in-out; }
+    @keyframes shake { 0%,100% { transform:translateX(0) } 25% { transform:translateX(-8px) } 75% { transform:translateX(8px) } }
+  </style>
+</section>
+
+<!-- ===== LOVE LETTER THAT TYPES ITSELF ===== -->
+<section style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:24px;padding:30px 24px;margin:40px auto;max-width:600px;backdrop-filter:blur(10px);text-align:center">
+  <h3 class="golden-title" style="font-size:2rem;margin-bottom:6px">💌 A Letter From My Heart</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:20px;color:rgba(255,215,0,0.6)">Tap to read the letter that my heart wrote for you...</p>
+  <button onclick="startLoveLetter()" id="letterBtn" style="background:linear-gradient(135deg,#ffd700,#ff8c00);color:#1a0500;border:none;padding:14px 36px;border-radius:50px;font-size:1.1rem;cursor:pointer;font-weight:600;transition:all 0.3s;box-shadow:0 4px 20px rgba(255,215,0,0.3)" onmouseover="this.style.transform='scale(1.08)';this.style.boxShadow='0 6px 30px rgba(255,215,0,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(255,215,0,0.3)'">📖 Open My Heart</button>
+  <div id="letterPaper" style="max-height:0;overflow:hidden;transition:max-height 1s ease,opacity 0.6s ease;opacity:0;margin-top:20px">
+    <div style="background:rgba(255,255,255,0.04);border-radius:16px;border:1px solid rgba(255,215,0,0.12);padding:24px 20px;text-align:left;position:relative">
+      <div style="font-family:'Alex Brush',cursive;font-size:1rem;color:rgba(255,215,0,0.4);margin-bottom:8px">My Dearest Diksha,</div>
+      <p id="letterTypewriter" style="font-family:'Alex Brush',cursive;font-size:1.3rem;line-height:1.8;color:#ffd700;margin:0;min-height:120px"></p>
+      <div id="letterCursor" style="display:inline-block;width:3px;height:1.3rem;background:#ffd700;margin-left:2px;animation:blink 0.7s step-end infinite;vertical-align:text-bottom"></div>
+      <div style="font-family:'Alex Brush',cursive;font-size:1rem;color:rgba(255,215,0,0.4);margin-top:16px;text-align:right">Yours Always,<br>Sarthak 💕</div>
+    </div>
+  </div>
+  <style>
+    #letterPaper.open { max-height: 800px; opacity: 1; }
+    @keyframes blink { 0%,100% { opacity:1 } 50% { opacity:0 } }
+  </style>
+</section>
+
+<!-- ===== PHOTO CAROUSEL ===== -->
+<section style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:24px;padding:30px 24px;margin:40px auto;max-width:600px;backdrop-filter:blur(10px);text-align:center">
+  <h3 class="golden-title" style="font-size:2rem;margin-bottom:6px">📸 Our Beautiful Journey</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:16px;color:rgba(255,215,0,0.6)">Every picture tells a love story...</p>
+  <div style="position:relative;border-radius:16px;overflow:hidden;background:rgba(0,0,0,0.3);border:1px solid rgba(255,215,0,0.12)">
+    <div id="carouselWrapper" style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden">
+      <img id="carouselImg" style="width:100%;height:100%;object-fit:cover;display:block;transition:opacity 0.6s ease" alt="Our memories">
+      <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:40px 20px 16px">
+        <p id="carouselCaption" style="font-family:'Alex Brush',cursive;font-size:1.2rem;color:#ffd700;margin:0;text-shadow:0 2px 10px rgba(0,0,0,0.5)"></p>
+      </div>
+      <div id="carouselDots" style="position:absolute;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5"></div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:10px;padding:12px">
+      <button onclick="carouselPrev()" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);color:#ffd700;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.2rem;transition:all 0.3s" onmouseover="this.style.background='rgba(255,215,0,0.2)'" onmouseout="this.style.background='rgba(255,215,0,0.1)'">◀</button>
+      <button onclick="toggleCarousel()" id="carouselPlayBtn" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);color:#ffd700;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1rem;transition:all 0.3s" onmouseover="this.style.background='rgba(255,215,0,0.2)'" onmouseout="this.style.background='rgba(255,215,0,0.1)'">⏸</button>
+      <button onclick="carouselNext()" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);color:#ffd700;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.2rem;transition:all 0.3s" onmouseover="this.style.background='rgba(255,215,0,0.2)'" onmouseout="this.style.background='rgba(255,215,0,0.1)'">▶</button>
+    </div>
+  </div>
+</section>
+
+<script>
+// ===== QUIZ =====
+var quizData = [
+  { q: "What makes Diksha's heart melt the most?", o: ["Sarthak's warm hugs 💑", "Dark chocolate 🍫", "Sunset walks 🌇"], a: 0 },
+  { q: "What is Diksha's superpower?", o: ["Making everyone around her smile ✨", "Reading minds 🔮", "Time travel ⏰"], a: 0 },
+  { q: "What's the best thing about Diksha?", o: ["Her gorgeous smile 😊", "Her amazing cooking 🍳", "Her kind and loving heart 💗"], a: 2 },
+  { q: "What does Sarthak love most about Diksha?", o: ["Her beautiful eyes 👀", "Every little thing about her 💕", "Her sense of humor 😂"], a: 1 },
+  { q: "Diksha's love language is...", o: ["Words of affirmation 💌", "Quality time together 🥰", "Both — she deserves it all 💖"], a: 2 },
+  { q: "What makes their bond unbreakable?", o: ["Trust and understanding 🤝", "Matching outfits 👫", "Same favorite food 🍕"], a: 0 }
+];
+var quizIdx = 0, quizScore = 0, quizAnswered = false;
+
+function loadQuiz() {
+  var qEl = document.getElementById('quizQuestion');
+  var oEl = document.getElementById('quizOptions');
+  var rEl = document.getElementById('quizResult');
+  var pEl = document.getElementById('quizProgress');
+  var restartBtn = document.getElementById('quizRestartBtn');
+  if (!qEl || !oEl || !rEl) return;
+  if (quizIdx >= quizData.length) {
+    var total = quizData.length;
+    var percent = Math.round((quizScore / total) * 100);
+    var msg = percent === 100 ? "💯 Perfect score! You know her better than anyone! You're the one! 😍" :
+              percent >= 80 ? "🌟 Amazing! You really know your girl! She'll be so impressed! 💕" :
+              percent >= 60 ? "💗 Good job! You know her pretty well! Keep loving her! 🥰" :
+              "💪 Not bad! Spend more time with her and you'll know everything! 😊";
+    qEl.textContent = '';
+    oEl.innerHTML = '';
+    rEl.innerHTML = '<div style="padding:16px"><div style="font-size:3rem;margin-bottom:8px">' + (percent === 100 ? '🏆' : percent >= 80 ? '🌟' : percent >= 60 ? '💗' : '💪') + '</div><div style="font-family:\'Alex Brush\',cursive;font-size:1.8rem;color:#ffd700">' + quizScore + '/' + total + '</div><div style="font-family:\'Cormorant Garamond\',serif;font-size:1.1rem;color:rgba(255,255,255,0.7);margin-top:6px">' + msg + '</div></div>';
+    if (pEl) pEl.textContent = '🎉 Quiz complete!';
+    if (restartBtn) restartBtn.style.display = 'block';
+    return;
+  }
+  var q = quizData[quizIdx];
+  qEl.textContent = q.q;
+  if (pEl) pEl.textContent = 'Question ' + (quizIdx + 1) + ' of ' + quizData.length;
+  oEl.innerHTML = '';
+  rEl.textContent = '';
+  quizAnswered = false;
+  for (var i = 0; i < q.o.length; i++) {
+    var btn = document.createElement('button');
+    btn.textContent = q.o[i];
+    btn.style.cssText = 'padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:#fff;cursor:pointer;font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;transition:all 0.3s;text-align:left';
+    btn.onmouseover = function() { if (!this.classList.contains('quiz-correct') && !this.classList.contains('quiz-wrong')) { this.style.background = 'rgba(255,255,255,0.12)'; this.style.borderColor = 'rgba(255,215,0,0.3)'; } };
+    btn.onmouseout = function() { if (!this.classList.contains('quiz-correct') && !this.classList.contains('quiz-wrong')) { this.style.background = 'rgba(255,255,255,0.06)'; this.style.borderColor = 'rgba(255,255,255,0.1)'; } };
+    btn.onclick = (function(idx, btnEl) { return function() { if (quizAnswered) return; quizAnswered = true; var allBtns = oEl.querySelectorAll('button'); for (var j = 0; j < allBtns.length; j++) { allBtns[j].style.cursor = 'default'; allBtns[j].onmouseover = null; allBtns[j].onmouseout = null; } if (idx === q.a) { btnEl.classList.add('quiz-correct'); quizScore++; rEl.innerHTML = '<span style=\"color:#00ff88;font-size:1.2rem\">✅ Correct! You know her so well! 🎉</span>'; } else { btnEl.classList.add('quiz-wrong'); allBtns[q.a].style.background = 'rgba(0,255,100,0.15)'; allBtns[q.a].style.borderColor = 'rgba(0,255,100,0.4)'; rEl.innerHTML = '<span style=\"color:#ff6b6b;font-size:1.1rem\">❌ Oops! But you still love her! 💕</span>'; } setTimeout(function() { quizIdx++; loadQuiz(); }, 1500); }; })(i, btn);
+    oEl.appendChild(btn);
+  }
+}
+function resetQuiz() { quizIdx = 0; quizScore = 0; var restartBtn = document.getElementById('quizRestartBtn'); if (restartBtn) restartBtn.style.display = 'none'; loadQuiz(); }
+
+// ===== VIRTUAL GIFT BOX =====
+var giftMessages = [
+  "You are the most beautiful gift life has ever given me. Every day with you feels like a celebration. 💝",
+  "If I could wrap the entire universe for you, I would. But for now, here's my heart — it has been yours all along. 💖",
+  "You deserve all the happiness in the world. And I'll spend my whole life trying to give it to you. ✨",
+  "Some people search their whole lives for what we have. I found you, and I found everything. 💕",
+  "You are my greatest adventure. Every moment with you is a treasure I'll cherish forever. 🌟"
+];
+var giftOpened = false;
+function openGift() {
+  if (giftOpened) return;
+  giftOpened = true;
+  var icon = document.getElementById('giftIcon');
+  var reveal = document.getElementById('giftReveal');
+  var msg = document.getElementById('giftMessage');
+  var ribbon = document.getElementById('giftRibbon');
+  var wrapper = document.getElementById('giftBoxWrapper');
+  if (icon) icon.textContent = '💝';
+  if (ribbon) ribbon.style.display = 'none';
+  if (wrapper) { wrapper.onmouseover = null; wrapper.onmouseout = null; }
+  if (reveal) reveal.classList.add('open');
+  if (msg) msg.textContent = giftMessages[Math.floor(Math.random() * giftMessages.length)];
+  // Burst sparkles
+  var container = document.getElementById('giftParticles');
+  var emojis = ['✨','🌟','💖','💕','❤️','💗','⭐','🌈'];
+  if (container) {
+    for (var i = 0; i < 20; i++) {
+      (function(d) {
+        setTimeout(function() {
+          var s = document.createElement('div');
+          s.className = 'gift-sparkle';
+          s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          var angle = Math.random() * Math.PI * 2;
+          var dist = 40 + Math.random() * 100;
+          s.style.setProperty('--gx', Math.cos(angle) * dist + 'px');
+          s.style.setProperty('--gy', Math.sin(angle) * dist + 'px');
+          s.style.left = '50%';
+          s.style.top = '50%';
+          container.appendChild(s);
+          setTimeout(function() { s.remove(); }, 2000);
+        }, d);
+      })(i * 60);
+    }
+  }
+}
+
+// ===== LOVE LETTER =====
+var letterTyping = false;
+var letterFullText = "From the very first moment I saw you, I knew my heart had found its home. Your smile lights up even my darkest days, and your laughter is the most beautiful melody I have ever heard. Every day with you feels like a dream I never want to wake up from. You are my sunshine, my peace, my everything. I love the way you scrunch your nose when you laugh, the way your eyes sparkle when you talk about something you love, and the way you care so deeply about everyone around you. You have made me a better person, just by being in my life. I promise to cherish you, to support you, to make you smile every single day, and to love you with everything I have — today, tomorrow, and always. You are my forever. Happy Birthday, my love. 💕";
+var letterIdx = 0;
+function startLoveLetter() {
+  if (letterTyping) return;
+  letterTyping = true;
+  var paper = document.getElementById('letterPaper');
+  var textEl = document.getElementById('letterTypewriter');
+  var cursor = document.getElementById('letterCursor');
+  var btn = document.getElementById('letterBtn');
+  if (!paper || !textEl) return;
+  paper.classList.add('open');
+  if (btn) btn.style.display = 'none';
+  textEl.textContent = '';
+  letterIdx = 0;
+  function typeChar() {
+    if (letterIdx < letterFullText.length) {
+      textEl.textContent += letterFullText[letterIdx];
+      letterIdx++;
+      var delay = letterFullText[letterIdx - 1] === '.' || letterFullText[letterIdx - 1] === ',' || letterFullText[letterIdx - 1] === '!' ? 60 : 20;
+      setTimeout(typeChar, delay);
+    } else {
+      if (cursor) cursor.style.display = 'none';
+    }
+  }
+  setTimeout(typeChar, 500);
+}
+
+// ===== PHOTO CAROUSEL =====
+var carouselData = [
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg', cap: 'That smile that stole my heart ❤️' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg', cap: 'Every moment with you is magic ✨' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/1_gallery.jpg', cap: 'Us against the world 🌍💕' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg', cap: 'You make everything beautiful 🌸' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg', cap: 'My favorite view is you 🌅' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo6.webp', cap: 'Together is my favorite place 🏠💗' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg', cap: 'Caught in your charm 🥰' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg', cap: 'Beautiful inside and out 💖' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg', cap: 'Radiant like the sun ☀️' },
+  { src: 'https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg', cap: 'My forever crush 💘' }
+];
+var carouselIdx = 0;
+var carouselTimer = null;
+var carouselPlaying = true;
+
+function showCarouselImg(idx, instant) {
+  var img = document.getElementById('carouselImg');
+  var cap = document.getElementById('carouselCaption');
+  var dots = document.getElementById('carouselDots');
+  if (!img || !cap || !dots) return;
+  if (idx < 0) idx = carouselData.length - 1;
+  if (idx >= carouselData.length) idx = 0;
+  carouselIdx = idx;
+  if (instant) {
+    img.src = carouselData[idx].src;
+  } else {
+    img.style.opacity = '0';
+    setTimeout(function() {
+      img.src = carouselData[idx].src;
+      setTimeout(function() { img.style.opacity = '1'; }, 50);
+    }, 300);
+  }
+  cap.textContent = carouselData[idx].cap;
+  // Update dots
+  var dotHtml = '';
+  for (var i = 0; i < carouselData.length; i++) {
+    dotHtml += '<div style="width:8px;height:8px;border-radius:50%;background:' + (i === idx ? '#ffd700' : 'rgba(255,255,255,0.3)') + ';transition:background 0.3s;cursor:pointer" onclick="showCarouselImg(' + i + ',false)"></div>';
+  }
+  dots.innerHTML = dotHtml;
+}
+function carouselNext() { showCarouselImg(carouselIdx + 1, false); }
+function carouselPrev() { showCarouselImg(carouselIdx - 1, false); }
+function toggleCarousel() {
+  var btn = document.getElementById('carouselPlayBtn');
+  if (carouselPlaying) {
+    carouselPlaying = false;
+    if (carouselTimer) { clearInterval(carouselTimer); carouselTimer = null; }
+    if (btn) btn.textContent = '▶';
+  } else {
+    carouselPlaying = true;
+    if (btn) btn.textContent = '⏸';
+    carouselTimer = setInterval(function() { showCarouselImg(carouselIdx + 1, false); }, 3500);
+  }
+}
+// Auto-start carousel
+carouselTimer = setInterval(function() { if (carouselPlaying) showCarouselImg(carouselIdx + 1, false); }, 3500);
+// Initial load
+window.addEventListener('load', function() {
+  setTimeout(function() { showCarouselImg(0, true); }, 1000);
+});
+
+// Load quiz on page load too
+window.addEventListener('load', function() {
+  setTimeout(function() { loadQuiz(); }, 500);
+});
+</script>
+
 <!-- LOCKED HEART -->
 <section class="sunset-card" style="max-width:600px;margin:40px auto;padding:30px;border-radius:20px;text-align:center;position:relative;overflow:hidden">
   <div id="heartGlow" style="position:absolute;top:50%;left:50%;width:100px;height:100px;background:radial-gradient(circle,rgba(255,215,0,0.3),transparent);border-radius:50%;transform:translate(-50%,-50%) scale(0);transition:all 0.8s ease;pointer-events:none"></div>
