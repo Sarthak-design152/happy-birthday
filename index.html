@@ -1000,6 +1000,33 @@ if (window.polaroidInited) {} else {
   });
 }
 </script><!-- ===== BLOW A KISS ===== -->
+<!-- ===== POLAROID MEMORY CAROUSEL ===== -->
+<section style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:24px;padding:30px 24px;margin:40px auto;max-width:650px;backdrop-filter:blur(10px);text-align:center">
+  <h3 class="golden-title" style="font-size:2.2rem;margin-bottom:4px">📸 Our Polaroid Memories</h3>
+  <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:16px;color:#e8a87c">Flip through our story...</p>
+  <div id="polaroidStage" style="position:relative;width:100%;max-width:480px;margin:0 auto;perspective:1200px">
+    <div id="polaroidFrame" class="polaroid-frame" style="background:#f5f0e8;padding:14px 14px 50px;border-radius:4px;box-shadow:0 8px 30px rgba(0,0,0,0.4),0 2px 8px rgba(0,0,0,0.2);transform-style:preserve-3d;transition:transform 0.3s ease;cursor:pointer;position:relative">
+      <div style="width:100%;aspect-ratio:4/3;overflow:hidden;background:#333;border-radius:2px;position:relative">
+        <img id="polaroidImg" style="width:100%;height:100%;object-fit:cover;display:block" alt="Memory">
+      </div>
+      <p id="polaroidCaption" style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:#8b7355;text-align:center;margin:10px 0 0;position:absolute;bottom:14px;left:14px;right:14px"></p>
+      <div style="position:absolute;top:8px;right:12px;font-size:0.8rem;color:#ccc;font-family:'Cormorant Garamond',serif" id="polaroidCount"></div>
+    </div>
+    <div style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:16px">
+      <button onclick="polaroidNav(-1)" style="background:rgba(232,168,124,0.15);border:1px solid rgba(232,168,124,0.3);color:#e8a87c;border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:1.1rem;transition:all 0.3s" onmouseover="this.style.background='rgba(232,168,124,0.3)'" onmouseout="this.style.background='rgba(232,168,124,0.15)'">◀</button>
+      <div id="polaroidDots" style="display:flex;align-items:center;gap:5px"></div>
+      <button onclick="polaroidNav(1)" style="background:rgba(232,168,124,0.15);border:1px solid rgba(232,168,124,0.3);color:#e8a87c;border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:1.1rem;transition:all 0.3s" onmouseover="this.style.background='rgba(232,168,124,0.3)'" onmouseout="this.style.background='rgba(232,168,124,0.15)'">▶</button>
+      <button onclick="polaroidToggle()" id="polaroidPlayBtn" style="background:rgba(232,168,124,0.15);border:1px solid rgba(232,168,124,0.3);color:#e8a87c;border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:1rem;transition:all 0.3s" onmouseover="this.style.background='rgba(232,168,124,0.3)'" onmouseout="this.style.background='rgba(232,168,124,0.15)'">⏸</button>
+    </div>
+  </div>
+  <style>
+    .polaroid-frame { animation:polaroidSlideIn 0.5s ease-out }
+    @keyframes polaroidSlideIn { 0% { transform:translateX(60px) rotateY(10deg);opacity:0 } 100% { transform:translateX(0) rotateY(0);opacity:1 } }
+    .polaroid-dot { width:8px;height:8px;border-radius:50%;transition:all 0.3s;cursor:pointer }
+    .polaroid-dot:hover { transform:scale(1.3) }
+  </style>
+</section>
+
 <section style="border-radius:24px;padding:30px 24px;margin:40px auto;max-width:600px;text-align:center">
   <h3 style="font-size:2.2rem;margin-bottom:4px">💋 Blow a Kiss</h3>
   <p class="copper-text" style="font-family:'Cormorant Garamond',serif;font-size:1rem;margin-bottom:16px;color:#e8a87c">Send a flying kiss across the screen...</p>
@@ -2607,29 +2634,38 @@ var carouselIdx = 0;
 var carouselTimer = null;
 var carouselPlaying = true;
 function showCarouselImg(idx, instant) {
-  var img = document.getElementById('carouselImg');
-  var cap = document.getElementById('carouselCaption');
-  var dots = document.getElementById('carouselDots');
-  if (!img || !cap || !dots) return;
+  var img = document.getElementById('polaroidImg');
+  var cap = document.getElementById('polaroidCaption');
+  var cnt = document.getElementById('polaroidCount');
+  var dots = document.getElementById('polaroidDots');
+  var frame = document.getElementById('polaroidFrame');
+  if (!img || !cap) return;
   if (idx < 0) idx = carouselData.length - 1;
   if (idx >= carouselData.length) idx = 0;
   carouselIdx = idx;
-  if (instant) { img.src = carouselData[idx].src; }
+  if (instant) { img.src = carouselData[idx].src; cap.textContent = carouselData[idx].cap; }
   else {
-    img.style.opacity = '0';
-    setTimeout(function() { img.src = carouselData[idx].src; setTimeout(function() { img.style.opacity = '1'; }, 50); }, 300);
+    if (frame) { frame.style.animation = 'none'; frame.offsetHeight; }
+    setTimeout(function() {
+      img.src = carouselData[idx].src;
+      cap.textContent = carouselData[idx].cap;
+      if (frame) frame.style.animation = 'polaroidSlideIn 0.5s ease-out';
+    }, 50);
   }
-  cap.textContent = carouselData[idx].cap;
-  var dotHtml = '';
-  for (var i = 0; i < carouselData.length; i++) {
-    dotHtml += '<div style="width:8px;height:8px;border-radius:50%;background:' + (i === idx ? '#ffd700' : 'rgba(255,255,255,0.3)') + ';transition:background 0.3s;cursor:pointer" onclick="showCarouselImg(' + i + ',false)"></div>';
+  if (cnt) cnt.textContent = (idx + 1) + '/' + carouselData.length;
+  if (dots) {
+    var h = '';
+    for (var i = 0; i < carouselData.length; i++) {
+      h += '<div class="polaroid-dot" style="background:' + (i === idx ? '#e8a87c' : 'rgba(232,168,124,0.3)') + '" onclick="showCarouselImg(' + i + ',false)"></div>';
+    }
+    dots.innerHTML = h;
   }
-  dots.innerHTML = dotHtml;
+  if (frame) frame.style.transform = 'rotateX(0deg) rotateY(0deg)';
 }
 function carouselNext() { showCarouselImg(carouselIdx + 1, false); }
 function carouselPrev() { showCarouselImg(carouselIdx - 1, false); }
 function toggleCarousel() {
-  var btn = document.getElementById('carouselPlayBtn');
+  var btn = document.getElementById('polaroidPlayBtn');
   if (carouselPlaying) {
     carouselPlaying = false;
     if (carouselTimer) { clearInterval(carouselTimer); carouselTimer = null; }
@@ -2640,7 +2676,37 @@ function toggleCarousel() {
     carouselTimer = setInterval(function() { showCarouselImg(carouselIdx + 1, false); }, 3500);
   }
 }
+function polaroidNav(dir) { showCarouselImg(carouselIdx + dir, false); }
+function polaroidToggle() { toggleCarousel(); }
 
+// Hover tilt effect
+(function() {
+  var stage = document.getElementById('polaroidStage');
+  if (!stage) return;
+  stage.addEventListener('mousemove', function(e) {
+    var frame = document.getElementById('polaroidFrame');
+    if (!frame) return;
+    var rect = stage.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+    var cx = rect.width / 2, cy = rect.height / 2;
+    var rx = ((y - cy) / cy) * -8;
+    var ry = ((x - cx) / cx) * 8;
+    frame.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+  });
+  stage.addEventListener('mouseleave', function() {
+    var f = document.getElementById('polaroidFrame');
+    if (f) f.style.transform = 'rotateX(0deg) rotateY(0deg)';
+  });
+})();
+
+// Init carousel on load
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    showCarouselImg(0, true);
+    if (!carouselTimer) carouselTimer = setInterval(function() { if (carouselPlaying) showCarouselImg(carouselIdx + 1, false); }, 3500);
+  }, 800);
+});
 // ===== BLOW A KISS =====
 var kissTotal = 0;
 function blowKiss() {
@@ -2803,6 +2869,27 @@ window.addEventListener('load', function() {
     setTimeout(function(){p.remove()},14000);
   },2000);
 })();
+</script>
+
+
+
+<!-- Volume fade-in audio -->
+<audio id="bgSong" loop style="display:none"></audio>
+<script>
+function initAudioFade(src) {
+  var audio = document.getElementById('bgSong');
+  if (!audio) return;
+  audio.src = src;
+  audio.volume = 0;
+  audio.play().then(function() {
+    var vol = 0;
+    var fi = setInterval(function() {
+      vol += 0.02;
+      if (vol >= 1) { vol = 1; clearInterval(fi); }
+      audio.volume = vol;
+    }, 100);
+  }).catch(function() {});
+}
 </script>
 
 </body>
