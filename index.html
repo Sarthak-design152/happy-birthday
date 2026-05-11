@@ -217,6 +217,8 @@ body {
 <div id="passwordGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);z-index:100000;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Quicksand',sans-serif;">
   <div style="text-align:center;padding:30px;max-width:380px;width:90%;">
     <div style="font-size:3rem;margin-bottom:10px;">🔒</div>
+  <div class="music-btn" id="musicBtn">🎵;</div>
+
     <div style="font-family:'Dancing Script',cursive;font-size:2rem;color:#fff;margin-bottom:6px;">Secret Surprise</div>
     <div style="color:rgba(255,255,255,0.6);font-size:0.95rem;margin-bottom:24px;">Enter the password to unlock</div>
     <input type="password" id="passwordInput" placeholder="Enter password..."
@@ -1875,15 +1877,6 @@ function rainLetters() {
 
 <style>
 #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9997; pointer-events: none; }
-.music-btn-new {
-  position: fixed; top: 10px; right: 10px; z-index: 10000;
-  background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-  color: white; border: 1px solid rgba(255,215,0,0.3);
-  padding: 8px 12px; border-radius: 50%; font-size: 1.4rem;
-  cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  transition: all 0.3s;
-}
-.music-btn-new:hover { transform: scale(1.1); border-color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
 @keyframes titleGlow {
   0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.3), 0 0 40px rgba(255,215,0,0.1); }
   50% { text-shadow: 0 0 30px rgba(255,215,0,0.6), 0 0 60px rgba(255,215,0,0.3), 0 0 100px rgba(255,215,0,0.1); }
@@ -1891,7 +1884,7 @@ function rainLetters() {
 .hero-title { animation: titleGlow 3s ease-in-out infinite !important; }
 </style>
 <canvas id="confettiCanvas"></canvas>
-<button id="musicToggleBtn" class="music-btn-new" onclick="toggleMusic()">🔇</button>
+
 <script>
 // ===== CONFETTI CELEBRATION =====
 (function() {
@@ -1942,83 +1935,9 @@ function rainLetters() {
   setTimeout(draw, 1000);
 })();
 
-// ===== BIRTHDAY MELODY (Web Audio API) =====
-var ac = null, isPlaying = false, melodyTimer = null, musicStarted = false;
 
-function initAC() {
-  if (!ac) {
-    try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; }
-  }
-  if (ac.state === 'suspended') ac.resume();
-  return ac;
-}
-
-function playNote(freq, dur, start) {
-  var ctx = initAC();
-  if (!ctx) return;
-  var osc = ctx.createOscillator();
-  var g = ctx.createGain();
-  osc.type = 'sine';
-  osc.frequency.value = freq;
-  g.gain.setValueAtTime(0, start);
-  g.gain.linearRampToValueAtTime(0.25, start + 0.05);
-  g.gain.linearRampToValueAtTime(0.15, start + dur * 0.6);
-  g.gain.linearRampToValueAtTime(0, start + dur);
-  osc.connect(g);
-  g.connect(ctx.destination);
-  osc.start(start);
-  osc.stop(start + dur);
-}
-
-function playMelody() {
-  var ctx = initAC();
-  if (!ctx) return;
-  if (melodyTimer) { clearTimeout(melodyTimer); melodyTimer = null; }
-  var notes = [
-    [262,0.4],[262,0.4],[294,0.8],[262,0.8],[349,0.8],[330,1.2],
-    [262,0.4],[262,0.4],[294,0.8],[262,0.8],[392,0.8],[349,1.2],
-    [262,0.4],[262,0.4],[523,0.8],[440,0.8],[349,0.8],[330,0.8],[294,0.8],
-    [494,0.4],[494,0.4],[440,0.8],[349,0.8],[392,0.8],[349,1.2]
-  ];
-  var bpm = 110;
-  var beat = 60 / bpm;
-  var t = ctx.currentTime + 0.05;
-  notes.forEach(function(n) {
-    playNote(n[0], n[1] * beat, t);
-    t += n[1] * beat + 0.03;
-  });
-  var len = (t - ctx.currentTime) * 1000;
-  melodyTimer = setTimeout(function() { if (isPlaying) playMelody(); }, len + 3000);
-}
-
-function toggleMusic() {
-  var btn = document.getElementById('musicToggleBtn');
-  if (!btn) return;
-  if (isPlaying) {
-    isPlaying = false;
-    if (melodyTimer) { clearTimeout(melodyTimer); melodyTimer = null; }
-    btn.innerHTML = '🔇';
-    btn.style.borderColor = 'rgba(255,215,0,0.3)';
-  } else {
-    isPlaying = true;
-    btn.innerHTML = '🔊';
-    btn.style.borderColor = '#ffd700';
-    playMelody();
-  }
-}
-
-// Start on first click
-function firstClick() {
-  if (!musicStarted) {
-    musicStarted = true;
-    toggleMusic();
-    document.removeEventListener('click', firstClick);
-    document.removeEventListener('touchstart', firstClick);
-  }
-}
-document.addEventListener('click', firstClick);
-document.addEventListener('touchstart', firstClick);
 </script>
+
 
 </body>
 </html>
