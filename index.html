@@ -204,7 +204,7 @@ body {
 </style>
 
 </head>
-<body><!-- Birthday Song --><div style="display:none;"><audio id="birthdaySong" autoplay loop><source src="birthday.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio></div>
+<body><!-- Birthday Song --><div style="display:none;"><audio id="birthdaySong" autoplay loop><source src="birthday.mp3" onerror="this.parentElement.pause();this.parentElement.style.display='none'" type="audio/mpeg">Your browser does not support the audio element.</audio></div>
 
 <!-- Password Gate -->
 <div id="passwordGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);z-index:100000;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Quicksand',sans-serif;">
@@ -559,7 +559,7 @@ function checkPassword() {
   </style>
 </section>
 
-supernovaOverlay">
+<div class="supernova-overlay" id="supernovaOverlay">
     <div class="supernova-content" id="supernovaContent">
       <div class="sn-close" onclick="closeSupernova()">&times;</div>
       <div class="sn-text" id="supernovaText"></div>
