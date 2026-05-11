@@ -2847,32 +2847,19 @@ function fillMeter() {
   var fill = document.getElementById('meterFill');
   var label = document.getElementById('meterLabel');
   if (!fill) return;
-  meterLevel += 8 + Math.floor(Math.random() * 5);
-  if (meterLevel > 100) meterLevel = 0;
-  fill.style.width = meterLevel + '%';
-  if (meterLevel < 20) {
-    fill.style.background = 'linear-gradient(90deg, #b76e79, #e8a87c)';
-    if (label) label.textContent = '💕 We just met...';
-  } else if (meterLevel < 40) {
-    fill.style.background = 'linear-gradient(90deg, #e8a87c, #ffd700)';
-    if (label) label.textContent = '💗 Starting to feel it...';
-  } else if (meterLevel < 60) {
-    fill.style.background = 'linear-gradient(90deg, #ffd700, #ff8c00)';
-    if (label) label.textContent = '💖 Love is growing!';
-  } else if (meterLevel < 80) {
-    fill.style.background = 'linear-gradient(90deg, #ff8c00, #ff1493)';
-    if (label) label.textContent = '💝 This is real love!';
-  } else if (meterLevel < 100) {
-    fill.style.background = 'linear-gradient(90deg, #ff1493, #ff69b4)';
-    if (label) label.textContent = '💘 Head over heels!';
-  } else {
-    fill.style.background = 'linear-gradient(90deg, #ff69b4, #ffd700, #ff1493)';
-    if (label) label.textContent = '✨💕 PERFECT LOVE! You two are soulmates! 💕✨';
+  meterLevel = 100;
+  fill.style.width = '100%';
+  fill.style.background = 'linear-gradient(90deg, #ff69b4, #ffd700, #ff1493)';
+  if (label) label.textContent = '✨💕 100% PERFECT LOVE! Soulmates forever! 💕✨';
+  // Burst hearts
+  for (var i = 0; i < 10; i++) {
+    setTimeout(function() {
+      if (typeof popHeart === 'function') popHeart(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+    }, i * 100);
   }
 }
 
-// ===== CONFETTI BURST =====
-function confettiBurst() {
+function confettiBurst() {function confettiBurst() {
   var canvas = document.getElementById('confettiCanvas');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
