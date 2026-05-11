@@ -6,6 +6,16 @@
   <title>Happy Birthday, My Love!</title>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style>
+
+/* Floating rose petals */
+.rose-petal { position:fixed;pointer-events:none;z-index:9996;font-size:1.5rem;animation:petalFall linear infinite;opacity:0.4 }
+@keyframes petalFall { 0% { transform:translateY(-20px) rotate(0deg);opacity:0.4 } 100% { transform:translateY(110vh) rotate(720deg);opacity:0 } }
+/* Pulsing heart background */
+.heart-bg-pulse { position:fixed;top:50%;left:50%;width:300px;height:300px;background:radial-gradient(circle,rgba(183,110,121,0.06),transparent);border-radius:50%;transform:translate(-50%,-50%);animation:bgHeartPulse 4s ease-in-out infinite;pointer-events:none;z-index:0 }
+@keyframes bgHeartPulse { 0%,100% { transform:translate(-50%,-50%) scale(1);opacity:0.3 } 50% { transform:translate(-50%,-50%) scale(1.5);opacity:0.6 } }
+/* Soft glow overlay */
+.glow-overlay { position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 0%,rgba(183,110,121,0.08),transparent 70%);pointer-events:none;z-index:0 }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -2559,5 +2569,41 @@ window.addEventListener('load', function() {
   }, 500);
 });
 </script>
+
+
+<div class="heart-bg-pulse"></div>
+<div class="glow-overlay"></div>
+<div id="rosePetals"></div>
+<script>
+(function(){
+  var c=document.getElementById('rosePetals');if(!c)return;
+  var petals=['🌹','🌸','🌺','🌷','💮','🌸'];
+  for(var i=0;i<20;i++){
+    (function(d){
+      setTimeout(function(){
+        var p=document.createElement('div');p.className='rose-petal';
+        p.textContent=petals[Math.floor(Math.random()*petals.length)];
+        p.style.left=(Math.random()*100)+'%';
+        p.style.animationDuration=(6+Math.random()*8)+'s';
+        p.style.animationDelay='0s';
+        p.style.fontSize=(1+Math.random()*1.5)+'rem';
+        c.appendChild(p);
+        setTimeout(function(){p.remove()},14000);
+      },d);
+    })(i*800);
+  }
+  // Keep spawning
+  setInterval(function(){
+    var p=document.createElement('div');p.className='rose-petal';
+    p.textContent=petals[Math.floor(Math.random()*petals.length)];
+    p.style.left=(Math.random()*100)+'%';
+    p.style.animationDuration=(6+Math.random()*8)+'s';
+    p.style.fontSize=(1+Math.random()*1.5)+'rem';
+    document.getElementById('rosePetals').appendChild(p);
+    setTimeout(function(){p.remove()},14000);
+  },2000);
+})();
+</script>
+
 </body>
 </html>
