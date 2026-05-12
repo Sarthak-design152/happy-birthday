@@ -725,7 +725,7 @@ section h2 .icon { margin-right: 8px; font-size: 1.5rem; }
   <section id="letter">
     <h2><span class="icon">&#x1F48C;</span>A Love Letter for You</h2>
     <div id="loveLetter"></div>
-    <button class="mischief-btn" onclick="doMischief()">&#x1F440; Do not click &#x1F440;</button>
+    <button class="mischief-btn" onclick="doMischief(this)">&#x1F440; Do not click &#x1F440;</button>
     <button class="supernova-btn" onclick="launchSupernova()">&#x1F31F; Light Up the Stars &#x1F31F;</button>
   </section>
 
@@ -1400,12 +1400,12 @@ section h2 .icon { margin-right: 8px; font-size: 1.5rem; }
       document.getElementById('cakeHint').textContent = '\u2728 Make a wish, my love! \u2728';
       document.getElementById('wishMsg').textContent = '\u{1F31F} Happy Birthday, Diksha! May all your dreams come true! \u{1F31F}';
       launchConfetti();
-      window.launchFireworks();
+      if (window.launchFireworks) window.launchFireworks();
     }
 
     // ==================== DO NOT CLICK ====================
     var clickCount = 0;
-    function doMischief() {
+    function doMischief(btn) {
       clickCount++;
       if (clickCount < 5) {
         var msgs = ['Nope, not yet \u{1F609}', 'Keep trying... \u{1F60F}', 'Almost there... \u{1F525}', 'One more time! \u{1F608}'];
@@ -1417,7 +1417,7 @@ section h2 .icon { margin-right: 8px; font-size: 1.5rem; }
         return;
       }
       clickCount = 0;
-      var btn = event && event.target ? event.target : document.querySelector('.mischief-btn');
+      if (!btn) btn = document.querySelector('.mischief-btn');
       btn.style.animation = 'shake 0.5s ease-in-out';
       setTimeout(function() {
         btn.style.animation = '';
@@ -1428,7 +1428,7 @@ section h2 .icon { margin-right: 8px; font-size: 1.5rem; }
         setTimeout(function() { box.remove(); }, 3000);
       }, 550);
       launchConfetti();
-      window.launchFireworks();
+      if (window.launchFireworks) window.launchFireworks();
     }
 
     // ==================== CONFETTI ====================
