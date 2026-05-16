@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>14 Weeks ❤️ Our Story</title>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+<script>
+  var ytReady = false;
+  window.onYouTubeIframeAPIReady = function() { ytReady = true; };
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { margin: 0; height: 100vh; overflow: hidden; font-family: Poppins; background: black; color: white; }
@@ -96,9 +101,6 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 </head>
 <body>
 
-<audio id="music" loop preload="auto">
-  <source src="music.mp3" type="audio/mp3">
-</audio>
 <div id="ytPlayerWrapper" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;overflow:hidden;"></div>
 <div id="musicNote" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:44px;height:44px;border-radius:50%;background:rgba(255,77,109,0.2);border:1px solid rgba(255,77,109,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.3rem;backdrop-filter:blur(8px);transition:0.3s;display:none;" onclick="toggleMusic()">🎵</div>
 
@@ -223,23 +225,30 @@ function start() {
 }
 
 function startMusic() {
-  var iframe = document.createElement("iframe");
-  iframe.allow = "autoplay";
-  iframe.style.cssText = "position:absolute;width:0;height:0;opacity:0;pointer-events:none;";
-  iframe.src = "https://www.youtube.com/embed/rtOvBOTyf00?autoplay=1&loop=1&playlist=rtOvBOTyf00&controls=0";
-  document.body.appendChild(iframe);
-  ytPlayer = iframe;
-  playing = true;
+  if (typeof YT !== 'undefined' && YT.Player && !ytPlayer) {
+    ytPlayer = new YT.Player('ytPlayerWrapper', {
+      height: 0, width: 0,
+      videoId: 'rtOvBOTyX00',
+      playerVars: {
+        autoplay: 1, controls: 0, loop: 1,
+        playlist: 'rtOvBOTyX00', enablejsapi: 1
+      },
+      events: {
+        onReady: function(e) { e.target.playVideo(); }
+      }
+    });
+    playing = true;
+  }
 }
 
 function toggleMusic() {
-  if (!ytPlayer) return;
+  if (!ytPlayer || typeof ytPlayer.playVideo !== 'function') return;
   if (playing) {
-    ytPlayer.src = "";
+    ytPlayer.pauseVideo();
     playing = false;
     musicNoteBtn.style.opacity = "0.5";
   } else {
-    ytPlayer.src = "https://www.youtube.com/embed/rtOvBOTyf00?autoplay=1&loop=1&playlist=rtOvBOTyf00&controls=0";
+    ytPlayer.playVideo();
     playing = true;
     musicNoteBtn.style.opacity = "1";
   }
@@ -444,10 +453,11 @@ var heartbeatCtx, heartbeatW, heartbeatH, heartbeatT = 0;
 function initHeartbeat() {
   var canvas = document.getElementById("heartbeatCanvas");
   if (!canvas) return;
+  canvas.width = canvas.offsetWidth || 400;
+  canvas.height = canvas.offsetHeight || 120;
   heartbeatCtx = canvas.getContext("2d");
-  heartbeatW = canvas.width = canvas.offsetWidth;
-  heartbeatH = canvas.height = canvas.offsetHeight;
-  if (!heartbeatW || !heartbeatH) { heartbeatW = 300; heartbeatH = 120; }
+  heartbeatW = canvas.width;
+  heartbeatH = canvas.height;
   heartbeatT = 0;
   drawHeartbeat();
 }
@@ -523,10 +533,23 @@ function startFireworks() {
 
 // Love Letter
 var letterOpen = false;
+function spawnKisses() {
+  var kisses = ["💋","💕","💖","💗","🌹","✨"];
+  for (var i = 0; i < 8; i++) {
+    (function() {
+      var k = document.createElement("span");
+      k.textContent = kisses[Math.floor(Math.random() * kisses.length)];
+      k.style.cssText = "position:fixed;left:" + (20 + Math.random() * 60) + "%;top:50%;font-size:" + (16 + Math.random() * 16) + "px;pointer-events:none;z-index:99999;animation:kissFloat 2s ease forwards;opacity:0;";
+      document.body.appendChild(k);
+      setTimeout(function() { k.remove(); }, 2500);
+    })();
+  }
+}
 function openLetter() {
   var env = document.getElementById("envelope");
   var letter = document.getElementById("letterContent");
   var btn = document.getElementById("letterBtn");
+  spawnKisses();
   if (!letterOpen) {
     env.style.transform = "rotateY(180deg)";
     setTimeout(function() { env.style.display = "none"; letter.style.display = "block"; btn.style.display = "inline-block"; }, 400);
@@ -541,13 +564,13 @@ var orbsCtx, orbsW, orbsH, orbsList = [], orbsColors = ["#ff4d6d","#ff6b8a","#ff
 function initOrbs() {
   var canvas = document.getElementById("orbsCanvas");
   if (!canvas) return;
+  canvas.width = 400; canvas.height = 200;
   orbsCtx = canvas.getContext("2d");
-  orbsW = canvas.width = canvas.offsetWidth;
-  orbsH = canvas.height = canvas.offsetHeight;
-  if (!orbsW || !orbsH) { orbsW = 300; orbsH = 200; }
+  orbsW = canvas.width;
+  orbsH = canvas.height;
   orbsList = [];
-  for (var i = 0; i < 25; i++) {
-    orbsList.push({ x: Math.random() * orbsW, y: Math.random() * orbsH, r: 30 + Math.random() * 50, color: orbsColors[Math.floor(Math.random() * orbsColors.length)], dx: (Math.random() - 0.5) * 0.2, dy: (Math.random() - 0.5) * 0.2, a: 0.2 + Math.random() * 0.3 });
+  for (var i = 0; i < 35; i++) {
+    orbsList.push({ x: Math.random() * orbsW, y: Math.random() * orbsH, r: 20 + Math.random() * 60, color: orbsColors[Math.floor(Math.random() * orbsColors.length)], dx: (Math.random() - 0.5) * 0.3, dy: (Math.random() - 0.5) * 0.3, a: 0.3 + Math.random() * 0.4 });
   }
   drawOrbs();
 }
@@ -599,15 +622,24 @@ function drawOrbs() {
   draw();
 })();
 
-// Cursor Heart Trail
+// Cursor Heart Trail + Sparkles
 (function() {
-  var hearts = ["❤️","💕","💖","💗","💓","🫶","✨"];
+  var icons = ["❤️","💕","💖","💗","💓","🫶","✨","🌟","💫","⭐"];
+  var sparkleColors = ["#ffd700","#ff4d6d","#ffd1dc","#fff"];
   document.addEventListener("mousemove", function(e) {
-    var el = document.createElement("span");
-    el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-    el.style.cssText = "position:fixed;left:" + (e.clientX - 10) + "px;top:" + (e.clientY - 10) + "px;font-size:" + (10 + Math.random() * 10) + "px;pointer-events:none;z-index:99999;opacity:0.8;animation:heartFade 1.2s ease forwards;";
-    document.body.appendChild(el);
-    setTimeout(function() { el.remove(); }, 1200);
+    if (Math.random() > 0.3) {
+      var el = document.createElement("span");
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+      el.style.cssText = "position:fixed;left:" + (e.clientX - 10) + "px;top:" + (e.clientY - 10) + "px;font-size:" + (10 + Math.random() * 10) + "px;pointer-events:none;z-index:99999;opacity:0.8;animation:heartFade 1.2s ease forwards;";
+      document.body.appendChild(el);
+      setTimeout(function() { el.remove(); }, 1200);
+    }
+    if (Math.random() > 0.6) {
+      var sp = document.createElement("div");
+      sp.style.cssText = "position:fixed;left:" + (e.clientX - 2 + Math.random() * 4) + "px;top:" + (e.clientY - 2 + Math.random() * 4) + "px;width:4px;height:4px;border-radius:50%;background:" + sparkleColors[Math.floor(Math.random() * sparkleColors.length)] + ";pointer-events:none;z-index:99999;box-shadow:0 0 6px " + sparkleColors[0] + ";animation:sparklePop 0.8s ease forwards;";
+      document.body.appendChild(sp);
+      setTimeout(function() { sp.remove(); }, 800);
+    }
   });
 })();
 
@@ -690,6 +722,15 @@ function burstConfetti() {
 @keyframes confettiFall {
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
   100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+@keyframes sparklePop {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0) translateY(-20px); }
+}
+@keyframes kissFloat {
+  0% { opacity: 0; transform: translateY(0) scale(0.3); }
+  20% { opacity: 1; transform: translateY(-20px) scale(1); }
+  100% { opacity: 0; transform: translateY(-120px) scale(0.6); }
 }
 </style>
 
