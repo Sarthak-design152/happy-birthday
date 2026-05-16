@@ -16,12 +16,28 @@ body { margin: 0; height: 100vh; overflow: hidden; font-family: Poppins; backgro
 
 #intro {
   position: absolute; width: 100%; height: 100%;
-  background: radial-gradient(circle at center, #ff4d6d, black);
+  background: radial-gradient(circle at center, #1a0011, #000);
   display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 999;
+  opacity: 0; animation: cinematicIntro 3s ease forwards;
 }
-#intro h1 { font-family: 'Great Vibes'; font-size: 3em; color: #ffd1dc; text-align: center; }
-#enterBtn { margin-top: 20px; padding: 12px 28px; border: none; border-radius: 12px; background: #ff4d6d; color: white; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; }
+#intro::before {
+  content: ''; position: absolute; width: 100%; height: 100%;
+  background: radial-gradient(circle at center, rgba(255,77,109,0.12) 0%, transparent 60%);
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+#intro h1 { font-family: 'Great Vibes'; font-size: 3em; color: #ffd1dc; text-align: center; opacity: 0; animation: fadeUp 1.2s ease 1.5s forwards; }
+#intro p { opacity: 0; animation: fadeUp 1.2s ease 2s forwards; }
+#enterBtn { margin-top: 20px; padding: 12px 28px; border: none; border-radius: 12px; background: #ff4d6d; color: white; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; opacity: 0; animation: fadeUp 1.2s ease 2.5s forwards; }
 #enterBtn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,77,109,0.5); }
+
+@keyframes cinematicIntro {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
 .bg { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; filter: brightness(0.4) blur(2px); transition: 2.5s ease; }
 .overlay { position: absolute; width: 100%; height: 100%; background: radial-gradient(ellipse at center, rgba(255,0,100,0.15) 0%, rgba(0,0,0,0.6) 80%); }
@@ -98,8 +114,37 @@ button { margin-top: 10px; padding: 10px 20px; border: none; border-radius: 10px
 button:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,77,109,0.4); }
 
 /* Heart cursor on gallery cards and reason cards */
-.gallery-card, .reason-card, #envelope, #musicNote, .close, #enterBtn {
+.gallery-card, .reason-card, #envelope, #musicNote, .close, #enterBtn, .open-when-card {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff4d6d' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") 12 12, pointer !important;
+}
+
+/* GALLERY CAPTIONS */
+.gallery-caption { font-family: 'Great Vibes'; font-size: 0.7rem; color: rgba(255,255,255,0.5); text-align: center; margin-top: 2px; line-height: 1.3; }
+
+/* SCROLL PROGRESS BAR */
+#scrollProgress {
+  position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #ff4d6d, #ffd1dc);
+  z-index: 99999; width: 0%; transition: width 0.1s ease; opacity: 0;
+}
+#scrollProgress.show { opacity: 1; }
+
+/* OPEN WHEN SECTION */
+.open-when-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
+.open-when-card {
+  padding: 12px 8px; border-radius: 12px; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06); text-align: center; cursor: pointer;
+  transition: all 0.4s ease; min-height: 70px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.open-when-card:hover { background: rgba(255,77,109,0.12); border-color: #ff4d6d; }
+.open-when-card .ow-icon { font-size: 1.3rem; margin-bottom: 4px; }
+.open-when-card .ow-label { font-family: 'Poppins'; font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; }
+.open-when-card .ow-label.open { color: #ff4d6d; }
+.open-when-card.opened { background: rgba(255,77,109,0.08); border-color: #ff4d6d; }
+.ow-content {
+  display: none; margin-top: 10px; padding: 14px; border-radius: 12px;
+  background: rgba(255,255,255,0.04); font-size: 0.85rem; line-height: 1.7;
+  color: #ffd1dc; text-align: left; font-family: 'Great Vibes'; font-size: 0.95rem;
 }
 
 /* CHAPTER SYSTEM */
@@ -157,7 +202,7 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 
 .heart, .spark { position: absolute; pointer-events: none; }
 .heart { animation: float 6s linear infinite; }
-.spark { width: 3px; height: 3px; background: white; border-radius: 50%; animation: sparkle 3s linear infinite; }
+.spark { width: 2px; height: 2px; background: white; border-radius: 50%; animation: sparkle 4s linear infinite; opacity: 0.3; }
 
 @keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
 @keyframes sparkle { 0% { transform: translateY(100vh); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
@@ -190,7 +235,8 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 <body>
 
 <div id="ytPlayerWrapper" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;overflow:hidden;"></div>
-<div id="musicNote" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:44px;height:44px;border-radius:50%;background:rgba(255,77,109,0.2);border:1px solid rgba(255,77,109,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.3rem;backdrop-filter:blur(8px);transition:0.3s;display:none;" onclick="toggleMusic()">🎵</div>
+<div id="musicNote" style="position:fixed;bottom:16px;right:16px;z-index:9999;width:36px;height:36px;border-radius:50%;background:rgba(255,77,109,0.08);border:1px solid rgba(255,77,109,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;backdrop-filter:blur(4px);transition:0.3s;display:none;opacity:0.5;" onclick="toggleMusic()">🎵</div>
+<div id="scrollProgress"></div>
 
 <div id="intro">
   <h1>Our Story ❤️</h1>
@@ -239,12 +285,12 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
       <button onclick="nextSlide()" style="position:absolute;top:50%;right:6px;transform:translateY(-50%);background:rgba(0,0,0,0.4);color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;">&#10095;</button>
     </div>
     <div class="gallery-grid" id="galleryGrid">
-      <div class="gallery-card" onclick="openLightbox(0)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg" alt="Beautiful"></div>
-      <div class="gallery-card" onclick="openLightbox(1)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg" alt="Beautiful"></div>
-      <div class="gallery-card" onclick="openLightbox(2)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg" alt="Stunning"></div>
-      <div class="gallery-card" onclick="openLightbox(3)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg" alt="Beautiful"></div>
-      <div class="gallery-card" onclick="openLightbox(4)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/hero_pic.png" alt="Gorgeous"></div>
-      <div class="gallery-card" onclick="openLightbox(5)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/profile_pic.jpg" alt="Beautiful"></div>
+      <div><div class="gallery-card" onclick="openLightbox(0)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg" alt="Beautiful"></div><div class="gallery-caption">my favorite smile</div></div>
+      <div><div class="gallery-card" onclick="openLightbox(1)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg" alt="Beautiful"></div><div class="gallery-caption">the moment I knew</div></div>
+      <div><div class="gallery-card" onclick="openLightbox(2)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg" alt="Stunning"></div><div class="gallery-caption">my favorite person</div></div>
+      <div><div class="gallery-card" onclick="openLightbox(3)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg" alt="Beautiful"></div><div class="gallery-caption">I still remember this feeling</div></div>
+      <div><div class="gallery-card" onclick="openLightbox(4)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/hero_pic.png" alt="Gorgeous"></div><div class="gallery-caption">you take my breath away</div></div>
+      <div><div class="gallery-card" onclick="openLightbox(5)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/profile_pic.jpg" alt="Beautiful"></div><div class="gallery-caption">first moment I smiled because of you</div></div>
     </div>
   </section>
 
@@ -312,6 +358,33 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
       <span style="font-family:'Great Vibes';font-size:1.2rem;color:#ff4d6d;">forever yours Golella</span>
     </div>
     <button onclick="openLetter()" style="display:none;" id="letterBtn">Read Again 💌</button>
+  </section>
+
+  <section id="openwhen" class="reveal">
+    <p class="chapter-sub">Keep This Forever</p>
+    <h2>Open When &#x1F49C;</h2>
+    <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);text-align:center;margin-bottom:8px;">save these for the moments you need them most</p>
+    <div class="open-when-grid">
+      <div class="open-when-card" onclick="openWhen(this, 0)">
+        <div class="ow-icon">🌧️</div>
+        <div class="ow-label">you miss me</div>
+      </div>
+      <div class="open-when-card" onclick="openWhen(this, 1)">
+        <div class="ow-icon">😔</div>
+        <div class="ow-label">you feel low</div>
+      </div>
+      <div class="open-when-card" onclick="openWhen(this, 2)">
+        <div class="ow-icon">😊</div>
+        <div class="ow-label">you're happy</div>
+      </div>
+      <div class="open-when-card" onclick="openWhen(this, 3)">
+        <div class="ow-icon">🌙</div>
+        <div class="ow-label">you can't sleep</div>
+      </div>
+    </div>
+    <div class="ow-content" id="owContent">
+      <div id="owMessage"></div>
+    </div>
   </section>
 
   <section id="glowOrbs" class="reveal">
@@ -393,7 +466,16 @@ function startMusic() {
         playlist: 'rtOvBOTyX00', enablejsapi: 1
       },
       events: {
-        onReady: function(e) { e.target.playVideo(); }
+        onReady: function(e) {
+          e.target.setVolume(0);
+          e.target.playVideo();
+          var vol = 0;
+          var fadeIn = setInterval(function() {
+            vol += 3;
+            if (vol >= 30) { vol = 30; clearInterval(fadeIn); }
+            e.target.setVolume(vol);
+          }, 300);
+        }
       }
     });
     playing = true;
@@ -422,22 +504,22 @@ function changeBg() {
   imgIdx = (imgIdx + 1) % bgImages.length;
 }
 changeBg();
-setInterval(changeBg, 3500);
+setInterval(changeBg, 5000);
 
 var heartBeatCount = 0;
 function spawn(type) {
   var el = document.createElement("div");
   el.className = type;
-  if (type === "heart") el.innerHTML = "❤";
+  if (type === "heart") { el.innerHTML = "❤"; el.style.opacity = "0.25"; }
   el.style.left = Math.random() * 100 + "vw";
-  el.style.fontSize = (12 + Math.random() * 18) + "px";
+  el.style.fontSize = (10 + Math.random() * 14) + "px";
   document.body.appendChild(el);
-  setTimeout(function() { el.remove(); }, 6000);
+  setTimeout(function() { el.remove(); }, 8000);
 }
-// Hearts beat at ~72 BPM rhythm (every 830ms)
-setInterval(function() { spawn("heart"); heartBeatCount++; }, 830);
-// Sparkles on the off-beat
-setInterval(function() { spawn("spark"); }, 1660);
+// Hearts beat slow + soft (~40 BPM, every 1500ms)
+setInterval(function() { spawn("heart"); heartBeatCount++; }, 1500);
+// Sparkles are rare highlights (every 5s)
+setInterval(function() { spawn("spark"); }, 5000);
 
 var targetDate = new Date("2026-05-19T00:00:00");
 
@@ -519,7 +601,7 @@ function prevSlide() { goToSlide((slideIdx - 1 + slideImgs.length) % slideImgs.l
 
 function resetSlideTimer() {
   clearInterval(slideTimer);
-  slideTimer = setInterval(nextSlide, 3000);
+  slideTimer = setInterval(nextSlide, 4000);
 }
 
 renderDots();
@@ -671,7 +753,7 @@ function startFireworks() {
 
   setInterval(function() {
     createBurst(Math.random() * W, Math.random() * H * 0.5);
-  }, 2000);
+  }, 4500);
 
   function animate() {
     ctx.clearRect(0, 0, W, H);
@@ -806,8 +888,14 @@ function drawOrbs() {
       setTimeout(function() { sp.remove(); }, 800);
     }
   }
+  var moveThrottle = 0;
   var touchThrottle = 0;
-  document.addEventListener("mousemove", function(e) { spawnTrail(e.clientX, e.clientY); });
+  document.addEventListener("mousemove", function(e) {
+    var now = Date.now();
+    if (now - moveThrottle < 60) return;
+    moveThrottle = now;
+    spawnTrail(e.clientX, e.clientY);
+  });
   document.addEventListener("touchmove", function(e) {
     var now = Date.now();
     if (now - touchThrottle < 80) return;
@@ -835,8 +923,8 @@ function drawOrbs() {
     div.style.left = (5 + Math.random() * 75) + "%";
     div.style.animationDuration = (10 + Math.random() * 6) + "s";
     document.body.appendChild(div);
-    setTimeout(function() { div.remove(); }, 16000);
-  }, 4000);
+    setTimeout(function() { div.remove(); }, 20000);
+  }, 7000);
 })();
 
 // Shooting Stars on Click
@@ -894,8 +982,8 @@ document.addEventListener("click", function(e) {
     moonEl.appendChild(sp);
     setTimeout(function() { if (sp.parentNode) sp.remove(); }, dur * 1000);
   }
-  setInterval(orbitSpark, 600);
-  setTimeout(function() { moonEl.classList.add("show"); }, 3000);
+  setInterval(orbitSpark, 1200);
+  setTimeout(function() { moonEl.classList.add("show"); }, 5000);
 })();
 
 // Floating Paper Lanterns
@@ -917,8 +1005,8 @@ document.addEventListener("click", function(e) {
     document.body.appendChild(l);
     setTimeout(function() { if (l.parentNode) l.remove(); }, 30000);
   }
-  setInterval(spawnLantern, 3000);
-  setTimeout(function() { spawnLantern(); }, 4000);
+  setInterval(spawnLantern, 5000);
+  setTimeout(function() { spawnLantern(); }, 6000);
 })();
 
 // Title Heart Burst
@@ -963,7 +1051,7 @@ var langColors = ["#ff4d6d","#ff6b8a","#ffd1dc","#ffb3c1","#ff8fa3","#ffd700","#
     document.body.appendChild(el);
     setTimeout(function() { if (el.parentNode) el.remove(); }, 15000);
   }
-  setInterval(dropLang, 1200);
+  setInterval(dropLang, 2500);
 })();
 // "Our Song" lyrics float-up
 var songLyrics = [
@@ -987,7 +1075,7 @@ function startLyrics() {
     document.body.appendChild(el);
     setTimeout(function() { if (el.parentNode) el.remove(); }, 7000);
     lyricIdx = (lyricIdx + 1) % songLyrics.length;
-  }, 5000);
+  }, 7000);
 }
 // Love Quotes Rotator
 var loveQuotes = [
@@ -1060,6 +1148,45 @@ function lockHearts() {
     }
   }, 800);
 }
+
+// Open When... emotional anchor
+var owMessages = [
+  "Hey you 💕<br><br>I hope you're smiling right now. Even when I'm not there, I want you to know — you're the first thought in my morning and the last one at night. Every moment away from you just makes me appreciate how lucky I am to have you in my life.<br><br>I'm always just a thought away. Always. 💫",
+  "I know some days feel heavy. But you? You're the strongest person I know. And even on days you don't feel it — you are enough. You are so loved, so valued, and so incredibly beautiful.<br><br>Take a deep breath. You've got this. And I've got you. Always. 🫶",
+  "This smile? It's my favorite thing in the world. I hope today gave you a thousand reasons to laugh. You deserve all the joy this life has to offer, and I can't wait to be the reason behind at least one of those smiles today.<br><br>Keep shining, my love. The world is brighter when you do. ✨",
+  "Close your eyes and imagine this — my arms wrapped around you, your head on my chest, the world quiet around us. You're safe. You're loved. You're not alone.<br><br>Count the stars with me. I'll be here when you wake up. Forever yours. 🌙💕"
+];
+function openWhen(el, idx) {
+  var content = document.getElementById("owContent");
+  var msg = document.getElementById("owMessage");
+  if (el.classList.contains("opened")) return;
+  el.classList.add("opened");
+  el.querySelector(".ow-label").classList.add("open");
+  content.style.display = "block";
+  msg.innerHTML = owMessages[idx];
+  content.style.animation = "transitionReveal 0.6s ease forwards";
+  spawnKisses();
+}
+
+// Scroll progress bar
+(function() {
+  var bar = document.getElementById("scrollProgress");
+  var main = document.getElementById("main");
+  function track() {
+    if (!bar || !main) return;
+    var pct = (main.scrollTop / (main.scrollHeight - main.clientHeight)) * 100;
+    bar.style.width = Math.min(pct, 100) + "%";
+  }
+  // Show bar when main appears
+  var obs = new MutationObserver(function() {
+    if (main.style.display !== "none") {
+      bar.classList.add("show");
+      obs.disconnect();
+    }
+  });
+  obs.observe(main, { attributes: true, attributeFilter: ["style"] });
+  main.addEventListener("scroll", track);
+})();
 
 // Confetti burst
 function burstConfetti() {
