@@ -87,6 +87,11 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 @keyframes heartFade { 0% { opacity: 0.8; transform: scale(0.5) translateY(0); } 50% { opacity: 1; transform: scale(1) translateY(-20px); } 100% { opacity: 0; transform: scale(0.8) translateY(-40px); } }
 
 .countdown-text { font-size: 1rem; color: #ffd1dc; margin: 10px 0; }
+.shooting-star { position: fixed; pointer-events: none; z-index: 9997; }
+.shooting-star .trail { position: absolute; height: 2px; background: linear-gradient(to right, transparent, #fff); border-radius: 2px; }
+.shooting-star .head { position: absolute; width: 4px; height: 4px; background: #fff; border-radius: 50%; box-shadow: 0 0 10px #fff, 0 0 20px #ffd1dc; }
+.wish-msg { position: fixed; pointer-events: none; z-index: 9997; font-family: 'Great Vibes'; font-size: 1.1rem; color: #ffd1dc; text-shadow: 0 0 20px rgba(255,77,109,0.5); animation: wishFade 3s ease forwards; }
+@keyframes wishFade { 0% { opacity: 0; transform: scale(0.3) translateY(0); } 20% { opacity: 1; transform: scale(1) translateY(-20px); } 100% { opacity: 0; transform: scale(0.8) translateY(-80px); } }
 </style>
 </head>
 <body>
@@ -94,7 +99,7 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 <audio id="music" loop preload="auto">
   <source src="music.mp3" type="audio/mp3">
 </audio>
-<iframe id="ytPlayer" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;" allow="autoplay" src=""></iframe>
+<div id="ytPlayerWrapper" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;overflow:hidden;"></div>
 <div id="musicNote" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:44px;height:44px;border-radius:50%;background:rgba(255,77,109,0.2);border:1px solid rgba(255,77,109,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.3rem;backdrop-filter:blur(8px);transition:0.3s;display:none;" onclick="toggleMusic()">🎵</div>
 
 <div id="intro">
@@ -203,7 +208,7 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 <script>
 var playing = false;
 var musicNoteBtn = document.getElementById("musicNote");
-var ytPlayer = document.getElementById("ytPlayer");
+var ytPlayer = null;
 
 function start() {
   document.getElementById("intro").style.display = "none";
@@ -218,18 +223,23 @@ function start() {
 }
 
 function startMusic() {
-  ytPlayer.src = "https://www.youtube.com/embed/rtOvBOTyf00?autoplay=1&loop=1&playlist=rtOvBOTyf00&controls=0&showinfo=0&enablejsapi=1";
+  var iframe = document.createElement("iframe");
+  iframe.allow = "autoplay";
+  iframe.style.cssText = "position:absolute;width:0;height:0;opacity:0;pointer-events:none;";
+  iframe.src = "https://www.youtube.com/embed/rtOvBOTyf00?autoplay=1&loop=1&playlist=rtOvBOTyf00&controls=0";
+  document.body.appendChild(iframe);
+  ytPlayer = iframe;
   playing = true;
-  musicNoteBtn.textContent = "🎵";
 }
 
 function toggleMusic() {
+  if (!ytPlayer) return;
   if (playing) {
     ytPlayer.src = "";
     playing = false;
     musicNoteBtn.style.opacity = "0.5";
   } else {
-    ytPlayer.src = "https://www.youtube.com/embed/rtOvBOTyf00?autoplay=1&loop=1&playlist=rtOvBOTyf00&controls=0&showinfo=0&enablejsapi=1";
+    ytPlayer.src = "https://www.youtube.com/embed/rtOvBOTyf00?autoplay=1&loop=1&playlist=rtOvBOTyf00&controls=0";
     playing = true;
     musicNoteBtn.style.opacity = "1";
   }
@@ -622,6 +632,47 @@ function drawOrbs() {
     setTimeout(function() { div.remove(); }, 16000);
   }, 4000);
 })();
+
+// Shooting Stars on Click
+var wishMessages = [
+  "you're my everything 💕", "forever yours 💫", "always and forever ❤️",
+  "my heart is yours 💗", "you're the one 🥰", "i choose you 🫶",
+  "you make me whole ✨", "my best decision 💖", "endless love 🌹",
+  "you're my home 🏠", "you're my dream come true 🌙", "my forever Valentine 💕"
+];
+document.addEventListener("click", function(e) {
+  var star = document.createElement("div");
+  star.className = "shooting-star";
+  var head = document.createElement("div");
+  head.className = "head";
+  var trail = document.createElement("div");
+  trail.className = "trail";
+  trail.style.width = (100 + Math.random() * 100) + "px";
+  trail.style.top = "1px";
+  trail.style.left = "2px";
+  star.appendChild(trail);
+  star.appendChild(head);
+  var angle = -20 + Math.random() * -40;
+  var dist = 150 + Math.random() * 250;
+  star.style.left = (e.clientX - 50) + "px";
+  star.style.top = (e.clientY - 50) + "px";
+  star.style.transform = "rotate(" + angle + "deg)";
+  document.body.appendChild(star);
+  requestAnimationFrame(function() {
+    star.style.transition = "all 0.6s ease-out";
+    star.style.transform = "rotate(" + angle + "deg) translateX(" + dist + "px)";
+    star.style.opacity = "0";
+  });
+  setTimeout(function() { star.remove(); }, 800);
+
+  var msg = document.createElement("div");
+  msg.className = "wish-msg";
+  msg.textContent = wishMessages[Math.floor(Math.random() * wishMessages.length)];
+  msg.style.left = (e.clientX - 60) + "px";
+  msg.style.top = (e.clientY - 60) + "px";
+  document.body.appendChild(msg);
+  setTimeout(function() { msg.remove(); }, 3000);
+});
 
 // Confetti burst
 function burstConfetti() {
