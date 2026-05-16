@@ -81,6 +81,7 @@ body { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
 .main-scroll {
   position: absolute; z-index: 10; top: 0; left: 0; width: 100%; height: 100%;
   overflow-y: auto; display: none; perspective: 1000px;
+  -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
 }
 .main-scroll::-webkit-scrollbar { width: 4px; }
 .main-scroll::-webkit-scrollbar-thumb { background: #ff4d6d; border-radius: 4px; }
@@ -771,25 +772,34 @@ function drawOrbs() {
   draw();
 })();
 
-// Cursor Heart Trail + Sparkles
+// Cursor Heart Trail + Sparkles (mouse + touch)
 (function() {
   var icons = ["❤️","💕","💖","💗","💓","🫶","✨","🌟","💫","⭐"];
   var sparkleColors = ["#ffd700","#ff4d6d","#ffd1dc","#fff"];
-  document.addEventListener("mousemove", function(e) {
+  function spawnTrail(x, y) {
     if (Math.random() > 0.3) {
       var el = document.createElement("span");
       el.textContent = icons[Math.floor(Math.random() * icons.length)];
-      el.style.cssText = "position:fixed;left:" + (e.clientX - 10) + "px;top:" + (e.clientY - 10) + "px;font-size:" + (10 + Math.random() * 10) + "px;pointer-events:none;z-index:99999;opacity:0.8;animation:heartFade 1.2s ease forwards;";
+      el.style.cssText = "position:fixed;left:" + (x - 10) + "px;top:" + (y - 10) + "px;font-size:" + (10 + Math.random() * 10) + "px;pointer-events:none;z-index:99999;opacity:0.8;animation:heartFade 1.2s ease forwards;";
       document.body.appendChild(el);
       setTimeout(function() { el.remove(); }, 1200);
     }
     if (Math.random() > 0.6) {
       var sp = document.createElement("div");
-      sp.style.cssText = "position:fixed;left:" + (e.clientX - 2 + Math.random() * 4) + "px;top:" + (e.clientY - 2 + Math.random() * 4) + "px;width:4px;height:4px;border-radius:50%;background:" + sparkleColors[Math.floor(Math.random() * sparkleColors.length)] + ";pointer-events:none;z-index:99999;box-shadow:0 0 6px " + sparkleColors[0] + ";animation:sparklePop 0.8s ease forwards;";
+      sp.style.cssText = "position:fixed;left:" + (x - 2 + Math.random() * 4) + "px;top:" + (y - 2 + Math.random() * 4) + "px;width:4px;height:4px;border-radius:50%;background:" + sparkleColors[Math.floor(Math.random() * sparkleColors.length)] + ";pointer-events:none;z-index:99999;box-shadow:0 0 6px " + sparkleColors[0] + ";animation:sparklePop 0.8s ease forwards;";
       document.body.appendChild(sp);
       setTimeout(function() { sp.remove(); }, 800);
     }
-  });
+  }
+  var touchThrottle = 0;
+  document.addEventListener("mousemove", function(e) { spawnTrail(e.clientX, e.clientY); });
+  document.addEventListener("touchmove", function(e) {
+    var now = Date.now();
+    if (now - touchThrottle < 80) return;
+    touchThrottle = now;
+    var t = e.touches[0];
+    spawnTrail(t.clientX, t.clientY);
+  }, { passive: true });
 })();
 
 // Floating Polaroid Photos
@@ -1048,7 +1058,28 @@ function burstConfetti() {
   80% { opacity: 1; }
   100% { transform: translate(35px, 35px) rotate(calc(var(--angle) + 6.2832rad)) translateX(var(--dist)) rotate(calc(-1 * var(--angle) - 6.2832rad)); opacity: 0; }
 }
-</style>
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 500px) {
+  body { overflow: hidden; -webkit-overflow-scrolling: touch; }
+  #intro h1 { font-size: 2.2rem; }
+  #enterBtn { padding: 16px 32px; font-size: 1.1rem; min-width: 200px; }
+  .card { padding: 24px 18px; margin: 24px auto; }
+  .card h1 { font-size: 2.2rem; }
+  #glowingName { font-size: 1.6rem; }
+  section { padding: 20px 16px; margin: 16px auto; }
+  section h2 { font-size: 1.4rem; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  button { padding: 14px 22px; font-size: 1rem; min-height: 48px; }
+  .reason-card { padding: 14px 12px; }
+  .chapter-sub { font-size: 0.65rem; }
+  .poem-text { font-size: 1rem; }
+  .quote-text { font-size: 1rem; min-height: 100px; }
+  #moon { top: 12px; right: 12px; transform: scale(0.7); transform-origin: top right; }
+  .lantern-body { width: 24px; height: 34px; }
+  .main-scroll::-webkit-scrollbar { width: 2px; }
+  button { min-width: 44px; min-height: 44px; }
+}
 
 </body>
 </html>
