@@ -3,256 +3,633 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Our Story ❤️</title>
-
+<title>14 Weeks ❤️ Our Story</title>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
-
 <style>
-body {
-  margin: 0;
-  height: 100vh;
-  overflow: hidden;
-  font-family: Poppins;
-  background: black;
-  color: white;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { margin: 0; height: 100vh; overflow: hidden; font-family: Poppins; background: black; color: white; }
 
-/* 🎬 INTRO */
 #intro {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  position: absolute; width: 100%; height: 100%;
   background: radial-gradient(circle at center, #ff4d6d, black);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 999;
+  display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 999;
 }
+#intro h1 { font-family: 'Great Vibes'; font-size: 3em; color: #ffd1dc; text-align: center; }
+#enterBtn { margin-top: 20px; padding: 12px 28px; border: none; border-radius: 12px; background: #ff4d6d; color: white; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; }
+#enterBtn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,77,109,0.5); }
 
-#intro h1 {
-  font-family: 'Great Vibes';
-  font-size: 3em;
-  color: #ffd1dc;
-  text-align: center;
+.bg { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; filter: brightness(0.5) blur(1px); transition: 2s ease; }
+.overlay { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255,0,100,0.2), black); }
+
+.main-scroll {
+  position: absolute; z-index: 10; top: 0; left: 0; width: 100%; height: 100%;
+  overflow-y: auto; display: none;
 }
+.main-scroll::-webkit-scrollbar { width: 4px; }
+.main-scroll::-webkit-scrollbar-thumb { background: #ff4d6d; border-radius: 4px; }
 
-#enterBtn {
-  margin-top: 20px;
-  padding: 12px 18px;
-  border: none;
-  border-radius: 12px;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* 🌌 BACKGROUND */
-.bg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  filter: brightness(0.5) blur(1px);
-  transition: 2s ease;
-}
-
-.overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255,0,100,0.2), black);
-}
-
-/* 💖 MAIN CARD */
 .card {
-  position: absolute;
-  z-index: 10;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  width: 360px;
-  padding: 20px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 60px rgba(255,0,100,0.4);
-  text-align: center;
+  width: 90%; max-width: 420px; margin: 40px auto; padding: 28px 24px;
+  border-radius: 20px; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px);
+  box-shadow: 0 0 60px rgba(255,0,100,0.4); text-align: center;
 }
+.card h1 { font-family: 'Great Vibes'; font-size: 2.7em; color: #ffd1dc; }
+.small { font-size: 0.9em; opacity: 0.9; margin: 6px 0; }
+button { margin-top: 10px; padding: 10px 20px; border: none; border-radius: 10px; background: #ff4d6d; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
+button:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,77,109,0.4); }
 
-h1 {
-  font-family: 'Great Vibes';
-  font-size: 2.7em;
-  color: #ffd1dc;
-}
+#secret { display: none; position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999; text-align: center; padding-top: 120px; backdrop-filter: blur(10px); }
+#secret h1 { font-family: 'Great Vibes'; color: #ff4d6d; font-size: 2.5rem; }
+#secret p { font-size: 1.1rem; margin: 20px; line-height: 1.8; color: #ffd1dc; }
 
-.small {
-  font-size: 0.9em;
-  opacity: 0.9;
-}
+section { width: 90%; max-width: 420px; margin: 20px auto; padding: 24px; border-radius: 20px; background: rgba(255,255,255,0.06); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); }
+section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; margin-bottom: 12px; text-align: center; }
 
-button {
-  margin-top: 10px;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 10px;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
-}
+.gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.gallery-card { aspect-ratio: 1; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: 0.3s; background: rgba(255,255,255,0.04); }
+.gallery-card:hover { transform: scale(1.05); border-color: #ff4d6d; }
+.gallery-card img { width: 100%; height: 100%; object-fit: cover; }
 
-/* 💌 SECRET */
-#secret {
-  display:none;
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:black;
-  z-index:999;
-  text-align:center;
-  padding-top:120px;
-}
+.lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; align-items: center; justify-content: center; cursor: pointer; }
+.lightbox.active { display: flex; }
+.lightbox img { max-width: 90%; max-height: 85%; border-radius: 12px; box-shadow: 0 0 40px rgba(255,77,109,0.3); }
+.lightbox .close { position: fixed; top: 20px; right: 30px; color: #fff; font-size: 2.5rem; cursor: pointer; opacity: 0.7; }
+.lightbox .close:hover { opacity: 1; }
 
-/* ✨ EFFECTS */
-.heart, .spark {
-  position: absolute;
-  pointer-events: none;
-}
+.reason-card { padding: 10px 14px; margin: 6px 0; background: rgba(255,255,255,0.05); border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: 0.3s; }
+.reason-card:hover { background: rgba(255,77,109,0.15); border-color: #ff4d6d; transform: translateX(4px); }
+.reason-card .num { color: #ff4d6d; font-weight: bold; margin-right: 6px; }
 
+.heartbeat-canvas { width: 100%; height: 120px; margin-top: 10px; border-radius: 10px; }
+
+.heart, .spark { position: absolute; pointer-events: none; }
 .heart { animation: float 6s linear infinite; }
 .spark { width: 3px; height: 3px; background: white; border-radius: 50%; animation: sparkle 3s linear infinite; }
 
-@keyframes float {
-  0%{transform:translateY(100vh);opacity:0}
-  50%{opacity:1}
-  100%{transform:translateY(-10vh);opacity:0}
-}
+@keyframes float { 0% { transform: translateY(100vh); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
+@keyframes sparkle { 0% { transform: translateY(100vh); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
 
-@keyframes sparkle {
-  0%{transform:translateY(100vh);opacity:0}
-  50%{opacity:1}
-  100%{transform:translateY(-10vh);opacity:0}
-}
+#typing { margin-top: 10px; font-size: 0.95em; min-height: 40px; color: #ffd1dc; }
 
-/* 💌 typing */
-#typing {
-  margin-top: 10px;
-  font-size: 0.9em;
-  min-height: 40px;
-}
+#fireworksCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; pointer-events: none; }
+#petalsCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+#starsCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+.polaroid { position: fixed; z-index: 2; pointer-events: none; animation: polaroidFloat 12s linear forwards; }
+.polaroid img { width: 120px; height: 120px; object-fit: cover; border-radius: 4px; }
+.polaroid-frame { background: #fff; padding: 8px 8px 30px 8px; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.polaroid-frame .caption { font-family: 'Great Vibes'; font-size: 0.75rem; color: #555; text-align: center; margin-top: 4px; }
+
+@keyframes polaroidFloat { 0% { transform: translateY(100vh) rotate(-10deg) scale(0.5); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-20vh) rotate(10deg) scale(1); opacity: 0; } }
+
+.poem-text { font-family: 'Great Vibes'; font-size: 1.2rem; color: #ffd1dc; line-height: 2; text-align: center; opacity: 0; animation: fadeInSoft 3s ease forwards; }
+@keyframes fadeInSoft { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes heartFade { 0% { opacity: 0.8; transform: scale(0.5) translateY(0); } 50% { opacity: 1; transform: scale(1) translateY(-20px); } 100% { opacity: 0; transform: scale(0.8) translateY(-40px); } }
+
+.countdown-text { font-size: 1rem; color: #ffd1dc; margin: 10px 0; }
 </style>
 </head>
-
 <body>
 
-<!-- 🎵 MUSIC -->
 <audio id="music" loop preload="auto">
   <source src="music.mp3" type="audio/mp3">
 </audio>
+<div id="musicNote" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:44px;height:44px;border-radius:50%;background:rgba(255,77,109,0.2);border:1px solid rgba(255,77,109,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.3rem;backdrop-filter:blur(8px);transition:0.3s;display:none;" onclick="toggleMusic()">🎵</div>
 
-<!-- 🎬 INTRO -->
 <div id="intro">
   <h1>Our Story ❤️</h1>
-  <button id="enterBtn" onclick="start()">Enter Our World</button>
+  <p style="color:#ffd1dc;margin:8px 0;font-size:0.9rem;">14 weeks of us</p>
+  <button id="enterBtn" onclick="start()">Enter Our World ✨</button>
 </div>
 
-<!-- 🌌 MAIN -->
 <div class="bg" id="bg"></div>
 <div class="overlay"></div>
 
-<div class="card" id="main" style="display:none">
+<canvas id="starsCanvas"></canvas>
+<canvas id="petalsCanvas"></canvas>
+<canvas id="fireworksCanvas"></canvas>
 
-  <h1>14 Weeks ❤️</h1>
-  <p class="small">you make everything feel softer</p>
+<div class="main-scroll" id="main">
 
-  <p id="countdown"></p>
-  <p id="typing"></p>
+  <div class="card">
+    <h1>14 Weeks ❤️</h1>
+    <p class="small">you make everything feel softer</p>
+    <p class="countdown-text" id="countdown"></p>
+    <p id="typing"></p>
+    <button onclick="openSecret()">Open Secret 💌</button>
+  </div>
 
-  <button onclick="openSecret()">Open Secret 💌</button>
+  <section id="gallery">
+    <h2>Our Moments</h2>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gallery-card" onclick="openLightbox(0)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg" alt="Us"></div>
+      <div class="gallery-card" onclick="openLightbox(1)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg" alt="Us"></div>
+      <div class="gallery-card" onclick="openLightbox(2)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo3.jpg" alt="Us"></div>
+      <div class="gallery-card" onclick="openLightbox(3)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg" alt="Us"></div>
+      <div class="gallery-card" onclick="openLightbox(4)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg" alt="Us"></div>
+      <div class="gallery-card" onclick="openLightbox(5)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo6.webp" alt="Us"></div>
+    </div>
+  </section>
+
+  <section id="reasons">
+    <h2>14 Reasons for 14 Weeks 💕</h2>
+    <div id="reasonsList"></div>
+  </section>
+
+  <section id="heartbeat">
+    <h2>My Heartbeat for You 💓</h2>
+    <canvas class="heartbeat-canvas" id="heartbeatCanvas"></canvas>
+  </section>
+
+  <section id="poem">
+    <h2>A Little Poem 🥀</h2>
+    <div class="poem-text">
+      In a world so wide, I found my home,<br>
+      In your gentle heart, where I'll always roam.<br>
+      Fourteen weeks of whispered dreams,<br>
+      Of golden suns and silver beams.<br><br>
+      You're the softest place I've ever known,<br>
+      The sweetest love I've ever grown.<br>
+      So here's to us, to all we'll be —<br>
+      My forever Valentine, just you and me. 💕
+    </div>
+  </section>
+
+  <section id="loveletter" style="text-align:center;">
+    <h2>A Letter For You 💌</h2>
+    <div id="envelope" onclick="openLetter()" style="cursor:pointer;margin:16px auto;width:200px;height:150px;background:linear-gradient(135deg,#ff4d6d,#ff6b8a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:3rem;box-shadow:0 8px 30px rgba(255,77,109,0.4);transition:0.3s;position:relative;">
+      <div style="position:absolute;top:0;left:0;width:100%;height:50%;background:linear-gradient(135deg,#ff6b8a,#ff8fa3);border-radius:10px 10px 0 0;clip-path:polygon(0 0,100% 0,50% 100%);"></div>
+      <span style="z-index:2;">💌</span>
+    </div>
+    <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:8px;">tap the envelope 💕</p>
+    <div id="letterContent" style="display:none;margin-top:16px;padding:20px;background:rgba(255,255,255,0.06);border-radius:16px;border:1px solid rgba(255,255,255,0.08);text-align:left;font-size:0.95rem;line-height:1.8;color:#ffd1dc;">
+      My love,<br><br>
+      It's only been 14 weeks, but it feels like I've known you my whole life. You came into my world and suddenly everything made sense — the colors got brighter, the music sounded sweeter, and my heart found a home it never knew it was searching for.<br><br>
+      You have this way of making ordinary moments feel magical. The way you laugh, the way you look at me, the way you say my name — it's all etched into my heart forever.<br><br>
+      Thank you for being you. For being patient, kind, and the most beautiful soul I've ever met. These 14 weeks have been the happiest of my life, and I can't wait to spend so many more with you.<br><br>
+      I love you. Always. 💕<br><br>
+      <span style="font-family:'Great Vibes';font-size:1.2rem;color:#ff4d6d;">Yours, forever</span>
+    </div>
+    <button onclick="openLetter()" style="display:none;" id="letterBtn">Read Again 💌</button>
+  </section>
+
+  <section id="glowOrbs" style="text-align:center;">
+    <h2>✨</h2>
+    <canvas id="orbsCanvas" style="width:100%;height:200px;border-radius:16px;margin-top:8px;"></canvas>
+    <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:6px;">soft light, just like you 💫</p>
+  </section>
 
 </div>
 
-<!-- 💌 SECRET -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="close" onclick="closeLightbox()">&times;</span>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
 <div id="secret">
-  <h1 style="font-family:Great Vibes;color:#ff4d6d;">For You ❤️</h1>
-  <p>i really really like you… more than i say 🫶</p>
+  <h1>For You, Always ❤️</h1>
+  <p>i really really like you… more than i say 🫶<br><br>
+  14 weeks, 98 days, countless smiles. you make everything better just by being you. thank you for being my home. happy 14 weeks, my love. 💕</p>
   <button onclick="closeSecret()">Go Back</button>
 </div>
 
 <script>
+var music = document.getElementById("music");
+var audioCtx = null;
+var playing = false;
+var musicNoteBtn = document.getElementById("musicNote");
 
-const music = document.getElementById("music");
-
-/* 🎬 START */
-function start(){
-  document.getElementById("intro").style.display="none";
-  document.getElementById("main").style.display="block";
-
-  music.play().catch(()=>{});
-
-  // fallback unlock
-  document.body.addEventListener("click", () => music.play(), { once:true });
+function start() {
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("main").style.display = "block";
+  musicNoteBtn.style.display = "flex";
+  startMusic();
+  startPetals();
+  startFireworks();
+  setTimeout(function() { burstConfetti(); }, 500);
 }
 
-/* 🌌 SLIDESHOW */
-const images=["photo1.jpg","photo2.jpg","photo3.jpg"];
-let i=0;
-const bg=document.getElementById("bg");
-
-function change(){
-  bg.style.backgroundImage=`url(${images[i]})`;
-  i=(i+1)%images.length;
+function startMusic() {
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    playMelody();
+    playing = true;
+    musicNoteBtn.textContent = "🎵";
+  } catch(e) {}
 }
-change();
-setInterval(change,3500);
 
-/* 💖 EFFECTS */
-function spawn(type){
-  const el=document.createElement("div");
-  el.className=type;
-  el.innerHTML=type==="heart"?"❤":"";
-  el.style.left=Math.random()*100+"vw";
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(),6000);
+function playMelody() {
+  if (!audioCtx) return;
+  var notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25];
+  var melody = [0,0,2,2,4,4,2,-1, 4,4,5,5,7,7,5,-1, 9,9,7,7,5,5,4,-1, 5,5,4,4,2,2,0,-1];
+  var noteLen = 0.5;
+  var totalLen = melody.length * noteLen;
+  var startTime = audioCtx.currentTime;
+
+  function schedule() {
+    var now = audioCtx.currentTime;
+    var lookAhead = now + 0.1;
+    for (var i = 0; i < melody.length; i++) {
+      var t = startTime + i * noteLen;
+      if (t < lookAhead) continue;
+      if (t > now + 0.5) break;
+      var note = melody[i];
+      if (note < 0) continue;
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = "sine";
+      osc.frequency.value = notes[note % notes.length];
+      gain.gain.setValueAtTime(0.04, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + noteLen * 0.8);
+      osc.start(t);
+      osc.stop(t + noteLen);
+    }
+    startTime += totalLen;
+  }
+
+  schedule();
+  setInterval(schedule, totalLen * 1000);
 }
-setInterval(()=>spawn("heart"),180);
-setInterval(()=>spawn("spark"),120);
 
-/* ⏳ COUNTDOWN */
-const startDate=new Date("2026-02-08");
-const target=new Date(startDate);
-target.setDate(startDate.getDate()+100);
-
-function update(){
-  let d=Math.ceil((target-new Date())/(1000*60*60*24));
-  document.getElementById("countdown").innerText="💫 "+d+" days until 100 days together";
-}
-setInterval(update,1000);
-update();
-
-/* 💌 TYPE */
-const text="you make everything feel calm… like home ❤️";
-let j=0;
-function type(){
-  if(j<text.length){
-    document.getElementById("typing").innerHTML+=text[j];
-    j++;
-    setTimeout(type,45);
+function toggleMusic() {
+  if (playing) {
+    if (audioCtx) audioCtx.suspend();
+    playing = false;
+    musicNoteBtn.textContent = "🎵";
+    musicNoteBtn.style.opacity = "0.5";
+  } else {
+    if (audioCtx) audioCtx.resume();
+    playing = true;
+    musicNoteBtn.textContent = "🎵";
+    musicNoteBtn.style.opacity = "1";
   }
 }
-type();
 
-/* 💌 SECRET */
-function openSecret(){
-  document.getElementById("secret").style.display="block";
+var bgImages = ["photo1.jpg","photo2.jpg","photo3.jpg"];
+var imgIdx = 0;
+var bg = document.getElementById("bg");
+
+function changeBg() {
+  bg.style.backgroundImage = "url(" + bgImages[imgIdx] + ")";
+  imgIdx = (imgIdx + 1) % bgImages.length;
 }
-function closeSecret(){
-  document.getElementById("secret").style.display="none";
+changeBg();
+setInterval(changeBg, 3500);
+
+function spawn(type) {
+  var el = document.createElement("div");
+  el.className = type;
+  if (type === "heart") el.innerHTML = "❤";
+  el.style.left = Math.random() * 100 + "vw";
+  el.style.fontSize = (10 + Math.random() * 20) + "px";
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 6000);
+}
+setInterval(function() { spawn("heart"); }, 180);
+setInterval(function() { spawn("spark"); }, 120);
+
+var startDate = new Date("2026-02-08");
+var target = new Date(startDate);
+target.setDate(startDate.getDate() + 100);
+
+function updateCountdown() {
+  var d = Math.ceil((target - new Date()) / (1000 * 60 * 60 * 24));
+  document.getElementById("countdown").innerText = "💫 " + d + " days until 100 days together";
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+var typeText = "you make everything feel calm… like home ❤️";
+var charIdx = 0;
+function typeWriter() {
+  if (charIdx < typeText.length) {
+    document.getElementById("typing").innerHTML += typeText[charIdx];
+    charIdx++;
+    setTimeout(typeWriter, 45);
+  }
+}
+typeWriter();
+
+function openSecret() { document.getElementById("secret").style.display = "block"; }
+function closeSecret() { document.getElementById("secret").style.display = "none"; }
+
+// Gallery
+var lightboxImages = [
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo3.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo6.webp"
+];
+function openLightbox(idx) {
+  document.getElementById("lightboxImg").src = lightboxImages[idx];
+  document.getElementById("lightbox").classList.add("active");
+}
+function closeLightbox() { document.getElementById("lightbox").classList.remove("active"); }
+
+// 14 Reasons
+var reasons = [
+  "Your smile lights up my whole world",
+  "The way you laugh makes everything better",
+  "You understand me without words",
+  "Your hugs feel like home",
+  "You make even ordinary days special",
+  "Your eyes tell stories I never get tired of",
+  "You believe in me when I don't",
+  "The little things you do mean everything",
+  "You're my favorite hello and hardest goodbye",
+  "Your voice is my favorite sound",
+  "You make me want to be the best version of myself",
+  "Your strength inspires me daily",
+  "You love me even on my worst days",
+  "You're my best friend, my love, my everything"
+];
+var reasonsDiv = document.getElementById("reasonsList");
+for (var r = 0; r < reasons.length; r++) {
+  (function(idx) {
+    var div = document.createElement("div");
+    div.className = "reason-card";
+    div.innerHTML = '<span class="num">' + (idx + 1) + '.</span> ' + reasons[idx];
+    div.addEventListener("click", function() {
+      var hearts = ["❤️","💕","💖","💗","💓","🫶"];
+      for (var h = 0; h < 6; h++) {
+        var e = document.createElement("span");
+        e.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        e.style.position = "absolute";
+        e.style.left = (30 + Math.random() * 40) + "%";
+        e.style.top = "50%";
+        e.style.fontSize = "1.2rem";
+        e.style.animation = "float 1s ease-out forwards";
+        e.style.pointerEvents = "none";
+        div.appendChild(e);
+        setTimeout(function() { e.remove(); }, 1000);
+      }
+    });
+    reasonsDiv.appendChild(div);
+  })(r);
 }
 
+// Rose Petals
+function startPetals() {
+  var canvas = document.getElementById("petalsCanvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener("resize", resize);
+
+  var petals = [];
+  for (var i = 0; i < 40; i++) {
+    petals.push({
+      x: Math.random() * W, y: Math.random() * H,
+      r: 6 + Math.random() * 8,
+      color: ["#ff4d6d","#ff6b8a","#ff8fa3","#ffb3c1","#ffd1dc"][Math.floor(Math.random() * 5)],
+      speed: 0.5 + Math.random() * 1,
+      drift: (Math.random() - 0.5) * 0.5,
+      angle: Math.random() * Math.PI * 2,
+      rotSpeed: 0.01 + Math.random() * 0.03
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    petals.forEach(function(p) {
+      p.angle += p.rotSpeed;
+      p.x += p.drift + Math.sin(p.angle) * 0.3;
+      p.y += p.speed;
+      if (p.y > H + 20) { p.y = -20; p.x = Math.random() * W; }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.globalAlpha = 0.6;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.r, p.r * 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// Heartbeat
+(function() {
+  var canvas = document.getElementById("heartbeatCanvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W = canvas.width = canvas.offsetWidth;
+  var H = canvas.height = canvas.offsetHeight;
+  var t = 0;
+  function drawBeat() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.beginPath();
+    ctx.strokeStyle = "#ff4d6d";
+    ctx.lineWidth = 2;
+    ctx.shadowColor = "#ff4d6d";
+    ctx.shadowBlur = 8;
+    for (var x = 0; x < W; x++) {
+      var beat = Math.abs(Math.sin(x * 0.03 + t)) * 30;
+      var y = H / 2 + Math.sin(x * 0.02 + t * 3) * beat * 0.5;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    t += 0.03;
+    requestAnimationFrame(drawBeat);
+  }
+  drawBeat();
+})();
+
+// Fireworks
+function startFireworks() {
+  var canvas = document.getElementById("fireworksCanvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener("resize", resize);
+
+  var particles = [];
+  var colors = ["#ff4d6d","#ff6b8a","#ffd1dc","#ffb3c1","#ff8fa3","#ffd700"];
+
+  function createBurst(x, y) {
+    for (var i = 0; i < 30; i++) {
+      var angle = Math.random() * Math.PI * 2;
+      var speed = 2 + Math.random() * 4;
+      particles.push({
+        x: x, y: y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+        life: 1, color: colors[Math.floor(Math.random() * colors.length)],
+        size: 2 + Math.random() * 3
+      });
+    }
+  }
+
+  setInterval(function() {
+    createBurst(Math.random() * W, Math.random() * H * 0.5);
+  }, 2000);
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(function(p, i) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.04;
+      p.life -= 0.01;
+      if (p.life <= 0) { particles.splice(i, 1); return; }
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.shadowBlur = 0;
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+// Love Letter
+var letterOpen = false;
+function openLetter() {
+  var env = document.getElementById("envelope");
+  var letter = document.getElementById("letterContent");
+  var btn = document.getElementById("letterBtn");
+  if (!letterOpen) {
+    env.style.transform = "rotateY(180deg)";
+    setTimeout(function() { env.style.display = "none"; letter.style.display = "block"; btn.style.display = "inline-block"; }, 400);
+    letterOpen = true;
+  } else {
+    letter.style.display = "block";
+  }
+}
+
+// Glowing Orbs
+(function() {
+  var canvas = document.getElementById("orbsCanvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W, H, orbs = [];
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  resize();
+  window.addEventListener("resize", resize);
+  var colors = ["#ff4d6d","#ff6b8a","#ff8fa3","#ffb3c1","#ffd1dc","#ffd700"];
+  for (var i = 0; i < 25; i++) {
+    orbs.push({ x: Math.random() * W, y: Math.random() * H, r: 15 + Math.random() * 30, color: colors[Math.floor(Math.random() * colors.length)], dx: (Math.random() - 0.5) * 0.3, dy: (Math.random() - 0.5) * 0.3, a: 0.1 + Math.random() * 0.2 });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    orbs.forEach(function(o) {
+      o.x += o.dx;
+      o.y += o.dy;
+      if (o.x < -50 || o.x > W + 50) { o.x = Math.random() * W; o.dx *= -1; }
+      if (o.y < -50 || o.y > H + 50) { o.y = Math.random() * H; o.dy *= -1; }
+      var grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
+      grad.addColorStop(0, o.color);
+      grad.addColorStop(1, "transparent");
+      ctx.globalAlpha = o.a;
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// Twinkling Stars
+(function() {
+  var canvas = document.getElementById("starsCanvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W, H, stars = [];
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener("resize", resize);
+  for (var i = 0; i < 80; i++) {
+    stars.push({ x: Math.random() * W, y: Math.random() * H, r: 0.5 + Math.random() * 1.5, a: Math.random(), s: 0.005 + Math.random() * 0.015, d: Math.random() > 0.5 ? 1 : -1 });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    stars.forEach(function(s) {
+      s.a += s.s * s.d;
+      if (s.a > 1 || s.a < 0) s.d *= -1;
+      ctx.globalAlpha = 0.3 + s.a * 0.7;
+      ctx.fillStyle = "#fff";
+      ctx.shadowColor = "#ffd1dc";
+      ctx.shadowBlur = s.r * 3;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.shadowBlur = 0;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// Cursor Heart Trail
+(function() {
+  var hearts = ["❤️","💕","💖","💗","💓","🫶","✨"];
+  document.addEventListener("mousemove", function(e) {
+    var el = document.createElement("span");
+    el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    el.style.cssText = "position:fixed;left:" + (e.clientX - 10) + "px;top:" + (e.clientY - 10) + "px;font-size:" + (10 + Math.random() * 10) + "px;pointer-events:none;z-index:99999;opacity:0.8;animation:heartFade 1.2s ease forwards;";
+    document.body.appendChild(el);
+    setTimeout(function() { el.remove(); }, 1200);
+  });
+})();
+
+// Floating Polaroid Photos
+(function() {
+  var imgs = [
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg",
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg",
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo3.jpg",
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg",
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg"
+  ];
+  var captions = ["us 💕", "you ✨", "together 💖", "my favorite 💗", "always 🫶"];
+  setInterval(function() {
+    var idx = Math.floor(Math.random() * imgs.length);
+    var div = document.createElement("div");
+    div.className = "polaroid";
+    div.innerHTML = '<div class="polaroid-frame"><img src="' + imgs[idx] + '"><div class="caption">' + captions[idx] + '</div></div>';
+    div.style.left = (5 + Math.random() * 75) + "%";
+    div.style.animationDuration = (10 + Math.random() * 6) + "s";
+    document.body.appendChild(div);
+    setTimeout(function() { div.remove(); }, 16000);
+  }, 4000);
+})();
+
+// Confetti burst
+function burstConfetti() {
+  var colors = ["#ff4d6d","#ffd1dc","#ffd700","#ff6b8a","#ffb3c1","#fff"];
+  for (var i = 0; i < 80; i++) {
+    var el = document.createElement("div");
+    el.style.cssText = "position:fixed;left:" + (Math.random() * 100) + "vw;top:-10px;width:" + (4 + Math.random() * 6) + "px;height:" + (4 + Math.random() * 6) + "px;background:" + colors[Math.floor(Math.random() * colors.length)] + ";border-radius:" + (Math.random() > 0.5 ? "50%" : "2px") + ";z-index:99999;pointer-events:none;animation:confettiFall " + (2 + Math.random() * 2) + "s linear forwards;";
+    document.body.appendChild(el);
+    setTimeout(function() { el.remove(); }, 4000);
+  }
+}
 </script>
+
+<style>
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+</style>
 
 </body>
 </html>
