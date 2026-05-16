@@ -120,14 +120,14 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
   </div>
 
   <section id="gallery">
-    <h2>Our Moments</h2>
+    <h2>Gallery &#x1F338;</h2>
     <div class="gallery-grid" id="galleryGrid">
-      <div class="gallery-card" onclick="openLightbox(0)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg" alt="Us"></div>
-      <div class="gallery-card" onclick="openLightbox(1)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg" alt="Us"></div>
-      <div class="gallery-card" onclick="openLightbox(2)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo3.jpg" alt="Us"></div>
-      <div class="gallery-card" onclick="openLightbox(3)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg" alt="Us"></div>
-      <div class="gallery-card" onclick="openLightbox(4)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg" alt="Us"></div>
-      <div class="gallery-card" onclick="openLightbox(5)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo6.webp" alt="Us"></div>
+      <div class="gallery-card" onclick="openLightbox(0)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg" alt="Beautiful"></div>
+      <div class="gallery-card" onclick="openLightbox(1)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg" alt="Beautiful"></div>
+      <div class="gallery-card" onclick="openLightbox(2)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg" alt="Stunning"></div>
+      <div class="gallery-card" onclick="openLightbox(3)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg" alt="Beautiful"></div>
+      <div class="gallery-card" onclick="openLightbox(4)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/hero_pic.png" alt="Gorgeous"></div>
+      <div class="gallery-card" onclick="openLightbox(5)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/profile_pic.jpg" alt="Beautiful"></div>
     </div>
   </section>
 
@@ -173,10 +173,10 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
     <button onclick="openLetter()" style="display:none;" id="letterBtn">Read Again 💌</button>
   </section>
 
-  <section id="glowOrbs" style="text-align:center;">
-    <h2>✨</h2>
-    <canvas id="orbsCanvas" style="width:100%;height:200px;border-radius:16px;margin-top:8px;"></canvas>
-    <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:6px;">soft light, just like you 💫</p>
+  <section id="glowOrbs">
+    <h2>Soft Light, Just Like You &#x2728;</h2>
+    <canvas id="orbsCanvas" style="width:100%;height:200px;border-radius:16px;margin-top:8px;background:rgba(255,255,255,0.02);"></canvas>
+    <p style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-top:8px;text-align:center;">&#x2728; gentle light, just like the way you make me feel &#x2728;</p>
   </section>
 
 </div>
@@ -223,35 +223,30 @@ function playMelody() {
   if (!audioCtx) return;
   var notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25];
   var melody = [0,0,2,2,4,4,2,-1, 4,4,5,5,7,7,5,-1, 9,9,7,7,5,5,4,-1, 5,5,4,4,2,2,0,-1];
-  var noteLen = 0.5;
-  var totalLen = melody.length * noteLen;
-  var startTime = audioCtx.currentTime;
+  var noteIdx = 0;
+  var noteLen = 0.45;
 
-  function schedule() {
-    var now = audioCtx.currentTime;
-    var lookAhead = now + 0.1;
-    for (var i = 0; i < melody.length; i++) {
-      var t = startTime + i * noteLen;
-      if (t < lookAhead) continue;
-      if (t > now + 0.5) break;
-      var note = melody[i];
-      if (note < 0) continue;
+  function playNext() {
+    if (!playing || !audioCtx) return;
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    var n = melody[noteIdx % melody.length];
+    if (n >= 0) {
       var osc = audioCtx.createOscillator();
       var gain = audioCtx.createGain();
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       osc.type = "sine";
-      osc.frequency.value = notes[note % notes.length];
-      gain.gain.setValueAtTime(0.04, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + noteLen * 0.8);
-      osc.start(t);
-      osc.stop(t + noteLen);
+      osc.frequency.value = notes[n % notes.length];
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + noteLen * 0.8);
+      osc.start();
+      osc.stop(audioCtx.currentTime + noteLen);
     }
-    startTime += totalLen;
+    noteIdx++;
+    setTimeout(playNext, noteLen * 1000);
   }
 
-  schedule();
-  setInterval(schedule, totalLen * 1000);
+  playNext();
 }
 
 function toggleMusic() {
@@ -318,12 +313,12 @@ function closeSecret() { document.getElementById("secret").style.display = "none
 
 // Gallery
 var lightboxImages = [
-  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg",
-  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg",
-  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo3.jpg",
-  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg",
-  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg",
-  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo6.webp"
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/hero_pic.png",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/profile_pic.jpg"
 ];
 function openLightbox(idx) {
   document.getElementById("lightboxImg").src = lightboxImages[idx];
@@ -593,13 +588,13 @@ function openLetter() {
 // Floating Polaroid Photos
 (function() {
   var imgs = [
-    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo1.jpg",
-    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo2.jpg",
-    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo3.jpg",
-    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo4.jpg",
-    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo5.jpg"
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg",
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg",
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg",
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/hero_pic.png",
+    "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/profile_pic.jpg"
   ];
-  var captions = ["us 💕", "you ✨", "together 💖", "my favorite 💗", "always 🫶"];
+  var captions = ["beautiful 💕", "stunning ✨", "gorgeous 💖", "my everything 💗", "always 🫶"];
   setInterval(function() {
     var idx = Math.floor(Math.random() * imgs.length);
     var div = document.createElement("div");
