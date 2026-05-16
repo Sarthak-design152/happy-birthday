@@ -122,6 +122,12 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 
   <section id="gallery">
     <h2>Gallery &#x1F338;</h2>
+    <div id="slideshow" style="position:relative;border-radius:16px;overflow:hidden;margin-bottom:10px;background:rgba(255,255,255,0.03);">
+      <img id="slideImg" src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;transition:opacity 0.6s ease;display:block;">
+      <div style="position:absolute;bottom:10px;left:0;width:100%;display:flex;justify-content:center;gap:6px;" id="slideDots"></div>
+      <button onclick="prevSlide()" style="position:absolute;top:50%;left:6px;transform:translateY(-50%);background:rgba(0,0,0,0.4);color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;">&#10094;</button>
+      <button onclick="nextSlide()" style="position:absolute;top:50%;right:6px;transform:translateY(-50%);background:rgba(0,0,0,0.4);color:#fff;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;">&#10095;</button>
+    </div>
     <div class="gallery-grid" id="galleryGrid">
       <div class="gallery-card" onclick="openLightbox(0)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg" alt="Beautiful"></div>
       <div class="gallery-card" onclick="openLightbox(1)"><img src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg" alt="Beautiful"></div>
@@ -263,15 +269,14 @@ function spawn(type) {
 setInterval(function() { spawn("heart"); }, 180);
 setInterval(function() { spawn("spark"); }, 120);
 
-var startDate = new Date("2026-02-08");
-var target = new Date(startDate);
-target.setDate(startDate.getDate() + 100);
+var targetDate = new Date("2026-05-19T00:00:00");
 
 function updateCountdown() {
-  var d = Math.ceil((target - new Date()) / (1000 * 60 * 60 * 24));
+  var diff = targetDate - new Date();
+  var d = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   document.getElementById("countdown").innerText = "💫 " + d + " days until 100 days together";
 }
-setInterval(updateCountdown, 1000);
+setInterval(updateCountdown, 60000);
 updateCountdown();
 
 var typeText = "you make everything feel calm… like home ❤️";
@@ -302,6 +307,51 @@ function openLightbox(idx) {
   document.getElementById("lightbox").classList.add("active");
 }
 function closeLightbox() { document.getElementById("lightbox").classList.remove("active"); }
+
+// Slideshow
+var slideImgs = [
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_2.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_3.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/photo58.jpg",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/hero_pic.png",
+  "https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/profile_pic.jpg"
+];
+var slideIdx = 0;
+var slideTimer;
+
+function renderDots() {
+  var dots = document.getElementById("slideDots");
+  dots.innerHTML = "";
+  for (var i = 0; i < slideImgs.length; i++) {
+    var d = document.createElement("span");
+    d.style.cssText = "width:8px;height:8px;border-radius:50%;background:" + (i === slideIdx ? "#ff4d6d" : "rgba(255,255,255,0.3)") + ";cursor:pointer;transition:0.3s;display:inline-block;";
+    d.onclick = function(idx) { return function() { goToSlide(idx); }; }(i);
+    dots.appendChild(d);
+  }
+}
+
+function goToSlide(idx) {
+  slideIdx = idx;
+  document.getElementById("slideImg").style.opacity = "0";
+  setTimeout(function() {
+    document.getElementById("slideImg").src = slideImgs[slideIdx];
+    document.getElementById("slideImg").style.opacity = "1";
+    renderDots();
+  }, 300);
+  resetSlideTimer();
+}
+
+function nextSlide() { goToSlide((slideIdx + 1) % slideImgs.length); }
+function prevSlide() { goToSlide((slideIdx - 1 + slideImgs.length) % slideImgs.length); }
+
+function resetSlideTimer() {
+  clearInterval(slideTimer);
+  slideTimer = setInterval(nextSlide, 3000);
+}
+
+renderDots();
+resetSlideTimer();
 
 // 14 Reasons
 var reasons = [
@@ -498,7 +548,7 @@ function initOrbs() {
   if (!orbsW || !orbsH) { orbsW = 300; orbsH = 200; }
   orbsList = [];
   for (var i = 0; i < 25; i++) {
-    orbsList.push({ x: Math.random() * orbsW, y: Math.random() * orbsH, r: 15 + Math.random() * 30, color: orbsColors[Math.floor(Math.random() * orbsColors.length)], dx: (Math.random() - 0.5) * 0.3, dy: (Math.random() - 0.5) * 0.3, a: 0.1 + Math.random() * 0.2 });
+    orbsList.push({ x: Math.random() * orbsW, y: Math.random() * orbsH, r: 30 + Math.random() * 50, color: orbsColors[Math.floor(Math.random() * orbsColors.length)], dx: (Math.random() - 0.5) * 0.2, dy: (Math.random() - 0.5) * 0.2, a: 0.2 + Math.random() * 0.3 });
   }
   drawOrbs();
 }
