@@ -23,32 +23,63 @@ body { margin: 0; height: 100vh; overflow: hidden; font-family: Poppins; backgro
 #enterBtn { margin-top: 20px; padding: 12px 28px; border: none; border-radius: 12px; background: #ff4d6d; color: white; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; }
 #enterBtn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,77,109,0.5); }
 
-.bg { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; filter: brightness(0.5) blur(1px); transition: 2s ease; }
-.overlay { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255,0,100,0.2), black); }
+.bg { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; filter: brightness(0.4) blur(2px); transition: 2.5s ease; }
+.overlay { position: absolute; width: 100%; height: 100%; background: radial-gradient(ellipse at center, rgba(255,0,100,0.15) 0%, rgba(0,0,0,0.6) 80%); }
+.vignette { position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.7) 100%); z-index: 4; pointer-events: none; }
 
 .main-scroll {
   position: absolute; z-index: 10; top: 0; left: 0; width: 100%; height: 100%;
-  overflow-y: auto; display: none;
+  overflow-y: auto; display: none; perspective: 1000px;
 }
 .main-scroll::-webkit-scrollbar { width: 4px; }
 .main-scroll::-webkit-scrollbar-thumb { background: #ff4d6d; border-radius: 4px; }
 
 .card {
-  width: 90%; max-width: 420px; margin: 40px auto; padding: 28px 24px;
-  border-radius: 20px; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px);
-  box-shadow: 0 0 60px rgba(255,0,100,0.4); text-align: center;
+  width: 90%; max-width: 420px; margin: 40px auto; padding: 32px 24px;
+  border-radius: 24px; background: rgba(255,255,255,0.08); backdrop-filter: blur(16px);
+  box-shadow: 0 0 60px rgba(255,0,100,0.4), inset 0 0 60px rgba(255,255,255,0.03); text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
 }
 .card h1 { font-family: 'Great Vibes'; font-size: 2.7em; color: #ffd1dc; }
 .small { font-size: 0.9em; opacity: 0.9; margin: 6px 0; }
 button { margin-top: 10px; padding: 10px 20px; border: none; border-radius: 10px; background: #ff4d6d; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
 button:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,77,109,0.4); }
 
+/* CHAPTER SYSTEM */
+.chapter-sub { font-family: 'Poppins'; font-size: 0.7rem; color: rgba(255,255,255,0.3); text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
+.reveal.show { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0s; }
+.reveal-delay-2 { transition-delay: 0.15s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.45s; }
+.reveal-delay-5 { transition-delay: 0.6s; }
+.reveal-delay-6 { transition-delay: 0.75s; }
+.reveal-delay-7 { transition-delay: 0.9s; }
+.reveal-delay-8 { transition-delay: 1.05s; }
+
+/* TRANSITION SCREEN */
+#transition {
+  position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 999;
+  display: none; justify-content: center; align-items: center; flex-direction: column;
+  background: radial-gradient(ellipse at center, #1a0011, #000);
+}
+#transition .transition-main { font-family: 'Great Vibes'; font-size: 2.2rem; color: #ffd1dc; text-align: center; opacity: 0; transform: scale(0.8); }
+#transition .transition-sub { font-family: 'Poppins'; font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 12px; letter-spacing: 3px; text-transform: uppercase; opacity: 0; }
+#transition .transition-glow { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(255,77,109,0.15), transparent); animation: pulseGlow 3s ease-in-out infinite; }
+
 #secret { display: none; position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999; text-align: center; padding-top: 120px; backdrop-filter: blur(10px); }
 #secret h1 { font-family: 'Great Vibes'; color: #ff4d6d; font-size: 2.5rem; }
 #secret p { font-size: 1.1rem; margin: 20px; line-height: 1.8; color: #ffd1dc; }
 
-section { width: 90%; max-width: 420px; margin: 20px auto; padding: 24px; border-radius: 20px; background: rgba(255,255,255,0.06); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); }
-section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; margin-bottom: 12px; text-align: center; }
+section {
+  width: 90%; max-width: 420px; margin: 24px auto; padding: 28px 24px;
+  border-radius: 20px; background: rgba(255,255,255,0.06); backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 0 40px rgba(255,0,100,0.08), inset 0 0 40px rgba(255,255,255,0.02);
+  transition: box-shadow 0.5s ease;
+}
+section:hover { box-shadow: 0 0 60px rgba(255,0,100,0.15), inset 0 0 40px rgba(255,255,255,0.03); }
+section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; margin-bottom: 8px; text-align: center; }
 
 .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .gallery-card { aspect-ratio: 1; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: 0.3s; background: rgba(255,255,255,0.04); }
@@ -112,6 +143,13 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 
 <div class="bg" id="bg"></div>
 <div class="overlay"></div>
+<div class="vignette"></div>
+
+<div id="transition">
+  <div class="transition-glow"></div>
+  <div class="transition-main" id="transitionMain">You stepped into my world...</div>
+  <div class="transition-sub" id="transitionSub">and everything changed</div>
+</div>
 
 <canvas id="starsCanvas"></canvas>
 <canvas id="petalsCanvas"></canvas>
@@ -119,7 +157,7 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 
 <div class="main-scroll" id="main">
 
-  <div class="card">
+  <div class="card reveal">
     <div id="glowingName">✨ Diksha ✨</div>
     <h1 id="titleHeart" onclick="burstTitleHearts()">14 Weeks ❤️</h1>
     <p class="small">you make everything feel softer</p>
@@ -128,8 +166,9 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
     <button onclick="openSecret()">Open Secret 💌</button>
   </div>
 
-  <section id="gallery">
-    <h2>Gallery &#x1F338;</h2>
+  <section id="gallery" class="reveal">
+    <p class="chapter-sub">Chapter One</p>
+    <h2>The Way You Look &#x1F338;</h2>
     <div id="slideshow" style="position:relative;border-radius:16px;overflow:hidden;margin-bottom:10px;background:rgba(255,255,255,0.03);">
       <img id="slideImg" src="https://raw.githubusercontent.com/Sarthak-design152/happy-birthday/main/diksha_1.jpg" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;transition:opacity 0.6s ease;display:block;">
       <div style="position:absolute;bottom:10px;left:0;width:100%;display:flex;justify-content:center;gap:6px;" id="slideDots"></div>
@@ -146,18 +185,21 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
     </div>
   </section>
 
-  <section id="reasons">
-    <h2>14 Reasons for 14 Weeks 💕</h2>
+  <section id="reasons" class="reveal">
+    <p class="chapter-sub">Chapter Two</p>
+    <h2>Why You 💕</h2>
     <div id="reasonsList"></div>
   </section>
 
-  <section id="heartbeat">
-    <h2>My Heartbeat for You 💓</h2>
+  <section id="heartbeat" class="reveal">
+    <p class="chapter-sub">Chapter Three</p>
+    <h2>You and Me 💓</h2>
     <canvas class="heartbeat-canvas" id="heartbeatCanvas"></canvas>
   </section>
 
-  <section id="poem">
-    <h2>A Little Poem 🥀</h2>
+  <section id="poem" class="reveal">
+    <p class="chapter-sub">Chapter Four</p>
+    <h2>Softly 🥀</h2>
     <div class="poem-text">
       In a world so wide, I found my home,<br>
       In your gentle heart, where I'll always roam.<br>
@@ -170,16 +212,18 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
     </div>
   </section>
 
-  <section id="quotes">
-    <h2>Whispers of Love 💫</h2>
+  <section id="quotes" class="reveal">
+    <p class="chapter-sub">Interlude</p>
+    <h2>Whispers 💫</h2>
     <div class="quote-text" id="quoteText">
       <div id="quoteLine"></div>
       <div class="quote-author" id="quoteAuthor"></div>
     </div>
   </section>
 
-  <section id="loveletter" style="text-align:center;">
-    <h2>A Letter For You 💌</h2>
+  <section id="loveletter" class="reveal" style="text-align:center;">
+    <p class="chapter-sub">Chapter Five</p>
+    <h2>My Promise 💌</h2>
     <div id="envelope" onclick="openLetter()" style="cursor:pointer;margin:16px auto;width:200px;height:150px;background:linear-gradient(135deg,#ff4d6d,#ff6b8a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:3rem;box-shadow:0 8px 30px rgba(255,77,109,0.4);transition:0.3s;position:relative;">
       <div style="position:absolute;top:0;left:0;width:100%;height:50%;background:linear-gradient(135deg,#ff6b8a,#ff8fa3);border-radius:10px 10px 0 0;clip-path:polygon(0 0,100% 0,50% 100%);"></div>
       <span style="z-index:2;">💌</span>
@@ -196,8 +240,9 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
     <button onclick="openLetter()" style="display:none;" id="letterBtn">Read Again 💌</button>
   </section>
 
-  <section id="glowOrbs">
-    <h2>Soft Light, Just Like You &#x2728;</h2>
+  <section id="glowOrbs" class="reveal">
+    <p class="chapter-sub">Epilogue</p>
+    <h2>Always &#x2728;</h2>
     <canvas id="orbsCanvas" style="width:100%;height:200px;border-radius:16px;margin-top:8px;background:rgba(255,255,255,0.02);"></canvas>
     <p style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-top:8px;text-align:center;">&#x2728; gentle light, just like the way you make me feel &#x2728;</p>
   </section>
@@ -222,15 +267,45 @@ var musicNoteBtn = document.getElementById("musicNote");
 var ytPlayer = null;
 
 function start() {
+  // Phase 1: Intro → Transition screen
   document.getElementById("intro").style.display = "none";
-  document.getElementById("main").style.display = "block";
-  musicNoteBtn.style.display = "flex";
-  startMusic();
-  startPetals();
-  startFireworks();
-  initHeartbeat();
-  initOrbs();
-  setTimeout(function() { burstConfetti(); }, 500);
+  var trans = document.getElementById("transition");
+  trans.style.display = "flex";
+  // Animate transition text
+  var tm = document.getElementById("transitionMain");
+  var ts = document.getElementById("transitionSub");
+  setTimeout(function() { tm.style.animation = "transitionReveal 1.2s ease forwards"; }, 100);
+  setTimeout(function() { ts.style.animation = "transitionReveal 1.2s ease forwards"; }, 600);
+
+  // Phase 2: After transition, show main content + start systems
+  setTimeout(function() {
+    trans.style.opacity = "0"; trans.style.transition = "opacity 0.8s ease";
+    setTimeout(function() {
+      trans.style.display = "none";
+      document.getElementById("main").style.display = "block";
+      document.getElementById("main").scrollTop = 0;
+      musicNoteBtn.style.display = "flex";
+      startMusic();
+      startPetals();
+      startFireworks();
+      initOrbs();
+
+      // Phase 3: Sequenced section reveals
+      var reveals = document.querySelectorAll(".reveal");
+      var delay = 300;
+      for (var i = 0; i < reveals.length; i++) {
+        (function(j) {
+          setTimeout(function() {
+            reveals[j].classList.add("show");
+            // Heartbeat starts when it's revealed
+            if (j === 3) { setTimeout(initHeartbeat, 400); }
+            // Confetti when first section appears
+            if (j === 0) { setTimeout(function() { burstConfetti(); }, 200); }
+          }, delay * (j + 1));
+        })(i);
+      }
+    }, 900);
+  }, 2800);
 }
 
 function startMusic() {
@@ -274,17 +349,20 @@ function changeBg() {
 changeBg();
 setInterval(changeBg, 3500);
 
+var heartBeatCount = 0;
 function spawn(type) {
   var el = document.createElement("div");
   el.className = type;
   if (type === "heart") el.innerHTML = "❤";
   el.style.left = Math.random() * 100 + "vw";
-  el.style.fontSize = (10 + Math.random() * 20) + "px";
+  el.style.fontSize = (12 + Math.random() * 18) + "px";
   document.body.appendChild(el);
   setTimeout(function() { el.remove(); }, 6000);
 }
-setInterval(function() { spawn("heart"); }, 180);
-setInterval(function() { spawn("spark"); }, 120);
+// Hearts beat at ~72 BPM rhythm (every 830ms)
+setInterval(function() { spawn("heart"); heartBeatCount++; }, 830);
+// Sparkles on the off-beat
+setInterval(function() { spawn("spark"); }, 1660);
 
 var targetDate = new Date("2026-05-19T00:00:00");
 
@@ -586,13 +664,14 @@ function initOrbs() {
 function drawOrbs() {
   if (!orbsCtx) return;
   orbsCtx.clearRect(0, 0, orbsW, orbsH);
+  var pulse = 0.6 + 0.4 * Math.sin(Date.now() * 0.003);
   orbsList.forEach(function(o) {
     o.x += o.dx; o.y += o.dy;
     if (o.x < -50 || o.x > orbsW + 50) { o.x = Math.random() * orbsW; o.dx *= -1; }
     if (o.y < -50 || o.y > orbsH + 50) { o.y = Math.random() * orbsH; o.dy *= -1; }
     var grad = orbsCtx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
     grad.addColorStop(0, o.color); grad.addColorStop(1, "transparent");
-    orbsCtx.globalAlpha = o.a;
+    orbsCtx.globalAlpha = o.a * pulse;
     orbsCtx.fillStyle = grad;
     orbsCtx.beginPath(); orbsCtx.arc(o.x, o.y, o.r, 0, Math.PI * 2); orbsCtx.fill();
   });
@@ -757,7 +836,7 @@ var langColors = ["#ff4d6d","#ff6b8a","#ffd1dc","#ffb3c1","#ff8fa3","#ffd700","#
     document.body.appendChild(el);
     setTimeout(function() { if (el.parentNode) el.remove(); }, 15000);
   }
-  setInterval(dropLang, 800);
+  setInterval(dropLang, 1200);
 })();
 // Love Quotes Rotator
 var loveQuotes = [
@@ -849,7 +928,18 @@ function burstConfetti() {
   50% { opacity: 1; transform: translate(var(--dx), var(--dy)) scale(1.2) rotate(180deg); }
   100% { opacity: 0; transform: translate(var(--dx2), var(--dy2)) scale(0.3) rotate(360deg); }
 }
-
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+@keyframes transitionReveal {
+  0% { opacity: 0; transform: scale(0.8); filter: blur(4px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
 </style>
 
 </body>
