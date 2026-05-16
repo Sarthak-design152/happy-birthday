@@ -206,6 +206,8 @@ function start() {
   startMusic();
   startPetals();
   startFireworks();
+  initHeartbeat();
+  initOrbs();
   setTimeout(function() { burstConfetti(); }, 500);
 }
 
@@ -414,32 +416,35 @@ function startPetals() {
 }
 
 // Heartbeat
-(function() {
+var heartbeatCtx, heartbeatW, heartbeatH, heartbeatT = 0;
+function initHeartbeat() {
   var canvas = document.getElementById("heartbeatCanvas");
   if (!canvas) return;
-  var ctx = canvas.getContext("2d");
-  var W = canvas.width = canvas.offsetWidth;
-  var H = canvas.height = canvas.offsetHeight;
-  var t = 0;
-  function drawBeat() {
-    ctx.clearRect(0, 0, W, H);
-    ctx.beginPath();
-    ctx.strokeStyle = "#ff4d6d";
-    ctx.lineWidth = 2;
-    ctx.shadowColor = "#ff4d6d";
-    ctx.shadowBlur = 8;
-    for (var x = 0; x < W; x++) {
-      var beat = Math.abs(Math.sin(x * 0.03 + t)) * 30;
-      var y = H / 2 + Math.sin(x * 0.02 + t * 3) * beat * 0.5;
-      if (x === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    t += 0.03;
-    requestAnimationFrame(drawBeat);
+  heartbeatCtx = canvas.getContext("2d");
+  heartbeatW = canvas.width = canvas.offsetWidth;
+  heartbeatH = canvas.height = canvas.offsetHeight;
+  if (!heartbeatW || !heartbeatH) { heartbeatW = 300; heartbeatH = 120; }
+  heartbeatT = 0;
+  drawHeartbeat();
+}
+function drawHeartbeat() {
+  if (!heartbeatCtx) return;
+  heartbeatCtx.clearRect(0, 0, heartbeatW, heartbeatH);
+  heartbeatCtx.beginPath();
+  heartbeatCtx.strokeStyle = "#ff4d6d";
+  heartbeatCtx.lineWidth = 2;
+  heartbeatCtx.shadowColor = "#ff4d6d";
+  heartbeatCtx.shadowBlur = 8;
+  for (var x = 0; x < heartbeatW; x++) {
+    var beat = Math.abs(Math.sin(x * 0.03 + heartbeatT)) * 30;
+    var y = heartbeatH / 2 + Math.sin(x * 0.02 + heartbeatT * 3) * beat * 0.5;
+    if (x === 0) heartbeatCtx.moveTo(x, y);
+    else heartbeatCtx.lineTo(x, y);
   }
-  drawBeat();
-})();
+  heartbeatCtx.stroke();
+  heartbeatT += 0.03;
+  requestAnimationFrame(drawHeartbeat);
+}
 
 // Fireworks
 function startFireworks() {
@@ -508,39 +513,36 @@ function openLetter() {
 }
 
 // Glowing Orbs
-(function() {
+var orbsCtx, orbsW, orbsH, orbsList = [], orbsColors = ["#ff4d6d","#ff6b8a","#ff8fa3","#ffb3c1","#ffd1dc","#ffd700"];
+function initOrbs() {
   var canvas = document.getElementById("orbsCanvas");
   if (!canvas) return;
-  var ctx = canvas.getContext("2d");
-  var W, H, orbs = [];
-  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
-  resize();
-  window.addEventListener("resize", resize);
-  var colors = ["#ff4d6d","#ff6b8a","#ff8fa3","#ffb3c1","#ffd1dc","#ffd700"];
+  orbsCtx = canvas.getContext("2d");
+  orbsW = canvas.width = canvas.offsetWidth;
+  orbsH = canvas.height = canvas.offsetHeight;
+  if (!orbsW || !orbsH) { orbsW = 300; orbsH = 200; }
+  orbsList = [];
   for (var i = 0; i < 25; i++) {
-    orbs.push({ x: Math.random() * W, y: Math.random() * H, r: 15 + Math.random() * 30, color: colors[Math.floor(Math.random() * colors.length)], dx: (Math.random() - 0.5) * 0.3, dy: (Math.random() - 0.5) * 0.3, a: 0.1 + Math.random() * 0.2 });
+    orbsList.push({ x: Math.random() * orbsW, y: Math.random() * orbsH, r: 15 + Math.random() * 30, color: orbsColors[Math.floor(Math.random() * orbsColors.length)], dx: (Math.random() - 0.5) * 0.3, dy: (Math.random() - 0.5) * 0.3, a: 0.1 + Math.random() * 0.2 });
   }
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    orbs.forEach(function(o) {
-      o.x += o.dx;
-      o.y += o.dy;
-      if (o.x < -50 || o.x > W + 50) { o.x = Math.random() * W; o.dx *= -1; }
-      if (o.y < -50 || o.y > H + 50) { o.y = Math.random() * H; o.dy *= -1; }
-      var grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
-      grad.addColorStop(0, o.color);
-      grad.addColorStop(1, "transparent");
-      ctx.globalAlpha = o.a;
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
+  drawOrbs();
+}
+function drawOrbs() {
+  if (!orbsCtx) return;
+  orbsCtx.clearRect(0, 0, orbsW, orbsH);
+  orbsList.forEach(function(o) {
+    o.x += o.dx; o.y += o.dy;
+    if (o.x < -50 || o.x > orbsW + 50) { o.x = Math.random() * orbsW; o.dx *= -1; }
+    if (o.y < -50 || o.y > orbsH + 50) { o.y = Math.random() * orbsH; o.dy *= -1; }
+    var grad = orbsCtx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
+    grad.addColorStop(0, o.color); grad.addColorStop(1, "transparent");
+    orbsCtx.globalAlpha = o.a;
+    orbsCtx.fillStyle = grad;
+    orbsCtx.beginPath(); orbsCtx.arc(o.x, o.y, o.r, 0, Math.PI * 2); orbsCtx.fill();
+  });
+  orbsCtx.globalAlpha = 1;
+  requestAnimationFrame(drawOrbs);
+}
 
 // Twinkling Stars
 (function() {
