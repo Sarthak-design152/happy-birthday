@@ -394,6 +394,20 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
     <p style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-top:8px;text-align:center;">&#x2728; gentle light, just like the way you make me feel &#x2728;</p>
   </section>
 
+  <div id="closingSignature" class="reveal" style="text-align:center;padding:60px 24px 80px;opacity:0;transition:opacity 2s ease;">
+    <div style="font-size:3.5rem;margin-bottom:16px;animation:nameGlow 2s ease-in-out infinite;">💕</div>
+    <div style="font-family:'Great Vibes';font-size:1.6rem;color:#ffd1dc;line-height:1.6;">
+      made for you,<br>
+      with every heartbeat
+    </div>
+    <div style="margin-top:20px;font-family:'Great Vibes';font-size:1rem;color:rgba(255,77,109,0.6);letter-spacing:2px;">
+      ✦ forever yours, Golella ✦
+    </div>
+    <div style="margin-top:24px;font-family:'Poppins';font-size:0.6rem;color:rgba(255,255,255,0.15);letter-spacing:1px;text-transform:uppercase;">
+      the end ✦ but our story never ends
+    </div>
+  </div>
+
 </div>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
@@ -1168,14 +1182,16 @@ function openWhen(el, idx) {
   spawnKisses();
 }
 
-// Scroll progress bar
+// Scroll progress bar + closing signature reveal
 (function() {
   var bar = document.getElementById("scrollProgress");
   var main = document.getElementById("main");
+  var sig = document.getElementById("closingSignature");
   function track() {
     if (!bar || !main) return;
     var pct = (main.scrollTop / (main.scrollHeight - main.clientHeight)) * 100;
     bar.style.width = Math.min(pct, 100) + "%";
+    if (sig && pct > 75) sig.style.opacity = "1";
   }
   // Show bar when main appears
   var obs = new MutationObserver(function() {
