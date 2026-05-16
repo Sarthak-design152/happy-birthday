@@ -94,7 +94,7 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 <audio id="music" loop preload="auto">
   <source src="music.mp3" type="audio/mp3">
 </audio>
-<div id="ytPlayerWrapper" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;overflow:hidden;"></div>
+<iframe id="ytPlayer" style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;" allow="autoplay" src=""></iframe>
 <div id="musicNote" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:44px;height:44px;border-radius:50%;background:rgba(255,77,109,0.2);border:1px solid rgba(255,77,109,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.3rem;backdrop-filter:blur(8px);transition:0.3s;display:none;" onclick="toggleMusic()">🎵</div>
 
 <div id="intro">
@@ -201,8 +201,9 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
 </div>
 
 <script>
-var player = null, playing = false;
+var playing = false;
 var musicNoteBtn = document.getElementById("musicNote");
+var ytPlayer = document.getElementById("ytPlayer");
 
 function start() {
   document.getElementById("intro").style.display = "none";
@@ -216,34 +217,22 @@ function start() {
   setTimeout(function() { burstConfetti(); }, 500);
 }
 
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('ytPlayerWrapper', {
-    height: '0', width: '0',
-    videoId: 'rtOvBOTyf00',
-    playerVars: { autoplay: 0, loop: 1, playlist: 'rtOvBOTyf00', controls: 0, rel: 0 },
-    events: {
-      onReady: function() { if (window._startMusic) { player.playVideo(); playing = true; } },
-      onStateChange: function(e) { if (e.data === YT.PlayerState.ENDED) e.target.playVideo(); }
-    }
-  });
-}
-
 function startMusic() {
-  if (player) { player.playVideo(); playing = true; musicNoteBtn.textContent = "🎵"; return; }
-  window._startMusic = true;
-  var tag = document.createElement('script');
-  tag.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(tag);
-  var check = setInterval(function() {
-    if (player) { player.playVideo(); playing = true; musicNoteBtn.textContent = "🎵"; clearInterval(check); }
-  }, 500);
-  setTimeout(function() { clearInterval(check); }, 10000);
+  ytPlayer.src = "https://www.youtube.com/embed/rtOvBOTyf00?autoplay=1&loop=1&playlist=rtOvBOTyf00&controls=0&showinfo=0&enablejsapi=1";
+  playing = true;
+  musicNoteBtn.textContent = "🎵";
 }
 
 function toggleMusic() {
-  if (!player) return;
-  if (playing) { player.pauseVideo(); playing = false; musicNoteBtn.style.opacity = "0.5"; }
-  else { player.playVideo(); playing = true; musicNoteBtn.style.opacity = "1"; }
+  if (playing) {
+    ytPlayer.src = "";
+    playing = false;
+    musicNoteBtn.style.opacity = "0.5";
+  } else {
+    ytPlayer.src = "https://www.youtube.com/embed/rtOvBOTyf00?autoplay=1&loop=1&playlist=rtOvBOTyf00&controls=0&showinfo=0&enablejsapi=1";
+    playing = true;
+    musicNoteBtn.style.opacity = "1";
+  }
 }
 
 var bgImages = ["photo1.jpg","photo2.jpg","photo3.jpg"];
