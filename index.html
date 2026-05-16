@@ -224,6 +224,7 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
     <h1 id="titleHeart" onclick="burstTitleHearts()">14 Weeks ❤️</h1>
     <p class="small">you make everything feel softer</p>
     <p class="countdown-text" id="countdown"></p>
+    <p class="countdown-text" id="countdownPoetic" style="font-size:0.75rem;opacity:0.6;margin-top:4px;"></p>
     <p id="typing"></p>
     <button onclick="openSecret()">Open Secret 💌</button>
   </div>
@@ -272,6 +273,17 @@ section h2 { font-family: 'Great Vibes'; font-size: 1.8rem; color: #ffd1dc; marg
       So here's to us, to all we'll be —<br>
       My forever Valentine, just you and me. 💕
     </div>
+  </section>
+
+  <section id="lovelock" class="reveal" style="text-align:center;">
+    <p class="chapter-sub">Interlude</p>
+    <h2>Locked Forever 🫶</h2>
+    <div id="lockContainer" style="position:relative;height:120px;margin:12px auto;width:100%;max-width:280px;cursor:pointer;" onclick="lockHearts()">
+      <div id="lockHeartLeft" style="position:absolute;left:10%;top:50%;transform:translateY(-50%);font-size:3rem;transition:all 0.8s cubic-bezier(0.23,1,0.32,1);opacity:0.8;">❤️</div>
+      <div id="lockHeartRight" style="position:absolute;right:10%;top:50%;transform:translateY(-50%);font-size:3rem;transition:all 0.8s cubic-bezier(0.23,1,0.32,1);opacity:0.8;">❤️</div>
+      <div id="lockResult" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:1.1rem;color:#ffd1dc;font-family:'Great Vibes';white-space:nowrap;">💕 Locked Forever 💕</div>
+    </div>
+    <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">tap to lock our hearts together 💕</p>
   </section>
 
   <section id="quotes" class="reveal">
@@ -351,6 +363,7 @@ function start() {
       startPetals();
       startFireworks();
       initOrbs();
+      startLyrics();
 
       // Phase 3: Sequenced section reveals
       var reveals = document.querySelectorAll(".reveal");
@@ -432,6 +445,8 @@ function updateCountdown() {
   var diff = targetDate - new Date();
   var d = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   document.getElementById("countdown").innerText = "💫 " + d + " days until 100 days together";
+  var h = d * 24, m = h * 60;
+  document.getElementById("countdownPoetic").innerText = d + " days of smiles, " + h.toLocaleString() + " hours of love, " + m.toLocaleString() + " moments of you";
 }
 setInterval(updateCountdown, 60000);
 updateCountdown();
@@ -950,6 +965,30 @@ var langColors = ["#ff4d6d","#ff6b8a","#ffd1dc","#ffb3c1","#ff8fa3","#ffd700","#
   }
   setInterval(dropLang, 1200);
 })();
+// "Our Song" lyrics float-up
+var songLyrics = [
+  "Heart beats fast ♪", "Colors and promises ♪", "How to be brave ♪",
+  "How can I love when I'm afraid to fall ♪", "But watching you stand alone ♪",
+  "All of my doubt suddenly goes away somehow ♪", "One step closer ♪",
+  "I have died every day waiting for you ♪", "Darling, don't be afraid ♪",
+  "I have loved you for a thousand years ♪", "I'll love you for a thousand more ♪",
+  "Time stands still ♪", "Beauty in all she is ♪", "I will be brave ♪"
+];
+var lyricIdx = 0;
+function startLyrics() {
+  setInterval(function() {
+    var el = document.createElement("div");
+    el.className = "lyric-float";
+    el.textContent = songLyrics[lyricIdx];
+    el.style.top = (40 + Math.random() * 20) + "%";
+    el.style.color = ["#ffd1dc","#ffb3c1","#ff8fa3","#ffd700","#fff"][Math.floor(Math.random() * 5)];
+    el.style.fontSize = (0.85 + Math.random() * 0.3) + "rem";
+    el.style.opacity = 0.5 + Math.random() * 0.3;
+    document.body.appendChild(el);
+    setTimeout(function() { if (el.parentNode) el.remove(); }, 7000);
+    lyricIdx = (lyricIdx + 1) % songLyrics.length;
+  }, 5000);
+}
 // Love Quotes Rotator
 var loveQuotes = [
   { q: "I found the one whom my soul loves.", a: "Song of Solomon 3:4" },
@@ -992,6 +1031,35 @@ function rotateQuote() {
     setInterval(rotateQuote, 5000);
   }
 })();
+
+// Love Lock
+var heartsLocked = false;
+function lockHearts() {
+  if (heartsLocked) return;
+  var left = document.getElementById("lockHeartLeft");
+  var right = document.getElementById("lockHeartRight");
+  var result = document.getElementById("lockResult");
+  if (!left || !right || !result) return;
+  left.style.left = "35%"; left.style.transform = "translateY(-50%) scale(1.3)";
+  right.style.right = "35%"; right.style.transform = "translateY(-50%) scale(1.3)";
+  setTimeout(function() {
+    left.style.display = "none";
+    right.style.display = "none";
+    result.style.display = "block";
+    result.style.animation = "transitionReveal 0.6s ease forwards";
+    heartsLocked = true;
+    // Sparkle burst
+    for (var i = 0; i < 12; i++) {
+      (function() {
+        var s = document.createElement("span");
+        s.textContent = ["💕","💖","💗","✨","🌟","💫"][Math.floor(Math.random() * 6)];
+        s.style.cssText = "position:fixed;left:50%;top:50%;font-size:" + (12 + Math.random() * 14) + "px;pointer-events:none;z-index:99999;animation:titleBurst 1s ease forwards;--dx:" + (-60 + Math.random() * 120) + "px;--dy:" + (-80 + Math.random() * 60) + "px;--dx2:" + (-30 + Math.random() * 60) + "px;--dy2:" + (-40 + Math.random() * 40) + "px;";
+        document.body.appendChild(s);
+        setTimeout(function() { s.remove(); }, 1200);
+      })();
+    }
+  }, 800);
+}
 
 // Confetti burst
 function burstConfetti() {
@@ -1058,6 +1126,24 @@ function burstConfetti() {
   80% { opacity: 1; }
   100% { transform: translate(35px, 35px) rotate(calc(var(--angle) + 6.2832rad)) translateX(var(--dist)) rotate(calc(-1 * var(--angle) - 6.2832rad)); opacity: 0; }
 }
+
+/* OUR SONG LYRICS */
+.lyric-float {
+  position: fixed; pointer-events: none; z-index: 3;
+  font-family: 'Great Vibes'; font-size: 1rem;
+  text-align: center; width: 100%; left: 0;
+  animation: lyricUp 6s ease forwards;
+  text-shadow: 0 0 20px rgba(255,77,109,0.3);
+}
+@keyframes lyricUp {
+  0% { opacity: 0; transform: translateY(20px) scale(0.8); filter: blur(2px); }
+  15% { opacity: 0.6; transform: translateY(0) scale(1); filter: blur(0); }
+  75% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-40px) scale(0.9); filter: blur(1px); }
+}
+
+/* LYRICS CTA in main style block */
+.lyric-cta { font-size: 0.75rem; color: rgba(255,255,255,0.3); text-align: center; margin-top: 4px; font-family: 'Poppins'; }
 
 /* MOBILE RESPONSIVE */
 @media (max-width: 500px) {
