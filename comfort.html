@@ -380,17 +380,15 @@ body {
 #waterWrap.drank #waterText { color: #f5cba0; }
 #waterCount { font-size: 0.55rem; color: rgba(245,230,211,0.1); margin-top: 4px; letter-spacing: 0.5px; }
 
-/* ===== UNMUTE PROMPT ===== */
-#unmutePrompt {
+/* ===== MUSIC INDICATOR ===== */
+#musicIndicator {
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  margin: 24px auto 0; padding: 8px 16px; border-radius: 20px;
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);
-  cursor: pointer; transition: all 0.3s; width: fit-content;
-  font-size: 0.65rem; color: rgba(245,230,211,0.2); letter-spacing: 0.5px;
+  margin: 20px auto 0; padding: 4px 12px; border-radius: 12px;
+  font-size: 0.55rem; color: rgba(245,230,211,0.15); letter-spacing: 0.5px;
+  width: fit-content; pointer-events: none;
 }
-#unmutePrompt:hover { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.1); color: #f5cba0; }
-#unmutePrompt.unmuted { opacity: 0.3; }
-#unmutePrompt.unmuted span { opacity: 0.5; }
+#musicIcon { animation: musicPulse 2s ease-in-out infinite; }
+@keyframes musicPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
 
 /* ===== AURORA BACKGROUND ===== */
 .aurora {
@@ -644,10 +642,10 @@ body {
   <!-- YouTube player (hidden, autoplays) -->
   <div id="ytPlayer" style="display:none;"></div>
 
-  <!-- Tap to unmute prompt -->
-  <div id="unmutePrompt" onclick="unmuteVideo()">
-    <span>🎵</span>
-    <span id="unmuteLabel">tap for lemon</span>
+  <!-- Music indicator -->
+  <div id="musicIndicator">
+    <span id="musicIcon">🎵</span>
+    <span id="musicLabel">lemon is playing 🍋</span>
   </div>
 
   <div class="footer">
@@ -946,8 +944,6 @@ updateTimeMsg();
 
 // ===== YOUTUBE PLAYER (Lemon by Kenshi Yonezu) =====
 var ytPlayer, ytReady = false, ytUnmuted = false;
-var unmutePrompt = document.getElementById("unmutePrompt");
-var unmuteLabel = document.getElementById("unmuteLabel");
 function onYouTubeIframeAPIReady() {
   ytPlayer = new YT.Player("ytPlayer", {
     videoId: "SX_ViT4Ra7k",
@@ -966,21 +962,35 @@ function onYouTubeIframeAPIReady() {
         ytReady = true;
         e.target.setVolume(20);
         e.target.playVideo();
+        // try to unmute immediately and keep trying
+        tryUnmute();
       }
     }
   });
 }
-function unmuteVideo() {
-  if (!ytReady) return;
-  if (ytUnmuted) return;
+function tryUnmute() {
+  if (!ytReady || ytUnmuted) return;
   try {
     if (ytPlayer.isMuted()) ytPlayer.unMute();
-    ytPlayer.setVolume(25);
+    ytPlayer.setVolume(22);
     ytUnmuted = true;
-    unmutePrompt.classList.add("unmuted");
-    unmuteLabel.textContent = "lemon is playing 🍋";
+  } catch(e) {
+    // retry after delay
+    setTimeout(tryUnmute, 200);
+  }
+}
+// also try on any user interaction with the page
+function onAnyInteraction() {
+  if (!ytReady || ytUnmuted) return;
+  try {
+    if (ytPlayer.isMuted()) ytPlayer.unMute();
+    ytPlayer.setVolume(22);
+    ytUnmuted = true;
   } catch(e) {}
 }
+document.addEventListener("click", onAnyInteraction);
+document.addEventListener("touchstart", onAnyInteraction);
+document.addEventListener("scroll", onAnyInteraction);
 
 // ===== WARM BELLY =====
 var bellyWarm = localStorage.getItem("comfort_bellyWarm") === "true";
