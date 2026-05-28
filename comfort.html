@@ -337,12 +337,7 @@ body {
   align-items: center; justify-content: center; transition: all 0.5s;
 }
 #hisMessage.has-content { border-style: solid; border-color: rgba(255,180,130,0.15); background: rgba(255,180,130,0.025); }
-#hisMessage .placeholder {
-  font-family: 'Playfair Display'; font-size: 0.85rem; color: rgba(245,230,211,0.18);
-  font-style: italic; line-height: 1.6;
-}
-#hisMessage .placeholder span { font-size: 0.65rem; opacity: 0.5; }
-#hisMessage .filled { display: none; font-family: 'Playfair Display'; font-size: 0.95rem; color: #f5e6d3; line-height: 1.7; font-style: italic; }
+#hisMessage .filled { font-family: 'Playfair Display'; font-size: 0.9rem; color: #f5e6d3; line-height: 1.9; font-style: italic; }
 
 /* ===== SOUND TOGGLE ===== */
 #soundWrap {
@@ -544,9 +539,8 @@ body {
 
   <!-- His Message -->
   <div class="section-title">a note from him</div>
-  <div id="hisMessage">
-    <div class="placeholder" id="placeholderMsg">he hasn't written his message yet.<br><span>come back later 💕</span></div>
-    <div class="filled" id="filledMsg"></div>
+  <div id="hisMessage" class="has-content">
+    <div class="filled" id="filledMsg">hey my love 💕<br><br>i know today is hard. i know your body feels heavy and your heart feels tired. and i want you to know that you don't have to be okay. you don't have to smile, you don't have to perform, you don't have to be strong. you just have to be — and that is more than enough for me.<br><br>i wish i could be there right now. i'd make you your favorite tea, wrap you in the softest blanket, and just let you rest against me. i'd stroke your hair and tell you that everything is going to be okay — because it will be. not because the hard things will disappear, but because you won't face them alone. i'm here. i'm always here.<br><br>you are so beautiful. not just today, but every day. especially on the days you don't feel it. especially when you're tired and messy and real. that's when you're most beautiful to me — because that's when you're most you.<br><br>take your time. rest as much as you need. cry if you want to. eat something warm. watch something that makes you feel good. and when you're ready, i'll be right here, waiting with open arms and a heart full of love for you.<br><br>you are my favorite person. my home. my always.<br><br>forever yours,<br>golella ✦</div>
   </div>
 
   <!-- Timed Message -->
@@ -751,10 +745,10 @@ var noteModal = document.getElementById("noteModal");
 var noteTitle = document.getElementById("noteTitle");
 var noteBody = document.getElementById("noteBody");
 var noteContents = [
-  { title: "you miss me \u2764", body: "i miss you too. every moment you're not here feels a little quieter, a little less warm. but i'm always just a thought away. close your eyes and imagine me holding your hand \u2014 i am. always. come find me when you can, or just stay here and know that you're loved." },
-  { title: "you feel low \uD83E\uDEC2", body: "it's okay to feel this way. you don't have to fight it or push it away. let yourself feel, let yourself cry, let yourself rest. i'm not going anywhere. when you're ready, i'll be right here. you are so much stronger than you know \u2014 but you don't have to be strong today." },
-  { title: "you need warmth \u2600\uFE0F", body: "wrap yourself in something soft. hold something warm. breathe slowly. you are safe. you are cared for. let this moment hold you the way i would if i were there. you deserve warmth. you deserve tenderness. you deserve to feel good." },
-  { title: "you can't sleep \uD83C\uDF19", body: "close your eyes. don't try to sleep \u2014 just rest. let your thoughts drift like clouds. imagine a warm, gentle light wrapping around you. i'm with you, even in the quiet. especially in the quiet. rest now. the world can wait." }
+  { title: "you miss me \u2764", body: "i was just thinking about you. again. always, actually. your laugh, the way your eyes crinkle when you smile, how safe i feel when you're near. every second without you is just me waiting to get back to you. close your eyes and imagine me holding your hand \u2014 because i am. i'm always right here, loving you. come back to me when you're ready, or just stay here and know that you are so, so loved." },
+  { title: "you feel low \uD83E\uDEC2", body: "hey beautiful. i know it's heavy right now. and that's okay. you don't have to fight it, you don't have to fix it, you don't have to be strong for anyone. just let yourself be. cry if you need to. rest if you need to. i'm not going anywhere not ever. when the world feels like too much, remember \u2014 you are my favorite person, my home, my always. and you are so much braver than you know." },
+  { title: "you need warmth \u2600\uFE0F", body: "i wish i could wrap my arms around you right now. pull you close, let you rest your head on my chest, run my fingers through your hair. until i can, let this be your warmth: wrap yourself in your softest blanket, hold something warm, and breathe slowly. you are safe. you are so cared for. you deserve every bit of softness this world has to offer \u2014 and i will spend my life making sure you feel it." },
+  { title: "you can't sleep \uD83C\uDF19", body: "shh. close your eyes, love. don't try to sleep \u2014 just rest right here in this moment. let your thoughts drift like clouds passing by a quiet moon. imagine my hand in yours, my voice softly telling you everything is okay. because it is. you are safe, you are loved, and tomorrow i'll still be here, and the day after, and always. rest now, my love. the world can wait. i've got you." }
 ];
 var openedNotes = JSON.parse(localStorage.getItem("comfort_openedNotes") || "[]");
 function initNotes() {
