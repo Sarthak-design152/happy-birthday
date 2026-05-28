@@ -497,10 +497,6 @@ body {
   animation: sparkRise 3s ease-out infinite;
 }
 #bellyWrap.warm .belly-spark { display: block; }
-.belly-spark:nth-child(6) { left: 20%; animation-delay: 0s; }
-.belly-spark:nth-child(7) { left: 40%; animation-delay: 0.8s; }
-.belly-spark:nth-child(8) { left: 60%; animation-delay: 1.6s; }
-.belly-spark:nth-child(9) { left: 80%; animation-delay: 2.4s; }
 @keyframes sparkRise {
   0% { transform: translateY(0) scale(0); opacity: 0; }
   20% { opacity: 0.5; }
@@ -788,10 +784,10 @@ body {
       <div class="belly-ring belly-ring-4"></div>
     </div>
     <div class="belly-glowbar"></div>
-    <div class="belly-spark"></div>
-    <div class="belly-spark"></div>
-    <div class="belly-spark"></div>
-    <div class="belly-spark"></div>
+    <div class="belly-spark" style="left:15%;animation-delay:0s;"></div>
+    <div class="belly-spark" style="left:35%;animation-delay:0.7s;"></div>
+    <div class="belly-spark" style="left:55%;animation-delay:1.4s;"></div>
+    <div class="belly-spark" style="left:75%;animation-delay:2.1s;"></div>
     <div class="belly-status" id="bellyStatus">tap to place gentle warmth on your belly</div>
   </div>
 
@@ -1132,14 +1128,16 @@ function onYouTubeIframeAPIReady() {
     }
   });
 }
+var tryUnmuteCount = 0;
 function tryUnmute() {
   if (!ytReady || ytUnmuted) return;
+  if (tryUnmuteCount > 50) return; // max 10s of retries
+  tryUnmuteCount++;
   try {
     if (ytPlayer.isMuted()) ytPlayer.unMute();
     ytPlayer.setVolume(22);
     ytUnmuted = true;
   } catch(e) {
-    // retry after delay
     setTimeout(tryUnmute, 200);
   }
 }
