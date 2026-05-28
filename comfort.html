@@ -339,19 +339,94 @@ body {
 #hisMessage.has-content { border-style: solid; border-color: rgba(255,180,130,0.15); background: rgba(255,180,130,0.025); }
 #hisMessage .filled { font-family: 'Playfair Display'; font-size: 0.9rem; color: #f5e6d3; line-height: 1.9; font-style: italic; }
 
-/* ===== SOUND TOGGLE ===== */
-#soundWrap {
-  display: flex; justify-content: center; margin: 24px 0;
+/* ===== WARM BELLY ===== */
+#bellyWrap {
+  margin: 6px 0; padding: 24px; border-radius: 16px; text-align: center; cursor: pointer;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
+  transition: all 0.5s; display: flex; flex-direction: column; align-items: center;
+  position: relative; overflow: hidden;
 }
-#soundBtn {
-  padding: 10px 24px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.04);
-  background: rgba(255,255,255,0.02); color: rgba(245,230,211,0.3); font-family: Inter;
-  font-size: 0.7rem; cursor: pointer; transition: all 0.3s; letter-spacing: 0.5px;
-  display: flex; align-items: center; gap: 6px;
+#bellyWrap.warm { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.12); }
+.belly-icon { font-size: 2rem; margin-bottom: 8px; transition: transform 0.5s; }
+#bellyWrap.warm .belly-icon { transform: scale(1.15); }
+.belly-visual { position: relative; width: 100px; height: 50px; margin: 8px 0; display: none; }
+#bellyWrap.warm .belly-visual { display: block; }
+.belly-ring {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 2px solid rgba(255,180,130,0.06);
+  animation: bellyPulse 3s ease-in-out infinite;
 }
-#soundBtn:hover { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.1); color: #f5cba0; }
-#soundBtn.on { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.1); color: #f5cba0; }
-.sound-icon { font-size: 0.9rem; }
+.belly-ring-2 { width: 60px; height: 60px; animation-delay: 0.5s; border-color: rgba(255,180,130,0.04); }
+.belly-ring-3 { width: 80px; height: 80px; animation-delay: 1s; border-color: rgba(255,180,130,0.02); }
+@keyframes bellyPulse {
+  0% { transform: translateX(-50%) scale(0.8); opacity: 0.1; }
+  50% { transform: translateX(-50%) scale(1.1); opacity: 0.3; }
+  100% { transform: translateX(-50%) scale(0.8); opacity: 0.1; }
+}
+.belly-status { font-size: 0.7rem; color: rgba(245,230,211,0.25); letter-spacing: 0.3px; transition: color 0.3s; }
+#bellyWrap.warm .belly-status { color: #f5cba0; }
+
+/* ===== WATER REMINDER ===== */
+#waterWrap {
+  margin: 6px 0; padding: 16px; border-radius: 16px; text-align: center; cursor: pointer;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
+  transition: all 0.3s; user-select: none;
+}
+#waterWrap:active { transform: scale(0.97); }
+.water-icon { font-size: 1.5rem; margin-bottom: 4px; transition: transform 0.3s; }
+#waterWrap.drank .water-icon { transform: scale(1.2); }
+#waterText { font-size: 0.7rem; color: rgba(245,230,211,0.25); letter-spacing: 0.5px; }
+#waterWrap.drank #waterText { color: #f5cba0; }
+#waterCount { font-size: 0.55rem; color: rgba(245,230,211,0.1); margin-top: 4px; letter-spacing: 0.5px; }
+
+/* ===== UNMUTE PROMPT ===== */
+#unmutePrompt {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin: 24px auto 0; padding: 8px 16px; border-radius: 20px;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer; transition: all 0.3s; width: fit-content;
+  font-size: 0.65rem; color: rgba(245,230,211,0.2); letter-spacing: 0.5px;
+}
+#unmutePrompt:hover { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.1); color: #f5cba0; }
+#unmutePrompt.unmuted { opacity: 0.3; }
+#unmutePrompt.unmuted span { opacity: 0.5; }
+
+/* ===== AURORA BACKGROUND ===== */
+.aurora {
+  position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.aurora-wave {
+  position: absolute; width: 200%; height: 60%; top: 10%; left: -50%;
+  background: linear-gradient(180deg, transparent, rgba(255,150,100,0.015), transparent);
+  border-radius: 50%;
+  animation: auroraDrift 12s ease-in-out infinite alternate;
+  filter: blur(40px);
+}
+.aurora-wave:nth-child(2) {
+  top: 30%; left: -30%; animation-duration: 16s; animation-delay: -4s;
+  background: linear-gradient(180deg, transparent, rgba(255,120,80,0.01), transparent);
+}
+.aurora-wave:nth-child(3) {
+  top: 50%; left: -40%; animation-duration: 14s; animation-delay: -8s;
+  background: linear-gradient(180deg, transparent, rgba(245,230,211,0.008), transparent);
+}
+@keyframes auroraDrift {
+  0% { transform: translateX(0) scale(1) rotate(0deg); }
+  100% { transform: translateX(10%) scale(1.1) rotate(3deg); }
+}
+
+/* ===== TWINKLING STARS ===== */
+.twinkle-star {
+  position: fixed; pointer-events: none; z-index: 0;
+  width: 2px; height: 2px; background: rgba(245,230,211,0.15);
+  border-radius: 50%; animation: twinkle linear infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.05; transform: scale(0.8); }
+  50% { opacity: 0.2; transform: scale(1.2); }
+}
 
 /* ===== AFFIRMATION LIST (additional) ===== */
 .affirm-list {
@@ -540,18 +615,39 @@ body {
   <!-- His Message -->
   <div class="section-title">a note from him</div>
   <div id="hisMessage" class="has-content">
-    <div class="filled" id="filledMsg">hey my love 💕<br><br>i know today is hard. i know your body feels heavy and your heart feels tired. and i want you to know that you don't have to be okay. you don't have to smile, you don't have to perform, you don't have to be strong. you just have to be — and that is more than enough for me.<br><br>i wish i could be there right now. i'd make you your favorite tea, wrap you in the softest blanket, and just let you rest against me. i'd stroke your hair and tell you that everything is going to be okay — because it will be. not because the hard things will disappear, but because you won't face them alone. i'm here. i'm always here.<br><br>you are so beautiful. not just today, but every day. especially on the days you don't feel it. especially when you're tired and messy and real. that's when you're most beautiful to me — because that's when you're most you.<br><br>take your time. rest as much as you need. cry if you want to. eat something warm. watch something that makes you feel good. and when you're ready, i'll be right here, waiting with open arms and a heart full of love for you.<br><br>you are my favorite person. my home. my always.<br><br>forever yours,<br>golella ✦</div>
+    <div class="filled" id="filledMsg">to my dearest malikk,<br><br>i know today is hard. i know your body feels heavy and your heart feels tired. and i want you to know that you don't have to be okay. you don't have to smile, you don't have to perform, you don't have to be strong. you just have to be — and that is more than enough for me.<br><br>i wish i could be there right now. i'd make you your favorite tea, wrap you in the softest blanket, and just let you rest against me. i'd stroke your hair and tell you that everything is going to be okay — because it will be. not because the hard things will disappear, but because you won't face them alone. i'm here. i'm always here.<br><br>you are so beautiful. not just today, but every day. especially on the days you don't feel it. especially when you're tired and messy and real. that's when you're most beautiful to me — because that's when you're most you.<br><br>take your time. rest as much as you need. cry if you want to. eat something warm. watch something that makes you feel good. and when you're ready, i'll be right here, waiting with open arms and a heart full of love for you.<br><br>you are my favorite person. my home. my always.<br><br>forever yours,<br>golella ✦</div>
   </div>
 
   <!-- Timed Message -->
   <div class="time-msg" id="timeMsg"></div>
 
-  <!-- Sound -->
-  <div id="soundWrap">
-    <button id="soundBtn" onclick="toggleSound()">
-      <span class="sound-icon">🎵</span>
-      <span id="soundLabel">play soft sound</span>
-    </button>
+  <!-- Warm Belly Comfort -->
+  <div class="section-title">warmth for your belly</div>
+  <div id="bellyWrap" onclick="toggleBelly()">
+    <div class="belly-icon" id="bellyIcon">🫳</div>
+    <div class="belly-visual" id="bellyVisual">
+      <div class="belly-ring"></div>
+      <div class="belly-ring belly-ring-2"></div>
+      <div class="belly-ring belly-ring-3"></div>
+    </div>
+    <div class="belly-status" id="bellyStatus">tap to place gentle warmth on your belly</div>
+  </div>
+
+  <!-- Water Reminder -->
+  <div class="section-title">a gentle reminder</div>
+  <div id="waterWrap">
+    <div class="water-icon" id="waterIcon">💧</div>
+    <div id="waterText">tap when you've had some water</div>
+    <div id="waterCount"></div>
+  </div>
+
+  <!-- YouTube player (hidden, autoplays) -->
+  <div id="ytPlayer" style="display:none;"></div>
+
+  <!-- Tap to unmute prompt -->
+  <div id="unmutePrompt" onclick="unmuteVideo()">
+    <span>🎵</span>
+    <span id="unmuteLabel">tap for lemon</span>
   </div>
 
   <div class="footer">
@@ -848,66 +944,112 @@ function updateTimeMsg() {
 }
 updateTimeMsg();
 
-// ===== SOUND =====
-var audioCtx, audioSrc, audioGain, isPlaying = false;
-var soundBtn = document.getElementById("soundBtn");
-var soundLabel = document.getElementById("soundLabel");
-function toggleSound() {
-  if (isPlaying) { stopSound(); return; }
-  startSound();
-}
-function startSound() {
-  try {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      // create gentle noise (brown-ish noise for warmth)
-      var sr = audioCtx.sampleRate;
-      var len = sr * 4;
-      var buf = audioCtx.createBuffer(1, len, sr);
-      var data = buf.getChannelData(0);
-      var v = 0;
-      for (var i = 0; i < len; i++) {
-        v += (Math.random() * 2 - 1) * 0.04;
-        v *= 0.98;
-        data[i] = v * 0.15;
+// ===== YOUTUBE PLAYER (Lemon by Kenshi Yonezu) =====
+var ytPlayer, ytReady = false, ytUnmuted = false;
+var unmutePrompt = document.getElementById("unmutePrompt");
+var unmuteLabel = document.getElementById("unmuteLabel");
+function onYouTubeIframeAPIReady() {
+  ytPlayer = new YT.Player("ytPlayer", {
+    videoId: "SX_ViT4Ra7k",
+    playerVars: {
+      autoplay: 1,
+      mute: 1,
+      loop: 1,
+      playlist: "SX_ViT4Ra7k",
+      controls: 0,
+      showinfo: 0,
+      modestbranding: 1,
+      rel: 0
+    },
+    events: {
+      onReady: function(e) {
+        ytReady = true;
+        e.target.setVolume(20);
+        e.target.playVideo();
       }
-      audioSrc = audioCtx.createBufferSource();
-      audioSrc.buffer = buf;
-      audioSrc.loop = true;
-      audioGain = audioCtx.createGain();
-      audioGain.gain.value = 0;
-      audioSrc.connect(audioGain);
-      audioGain.connect(audioCtx.destination);
-      audioSrc.start();
-      // fade in
-      var now = audioCtx.currentTime;
-      audioGain.gain.setValueAtTime(0, now);
-      audioGain.gain.linearRampToValueAtTime(0.15, now + 3);
-    } else {
-      if (audioCtx.state === "suspended") audioCtx.resume();
-      audioGain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 3);
     }
-    isPlaying = true;
-    soundBtn.classList.add("on");
-    soundLabel.textContent = "soft sound on \u2661";
-  } catch(e) {
-    soundLabel.textContent = "sound unavailable";
+  });
+}
+function unmuteVideo() {
+  if (!ytReady) return;
+  if (ytUnmuted) return;
+  try {
+    if (ytPlayer.isMuted()) ytPlayer.unMute();
+    ytPlayer.setVolume(25);
+    ytUnmuted = true;
+    unmutePrompt.classList.add("unmuted");
+    unmuteLabel.textContent = "lemon is playing 🍋";
+  } catch(e) {}
+}
+
+// ===== WARM BELLY =====
+var bellyWarm = localStorage.getItem("comfort_bellyWarm") === "true";
+var bellyWrap = document.getElementById("bellyWrap");
+var bellyStatus = document.getElementById("bellyStatus");
+var bellyIcon = document.getElementById("bellyIcon");
+if (bellyWarm) { bellyWrap.classList.add("warm"); bellyStatus.textContent = "warmth radiating ✦"; bellyIcon.textContent = "🤲"; }
+function toggleBelly() {
+  bellyWarm = !bellyWarm;
+  bellyWrap.classList.toggle("warm", bellyWarm);
+  if (bellyWarm) { bellyStatus.textContent = "warmth radiating ✦"; bellyIcon.textContent = "🤲"; }
+  else { bellyStatus.textContent = "tap to place gentle warmth on your belly"; bellyIcon.textContent = "🫳"; }
+  localStorage.setItem("comfort_bellyWarm", bellyWarm);
+}
+
+// ===== WATER REMINDER =====
+var waterCount = parseInt(localStorage.getItem("comfort_waterCount")) || 0;
+var waterWrap = document.getElementById("waterWrap");
+var waterText = document.getElementById("waterText");
+var waterCountEl = document.getElementById("waterCount");
+function updateWater() {
+  if (waterCount > 0) {
+    waterText.textContent = "you've had water " + waterCount + " time" + (waterCount > 1 ? "s" : "") + " today 💧";
+    waterCountEl.textContent = "keep going, love";
+  } else {
+    waterText.textContent = "tap when you've had some water";
+    waterCountEl.textContent = "";
   }
 }
-function stopSound() {
-  try {
-    if (audioGain) {
-      audioGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
-      setTimeout(function() {
-        if (audioSrc && audioSrc.stop) audioSrc.stop();
-        audioCtx = null; audioSrc = null; audioGain = null;
-      }, 1200);
-    }
-  } catch(e) {}
-  isPlaying = false;
-  soundBtn.classList.remove("on");
-  soundLabel.textContent = "play soft sound";
+updateWater();
+waterWrap.addEventListener("click", function() {
+  waterCount++;
+  localStorage.setItem("comfort_waterCount", waterCount);
+  waterWrap.classList.add("drank");
+  updateWater();
+  setTimeout(function() { waterWrap.classList.remove("drank"); }, 600);
+});
+// reset water count daily
+var lastWaterDate = localStorage.getItem("comfort_waterDate");
+var today = new Date().toDateString();
+if (lastWaterDate !== today) {
+  waterCount = 0;
+  localStorage.setItem("comfort_waterCount", 0);
+  localStorage.setItem("comfort_waterDate", today);
+  updateWater();
 }
+
+// ===== AURORA & STARS =====
+(function() {
+  var auroraDiv = document.createElement("div");
+  auroraDiv.className = "aurora";
+  for (var a = 0; a < 3; a++) {
+    var wave = document.createElement("div");
+    wave.className = "aurora-wave";
+    auroraDiv.appendChild(wave);
+  }
+  document.body.insertBefore(auroraDiv, document.body.firstChild);
+  // stars
+  for (var s = 0; s < 30; s++) {
+    var star = document.createElement("div");
+    star.className = "twinkle-star";
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 60 + "%";
+    star.style.animationDuration = (3 + Math.random() * 6) + "s";
+    star.style.animationDelay = (Math.random() * 8) + "s";
+    star.style.width = star.style.height = (1 + Math.random() * 2) + "px";
+    document.body.appendChild(star);
+  }
+})();
 
 // ===== PARTICLES =====
 (function() {
@@ -946,11 +1088,7 @@ function stopSound() {
   }
 })();
 
-// ===== EDITABLE SECTIONS FOR HIM =====
-// To add your personal message, find the line "he hasn't written his message yet"
-// below and replace the placeholder div content or uncomment the filled div.
-
-// You can also edit the Open When... note contents in the noteContents array above.
 </script>
+<script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
