@@ -38,6 +38,57 @@ body {
 @keyframes pulseGlow2 { 0% { opacity: 0.4; } 100% { opacity: 0.8; transform: scale(1.08); } }
 @keyframes pulseGlow3 { 0% { opacity: 0.3; } 100% { opacity: 0.7; transform: scale(1.06); } }
 
+/* romantic overlay pattern */
+.warm-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(255,180,160,0.03) 1px, transparent 1px),
+    radial-gradient(circle at 80% 30%, rgba(255,200,180,0.02) 1px, transparent 1px),
+    radial-gradient(circle at 50% 70%, rgba(255,150,130,0.02) 1px, transparent 1px);
+  background-size: 60px 60px, 80px 80px, 50px 50px;
+  animation: patternDrift 30s linear infinite;
+}
+@keyframes patternDrift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(10px, -5px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* soft vignette */
+.warm-bg .vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(10,5,5,0.25) 100%);
+  pointer-events: none;
+}
+
+/* embrace visual - two warm circles drifting toward each other */
+.embrace-left, .embrace-right {
+  position: fixed; pointer-events: none; z-index: 0;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,180,160,0.03), transparent);
+  animation: embraceDrift 8s ease-in-out infinite;
+}
+.embrace-left { left: 15%; bottom: 20%; animation-delay: 0s; }
+.embrace-right { right: 15%; bottom: 20%; animation-delay: 0.5s; }
+@keyframes embraceDrift {
+  0%, 100% { transform: translate(0, 0) scale(0.8); opacity: 0.1; }
+  25% { transform: translate(15px, -10px) scale(1); opacity: 0.2; }
+  50% { transform: translate(0, -5px) scale(0.9); opacity: 0.15; }
+  75% { transform: translate(-10px, -15px) scale(1.1); opacity: 0.2; }
+}
+
+/* floating petal */
+.float-petal {
+  position: fixed; pointer-events: none; z-index: 0; opacity: 0;
+  font-size: 12px; animation: petalFall linear infinite;
+}
+@keyframes petalFall {
+  0% { transform: translateY(-10vh) rotate(0deg) scale(0.5); opacity: 0; }
+  10% { opacity: 0.12; }
+  90% { opacity: 0.12; }
+  100% { transform: translateY(110vh) rotate(360deg) scale(1); opacity: 0; }
+}
+
 /* particle base */
 .particle {
   position: fixed; pointer-events: none; z-index: 0;
@@ -166,6 +217,16 @@ body {
 .main-msg .sub {
   font-size: 0.78rem; color: rgba(245,230,211,0.35); margin-top: 10px;
   letter-spacing: 0.5px; line-height: 1.7;
+}
+
+/* ===== ROMANCE QUOTE ROTATOR ===== */
+.romance-quote-wrap {
+  text-align: center; margin: -8px 0 16px; min-height: 30px;
+}
+.romance-quote {
+  font-family: 'Playfair Display'; font-style: italic; font-size: 0.7rem;
+  color: rgba(245,230,211,0.1); line-height: 1.5; transition: opacity 0.8s;
+  letter-spacing: 0.3px;
 }
 
 /* ===== SECTION TITLE ===== */
@@ -378,9 +439,42 @@ body {
   background: rgba(255,180,130,0.015);
   min-height: 100px; display: flex; flex-direction: column;
   align-items: center; justify-content: center; transition: all 0.5s;
+  position: relative;
 }
-#hisMessage.has-content { border-style: solid; border-color: rgba(255,180,130,0.15); background: rgba(255,180,130,0.025); }
-#hisMessage .filled { font-family: 'Playfair Display'; font-size: 0.9rem; color: #f5e6d3; line-height: 1.9; font-style: italic; }
+#hisMessage.has-content {
+  border-style: solid; border-color: rgba(255,180,130,0.15); background: rgba(255,180,130,0.025);
+  animation: letterGlow 3s ease-in-out infinite alternate;
+}
+@keyframes letterGlow {
+  0% { box-shadow: 0 0 8px rgba(255,180,130,0.02); }
+  100% { box-shadow: 0 0 20px rgba(255,180,130,0.06), 0 0 40px rgba(255,150,100,0.03); }
+}
+#hisMessage .filled {
+  font-family: 'Playfair Display'; font-size: 0.9rem; color: #f5e6d3;
+  line-height: 1.9; font-style: italic;
+  opacity: 0; animation: letterReveal 1.2s ease forwards;
+  animation-delay: 0.3s;
+}
+@keyframes letterReveal {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+#hisMessage .filled span { display: inline-block; }
+
+/* flutter hearts over letter */
+.letter-heart {
+  position: absolute; pointer-events: none; font-size: 8px;
+  color: rgba(255,180,160,0.08); animation: letterHeartFloat 4s ease-out infinite;
+}
+.letter-heart:nth-child(2) { left: 10%; animation-delay: -1s; }
+.letter-heart:nth-child(3) { right: 10%; animation-delay: -2s; }
+.letter-heart:nth-child(4) { left: 5%; animation-delay: -3s; }
+@keyframes letterHeartFloat {
+  0% { transform: translateY(0) scale(0); opacity: 0; }
+  20% { opacity: 0.15; }
+  80% { opacity: 0.15; }
+  100% { transform: translateY(-30px) scale(1); opacity: 0; }
+}
 
 /* ===== LOVE NOTE REPLY ===== */
 #loveNoteWrap {
@@ -607,7 +701,10 @@ body {
   <div class="glow-1"></div>
   <div class="glow-2"></div>
   <div class="glow-3"></div>
+  <div class="vignette"></div>
 </div>
+<div class="embrace-left"></div>
+<div class="embrace-right"></div>
 <div class="radiant-rays" id="radiantRays"></div>
 <div class="love-pulse"></div>
 
@@ -627,6 +724,11 @@ body {
   <div class="main-msg">
     <h1>you don't have to<br>be okay today</h1>
     <p class="sub">this is a no‑pressure zone.<br>rest. feel. let yourself be held.</p>
+  </div>
+
+  <!-- Romantic Quote Rotator -->
+  <div class="romance-quote-wrap">
+    <div class="romance-quote" id="romanceQuote">i'm so lucky to love you</div>
   </div>
 
   <!-- Mood Check-in -->
@@ -757,6 +859,10 @@ body {
   <!-- His Message -->
   <div class="section-title">a note from him</div>
   <div id="hisMessage" class="has-content">
+    <div class="letter-heart">✦</div>
+    <div class="letter-heart">♡</div>
+    <div class="letter-heart">✦</div>
+    <div class="letter-heart">♡</div>
     <div class="filled" id="filledMsg">to my dearest malikk,<br><br>i know today is hard. i know your body feels heavy and your heart feels tired. and i want you to know that you don't have to be okay. you don't have to smile, you don't have to perform, you don't have to be strong. you just have to be — and that is more than enough for me.<br><br>i wish i could be there right now. i'd make you your favorite tea, wrap you in the softest blanket, and just let you rest against me. i'd stroke your hair and tell you that everything is going to be okay — because it will be. not because the hard things will disappear, but because you won't face them alone. i'm here. i'm always here.<br><br>you are so beautiful. not just today, but every day. especially on the days you don't feel it. especially when you're tired and messy and real. that's when you're most beautiful to me — because that's when you're most you.<br><br>take your time. rest as much as you need. cry if you want to. eat something warm. watch something that makes you feel good. and when you're ready, i'll be right here, waiting with open arms and a heart full of love for you.<br><br>you are my favorite person. my home. my always.<br><br>forever yours,<br>golella ✦</div>
   </div>
 
@@ -1346,6 +1452,55 @@ function saveLoveNote() {
   }
 }
 
+// ===== ROMANCE QUOTE ROTATOR =====
+var romanceQuotes = [
+  "i'm so lucky to love you",
+  "you are my favorite thought",
+  "every day with you is a gift",
+  "you make my world softer",
+  "i fall for you more each day",
+  "you are the best part of my days",
+  "my heart is yours, always",
+  "you are my home",
+  "loving you is the easiest thing",
+  "you are my sunshine on every day",
+  "i love the way you exist",
+  "you are my always and forever",
+  "my favorite place is wherever you are",
+  "you make everything feel warm",
+  "i choose you, today and every day",
+  "you are the love of my life"
+];
+var quoteIdx = Math.floor(Math.random() * romanceQuotes.length);
+var quoteEl = document.getElementById("romanceQuote");
+if (quoteEl) {
+  quoteEl.textContent = romanceQuotes[quoteIdx];
+  setInterval(function() {
+    quoteIdx = (quoteIdx + 1) % romanceQuotes.length;
+    quoteEl.style.opacity = 0;
+    setTimeout(function() {
+      quoteEl.textContent = romanceQuotes[quoteIdx];
+      quoteEl.style.opacity = 1;
+    }, 600);
+  }, 5000);
+}
+
+// ===== FLOATING PETALS =====
+(function() {
+  var petalSymbols = ["🌸", "🌷", "🪷", "♡"];
+  for (var i = 0; i < 6; i++) {
+    (function() {
+      var p = document.createElement("div");
+      p.className = "float-petal";
+      p.style.left = (5 + Math.random() * 90) + "%";
+      p.style.fontSize = (8 + Math.random() * 8) + "px";
+      p.textContent = petalSymbols[Math.floor(Math.random() * petalSymbols.length)];
+      p.style.animationDuration = (12 + Math.random() * 14) + "s";
+      p.style.animationDelay = (Math.random() * 15) + "s";
+      document.body.appendChild(p);
+    })();
+  }
+})();
 </script>
 <script src="https://www.youtube.com/iframe_api"></script>
 </body>
