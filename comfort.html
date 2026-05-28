@@ -341,31 +341,100 @@ body {
 
 /* ===== WARM BELLY ===== */
 #bellyWrap {
-  margin: 6px 0; padding: 24px; border-radius: 16px; text-align: center; cursor: pointer;
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
-  transition: all 0.5s; display: flex; flex-direction: column; align-items: center;
+  margin: 6px 0; padding: 32px 24px; border-radius: 20px; text-align: center; cursor: pointer;
+  background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.025);
+  transition: all 0.6s; display: flex; flex-direction: column; align-items: center;
   position: relative; overflow: hidden;
 }
-#bellyWrap.warm { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.12); }
-.belly-icon { font-size: 2rem; margin-bottom: 8px; transition: transform 0.5s; }
-#bellyWrap.warm .belly-icon { transform: scale(1.15); }
-.belly-visual { position: relative; width: 100px; height: 50px; margin: 8px 0; display: none; }
+#bellyWrap::before {
+  content: ''; position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(ellipse at 50% 60%, rgba(255,150,80,0.15), transparent 70%);
+  transition: opacity 0.8s; pointer-events: none;
+}
+#bellyWrap.warm {
+  background: rgba(255,180,130,0.05); border-color: rgba(255,150,80,0.15);
+  box-shadow: 0 0 40px rgba(255,150,80,0.04), inset 0 0 30px rgba(255,150,80,0.02);
+}
+#bellyWrap.warm::before { opacity: 1; }
+.belly-icon { font-size: 2.4rem; margin-bottom: 8px; transition: all 0.5s; position: relative; z-index: 1; }
+#bellyWrap.warm .belly-icon {
+  transform: scale(1.2); filter: drop-shadow(0 0 12px rgba(255,150,80,0.3));
+  animation: bellyFloat 2.5s ease-in-out infinite;
+}
+@keyframes bellyFloat {
+  0%, 100% { transform: scale(1.2) translateY(0); }
+  50% { transform: scale(1.2) translateY(-3px); }
+}
+.belly-visual { position: relative; width: 160px; height: 80px; margin: 12px 0 4px; display: none; }
 #bellyWrap.warm .belly-visual { display: block; }
 .belly-ring {
-  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 40px; height: 40px; border-radius: 50%;
-  border: 2px solid rgba(255,180,130,0.06);
-  animation: bellyPulse 3s ease-in-out infinite;
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  border-radius: 50%;
+  animation: bellyPulse 2.5s ease-in-out infinite;
 }
-.belly-ring-2 { width: 60px; height: 60px; animation-delay: 0.5s; border-color: rgba(255,180,130,0.04); }
-.belly-ring-3 { width: 80px; height: 80px; animation-delay: 1s; border-color: rgba(255,180,130,0.02); }
+.belly-ring-1 {
+  width: 40px; height: 40px;
+  background: radial-gradient(circle, rgba(255,180,130,0.12), transparent);
+  border: 2px solid rgba(255,180,130,0.1);
+}
+.belly-ring-2 {
+  width: 70px; height: 70px; bottom: 5px;
+  background: radial-gradient(circle, rgba(255,150,80,0.06), transparent);
+  border: 1.5px solid rgba(255,150,80,0.06);
+  animation-delay: 0.6s;
+}
+.belly-ring-3 {
+  width: 110px; height: 110px; bottom: -10px;
+  background: radial-gradient(circle, rgba(255,120,60,0.03), transparent);
+  border: 1px solid rgba(255,120,60,0.03);
+  animation-delay: 1.2s;
+}
+.belly-ring-4 {
+  width: 160px; height: 160px; bottom: -30px;
+  background: radial-gradient(circle, rgba(255,100,40,0.015), transparent);
+  border: 1px solid rgba(255,100,40,0.015);
+  animation-delay: 1.8s;
+}
 @keyframes bellyPulse {
-  0% { transform: translateX(-50%) scale(0.8); opacity: 0.1; }
-  50% { transform: translateX(-50%) scale(1.1); opacity: 0.3; }
-  100% { transform: translateX(-50%) scale(0.8); opacity: 0.1; }
+  0% { transform: translateX(-50%) scale(0.85); opacity: 0.1; }
+  50% { transform: translateX(-50%) scale(1.08); opacity: 0.4; }
+  100% { transform: translateX(-50%) scale(0.85); opacity: 0.1; }
 }
-.belly-status { font-size: 0.7rem; color: rgba(245,230,211,0.25); letter-spacing: 0.3px; transition: color 0.3s; }
-#bellyWrap.warm .belly-status { color: #f5cba0; }
+/* warmth glow bar */
+.belly-glowbar {
+  display: none; width: 60%; height: 3px; border-radius: 3px; margin: 8px auto 0;
+  background: linear-gradient(90deg, transparent, rgba(255,180,130,0.2), rgba(255,150,80,0.3), rgba(255,180,130,0.2), transparent);
+  animation: glowbarSlide 2s ease-in-out infinite; position: relative; z-index: 1;
+}
+@keyframes glowbarSlide {
+  0% { opacity: 0.2; transform: scaleX(0.7); }
+  50% { opacity: 0.6; transform: scaleX(1); }
+  100% { opacity: 0.2; transform: scaleX(0.7); }
+}
+#bellyWrap.warm .belly-glowbar { display: block; }
+/* floating warmth sparks */
+.belly-spark {
+  position: absolute; pointer-events: none; z-index: 0; display: none;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,200,150,0.4), transparent);
+  animation: sparkRise 3s ease-out infinite;
+}
+#bellyWrap.warm .belly-spark { display: block; }
+.belly-spark:nth-child(6) { left: 20%; animation-delay: 0s; }
+.belly-spark:nth-child(7) { left: 40%; animation-delay: 0.8s; }
+.belly-spark:nth-child(8) { left: 60%; animation-delay: 1.6s; }
+.belly-spark:nth-child(9) { left: 80%; animation-delay: 2.4s; }
+@keyframes sparkRise {
+  0% { transform: translateY(0) scale(0); opacity: 0; }
+  20% { opacity: 0.5; }
+  80% { opacity: 0.5; }
+  100% { transform: translateY(-40px) scale(1); opacity: 0; }
+}
+.belly-status {
+  font-size: 0.7rem; color: rgba(245,230,211,0.15); letter-spacing: 0.3px;
+  transition: all 0.4s; position: relative; z-index: 1;
+}
+#bellyWrap.warm .belly-status { color: #f5cba0; text-shadow: 0 0 8px rgba(255,180,130,0.1); }
 
 /* ===== WATER REMINDER ===== */
 #waterWrap {
@@ -624,10 +693,16 @@ body {
   <div id="bellyWrap" onclick="toggleBelly()">
     <div class="belly-icon" id="bellyIcon">🫳</div>
     <div class="belly-visual" id="bellyVisual">
-      <div class="belly-ring"></div>
+      <div class="belly-ring belly-ring-1"></div>
       <div class="belly-ring belly-ring-2"></div>
       <div class="belly-ring belly-ring-3"></div>
+      <div class="belly-ring belly-ring-4"></div>
     </div>
+    <div class="belly-glowbar"></div>
+    <div class="belly-spark"></div>
+    <div class="belly-spark"></div>
+    <div class="belly-spark"></div>
+    <div class="belly-spark"></div>
     <div class="belly-status" id="bellyStatus">tap to place gentle warmth on your belly</div>
   </div>
 
