@@ -815,13 +815,10 @@ body {
 </div>
 
 <script>
-// one-time reset of test data
-if (!localStorage.getItem("comfort_reset")) {
-  localStorage.removeItem("comfort_waterCount");
-  localStorage.removeItem("comfort_waterDate");
-  localStorage.removeItem("comfort_loveNote");
-  localStorage.setItem("comfort_reset", "1");
-}
+// clear test data
+localStorage.removeItem("comfort_waterCount");
+localStorage.removeItem("comfort_waterDate");
+localStorage.removeItem("comfort_loveNote");
 
 // ===== CANDLE =====
 var candleLit = localStorage.getItem("comfort_candleLit") === "true";
