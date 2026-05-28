@@ -2,172 +2,402 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>for you 💕</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   min-height: 100vh; font-family: Inter; background: #1a0a0a; color: #f5e6d3;
   display: flex; flex-direction: column; align-items: center;
-  background: linear-gradient(180deg, #2d1215 0%, #1a0a0a 40%, #0d0505 100%);
-  padding: 20px; overflow-x: hidden;
+  background: linear-gradient(180deg, #2d1215 0%, #1a0a0a 35%, #0d0505 100%);
+  padding: 0 16px 20px; overflow-x: hidden; -webkit-tap-highlight-color: transparent;
 }
 
-/* warm glow bg */
+/* ambient glow layers */
 .warm-bg {
   position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0;
-  pointer-events: none;
+  pointer-events: none; overflow: hidden;
 }
-.warm-bg::before {
-  content: ''; position: absolute; width: 100%; height: 100%;
-  background: radial-gradient(ellipse at 50% 20%, rgba(255,150,100,0.06) 0%, transparent 60%);
+.warm-bg .glow-1 {
+  position: absolute; width: 100%; height: 100%;
+  background: radial-gradient(ellipse at 50% 15%, rgba(255,150,100,0.07) 0%, transparent 55%);
+  animation: pulseGlow 8s ease-in-out infinite alternate;
 }
+.warm-bg .glow-2 {
+  position: absolute; width: 100%; height: 100%;
+  background: radial-gradient(ellipse at 80% 60%, rgba(255,120,80,0.04) 0%, transparent 50%);
+  animation: pulseGlow2 12s ease-in-out infinite alternate;
+}
+.warm-bg .glow-3 {
+  position: absolute; width: 100%; height: 100%;
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,180,130,0.03) 0%, transparent 45%);
+  animation: pulseGlow3 10s ease-in-out infinite alternate;
+}
+@keyframes pulseGlow { 0% { opacity: 0.6; } 100% { opacity: 1; transform: scale(1.05); } }
+@keyframes pulseGlow2 { 0% { opacity: 0.4; } 100% { opacity: 0.8; transform: scale(1.08); } }
+@keyframes pulseGlow3 { 0% { opacity: 0.3; } 100% { opacity: 0.7; transform: scale(1.06); } }
 
-/* particles */
+/* particle base */
 .particle {
   position: fixed; pointer-events: none; z-index: 0;
-  width: 4px; height: 4px; background: radial-gradient(circle, #f5cba0, transparent);
   border-radius: 50%; opacity: 0;
   animation: floatParticle linear infinite;
 }
 @keyframes floatParticle {
+  0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+  15% { opacity: 0.25; }
+  75% { opacity: 0.25; }
+  100% { transform: translateY(-5vh) scale(1) rotate(360deg); opacity: 0; }
+}
+
+/* sparkle */
+.sparkle {
+  position: fixed; pointer-events: none; z-index: 0;
+  font-size: 10px; opacity: 0;
+  animation: sparkleFloat linear infinite;
+}
+@keyframes sparkleFloat {
   0% { transform: translateY(100vh) scale(0); opacity: 0; }
   20% { opacity: 0.3; }
   80% { opacity: 0.3; }
-  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  100% { transform: translateY(-10vh) scale(1.2) rotate(180deg); opacity: 0; }
 }
 
 /* main */
 .container { max-width: 420px; width: 100%; position: relative; z-index: 1; padding: 40px 0 60px; }
 
-/* candle */
+/* ===== CANDLE ===== */
 #candleWrap {
-  display: flex; justify-content: center; margin: 40px 0 24px; cursor: pointer;
-  transition: transform 0.3s;
+  display: flex; justify-content: center; margin: 30px 0 0; cursor: pointer;
+  transition: transform 0.3s; position: relative; z-index: 2;
 }
-#candleWrap:active { transform: scale(0.95); }
+#candleWrap:active { transform: scale(0.94); }
 .candle-body {
-  position: relative; width: 40px; height: 80px;
+  position: relative; width: 36px; height: 72px;
   background: linear-gradient(180deg, #f5deb3, #e8c89a, #d4a574);
-  border-radius: 4px 4px 6px 6px;
-  box-shadow: inset -4px 0 8px rgba(0,0,0,0.15);
+  border-radius: 3px 3px 5px 5px;
+  box-shadow: inset -3px 0 6px rgba(0,0,0,0.15);
 }
 .candle-body::after {
-  content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-  width: 8px; height: 6px; background: #333; border-radius: 2px 2px 0 0;
+  content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+  width: 7px; height: 5px; background: #222; border-radius: 2px 2px 0 0;
 }
 .candle-base {
-  position: absolute; bottom: -4px; left: -6px; width: 52px; height: 6px;
+  position: absolute; bottom: -3px; left: -5px; width: 46px; height: 5px;
   background: linear-gradient(180deg, #d4a574, #b8845a); border-radius: 3px;
 }
 #candleFlame {
-  position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
-  width: 12px; height: 20px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  background: radial-gradient(ellipse at 50% 30%, #fff5e6, #ffb366, #ff884d);
+  position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+  width: 10px; height: 18px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(ellipse at 50% 30%, #fff5e6, #ffb366, #ff7733);
   box-shadow: 0 0 20px rgba(255,150,80,0.4), 0 0 40px rgba(255,150,80,0.15);
   animation: flicker 0.3s ease-in-out infinite alternate;
   opacity: 0; transition: opacity 0.8s ease;
 }
 #candleFlame.lit { opacity: 1; }
 #candleFlame::after {
-  content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
-  width: 4px; height: 8px; background: radial-gradient(ellipse, rgba(255,255,255,0.6), transparent);
+  content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+  width: 3px; height: 6px; background: radial-gradient(ellipse, rgba(255,255,255,0.5), transparent);
   border-radius: 50%;
 }
 @keyframes flicker {
   0% { transform: translateX(-50%) scale(1) rotate(-1deg); }
-  100% { transform: translateX(-50%) scale(1.05) rotate(1deg); }
+  100% { transform: translateX(-50%) scale(1.04) rotate(1deg); }
 }
 .flame-glow {
-  position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-  width: 120px; height: 120px; border-radius: 50%;
+  position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+  width: 100px; height: 100px; border-radius: 50%;
   background: radial-gradient(circle, rgba(255,150,80,0.08), transparent 70%);
   opacity: 0; transition: opacity 1.5s ease;
 }
 .flame-glow.lit { opacity: 1; }
-.candle-hint { font-size: 0.7rem; color: rgba(245,230,211,0.3); text-align: center; margin-top: 8px; letter-spacing: 1px; }
+.candle-hint { font-size: 0.6rem; color: rgba(245,230,211,0.2); text-align: center; margin-top: 6px; letter-spacing: 1px; transition: opacity 0.5s; }
 
-/* main message */
-.main-msg {
-  text-align: center; margin: 32px 0; padding: 0 12px;
-}
+/* ===== MAIN MESSAGE ===== */
+.main-msg { text-align: center; margin: 28px 0 24px; padding: 0 8px; }
 .main-msg h1 {
-  font-family: 'Playfair Display'; font-size: 1.6rem; font-weight: 400;
+  font-family: 'Playfair Display'; font-size: 1.65rem; font-weight: 400;
   color: #f5e6d3; line-height: 1.5; font-style: italic;
 }
-.main-msg p {
-  font-size: 0.8rem; color: rgba(245,230,211,0.4); margin-top: 12px;
-  letter-spacing: 1px; line-height: 1.6;
+.main-msg .sub {
+  font-size: 0.78rem; color: rgba(245,230,211,0.35); margin-top: 10px;
+  letter-spacing: 0.5px; line-height: 1.7;
 }
 
-/* breathing circle */
-#breatheWrap {
-  display: flex; justify-content: center; margin: 32px 0; flex-direction: column; align-items: center;
+/* ===== SECTION TITLE ===== */
+.section-title {
+  font-size: 0.6rem; color: rgba(245,230,211,0.2); text-align: center;
+  letter-spacing: 2px; text-transform: uppercase; margin: 28px 0 12px;
+  position: relative;
 }
-#breatheCircle {
-  width: 80px; height: 80px; border-radius: 50%;
-  border: 1.5px solid rgba(245,230,211,0.15);
-  display: flex; align-items: center; justify-content: center;
-  transition: all 4s ease-in-out; cursor: pointer;
-  background: radial-gradient(circle at center, rgba(255,150,100,0.03), transparent);
-}
-#breatheCircle.breathe-in {
-  width: 120px; height: 120px; border-color: rgba(255,180,130,0.25);
-  box-shadow: 0 0 40px rgba(255,150,100,0.06);
-}
-#breatheCircle.breathe-out {
-  width: 80px; height: 80px; border-color: rgba(245,230,211,0.1);
-}
-#breatheText {
-  font-size: 0.7rem; color: rgba(245,230,211,0.4); letter-spacing: 2px;
-  text-transform: uppercase; transition: all 0.3s;
-}
-#breatheLabel {
-  font-size: 0.65rem; color: rgba(245,230,211,0.25); margin-top: 10px;
-  letter-spacing: 1px;
+.section-title::before, .section-title::after {
+  content: ''; display: inline-block; width: 20px; height: 1px;
+  background: rgba(245,230,211,0.08); vertical-align: middle; margin: 0 8px;
 }
 
-/* comforts */
-.comforts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 24px 0; }
-.comfort-card {
-  padding: 16px 12px; border-radius: 14px;
+/* ===== MOOD CHECK-IN ===== */
+.mood-wrap { text-align: center; margin: 6px 0 16px; }
+.mood-options {
+  display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
+}
+.mood-btn {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 50%; width: 42px; height: 42px; cursor: pointer;
+  font-size: 1.2rem; transition: all 0.3s ease; display: flex;
+  align-items: center; justify-content: center;
+}
+.mood-btn:hover, .mood-btn.selected { background: rgba(255,180,130,0.08); border-color: rgba(255,180,130,0.15); }
+.mood-btn.selected { transform: scale(1.15); box-shadow: 0 0 20px rgba(255,150,100,0.06); }
+.mood-response {
+  margin-top: 12px; font-family: 'Playfair Display'; font-size: 0.85rem;
+  font-style: italic; color: rgba(245,230,211,0.5); min-height: 40px;
+  transition: opacity 0.5s; line-height: 1.6; padding: 0 8px;
+}
+
+/* ===== AFFIRMATION ===== */
+.affirm-wrap {
+  text-align: center; margin: 8px 0;
+  padding: 20px 16px; border-radius: 16px; cursor: pointer;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
+  transition: all 0.3s; min-height: 80px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.affirm-wrap:hover { background: rgba(255,180,130,0.04); border-color: rgba(255,180,130,0.06); }
+.affirm-wrap:active { transform: scale(0.98); }
+.affirm-label { font-size: 0.55rem; color: rgba(245,230,211,0.15); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.affirm-text {
+  font-family: 'Playfair Display'; font-size: 1rem; font-style: italic;
+  color: #f5e6d3; line-height: 1.6; transition: opacity 0.6s;
+}
+.affirm-tip { font-size: 0.55rem; color: rgba(245,230,211,0.12); margin-top: 8px; letter-spacing: 0.5px; }
+
+/* ===== GROUNDING ===== */
+#groundingWrap {
+  text-align: center; margin: 6px 0; padding: 20px; border-radius: 16px;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
+  cursor: pointer; transition: all 0.3s;
+}
+#groundingWrap:active { transform: scale(0.98); }
+#groundingStep {
+  font-family: 'Playfair Display'; font-size: 1.2rem; font-style: italic;
+  color: #f5e6d3; margin: 8px 0; line-height: 1.6; min-height: 60px;
+  transition: opacity 0.5s;
+}
+#groundingLabel { font-size: 0.55rem; color: rgba(245,230,211,0.12); letter-spacing: 1px; text-transform: uppercase; }
+#groundingNum { color: rgba(245,230,211,0.2); font-size: 0.7rem; margin-top: 6px; }
+.grounding-dots { display: flex; justify-content: center; gap: 4px; margin-top: 8px; }
+.grounding-dot {
+  width: 4px; height: 4px; border-radius: 50%; background: rgba(245,230,211,0.08);
+  transition: background 0.3s;
+}
+.grounding-dot.active { background: #f5cba0; }
+
+/* ===== WARM DRINK ===== */
+#drinkWrap {
+  display: flex; flex-direction: column; align-items: center; margin: 6px 0;
+  padding: 20px; border-radius: 16px; cursor: pointer;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
+  transition: all 0.3s; user-select: none;
+}
+#drinkWrap:active { transform: scale(0.97); }
+#drinkWrap.warm { background: rgba(255,180,130,0.05); border-color: rgba(255,180,130,0.08); }
+.cup-container { position: relative; width: 50px; height: 55px; margin-bottom: 8px; }
+.cup-body {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 40px; height: 42px;
+  background: linear-gradient(180deg, #f5e6d3, #e8d5c0); border-radius: 0 0 4px 4px;
+  box-shadow: inset -3px 0 6px rgba(0,0,0,0.08);
+}
+.cup-handle {
+  position: absolute; right: -12px; top: 6px;
+  width: 14px; height: 18px; border: 2px solid #e8d5c0; border-radius: 0 8px 8px 0;
+  border-left: none; background: transparent;
+}
+.cup-rim {
+  position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
+  width: 44px; height: 6px; background: #f5e6d3; border-radius: 3px;
+}
+.steam {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 12px; background: radial-gradient(ellipse, rgba(245,230,211,0.15), transparent);
+  border-radius: 50%; animation: steamRise 2s ease-out infinite; opacity: 0;
+}
+.steam:nth-child(2) { left: 35%; animation-delay: 0.6s; }
+.steam:nth-child(3) { left: 65%; animation-delay: 1.2s; }
+.warm .steam { opacity: 1; }
+@keyframes steamRise {
+  0% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.15; }
+  100% { transform: translateX(-50%) translateY(-20px) scale(0.5); opacity: 0; }
+}
+.drink-status { font-size: 0.75rem; color: rgba(245,230,211,0.3); letter-spacing: 0.5px; }
+.drink-status.warm { color: #f5cba0; }
+
+/* ===== WORRY RELEASE ===== */
+#worryWrap {
+  margin: 6px 0; padding: 20px; border-radius: 16px; text-align: center;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
+}
+#worryInput {
+  width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.03); color: #f5e6d3; font-family: Inter; font-size: 0.8rem;
+  outline: none; transition: border-color 0.3s; resize: none;
+}
+#worryInput:focus { border-color: rgba(255,180,130,0.15); }
+#worryInput::placeholder { color: rgba(245,230,211,0.15); font-style: italic; }
+#worryBtn {
+  margin-top: 8px; padding: 8px 20px; border-radius: 20px; border: none;
+  background: rgba(255,180,130,0.08); color: #f5cba0; font-family: Inter; font-size: 0.7rem;
+  cursor: pointer; transition: all 0.3s; letter-spacing: 0.5px;
+}
+#worryBtn:hover { background: rgba(255,180,130,0.14); }
+#worryBtn:active { transform: scale(0.95); }
+.worry-float {
+  position: fixed; pointer-events: none; z-index: 10;
+  font-family: 'Playfair Display'; font-style: italic; font-size: 0.8rem;
+  color: rgba(245,230,211,0.4); max-width: 200px; text-align: center;
+  animation: worryRise 4s ease-out forwards;
+}
+@keyframes worryRise {
+  0% { opacity: 0.5; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-120px) scale(0.6) rotate(10deg); }
+}
+
+/* ===== HIS NOTES (Open When) ===== */
+.notes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 6px 0; }
+.note-card {
+  padding: 16px 10px; border-radius: 14px;
   background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04);
   text-align: center; cursor: pointer; transition: all 0.4s ease;
-  min-height: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 64px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
 }
-.comfort-card:hover { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.1); }
-.comfort-card .cw-icon { font-size: 1.5rem; margin-bottom: 4px; }
-.comfort-card .cw-label { font-size: 0.65rem; color: rgba(245,230,211,0.4); letter-spacing: 1px; text-transform: uppercase; }
-.comfort-card .cw-label.open { color: #f5cba0; }
-.comfort-card.opened { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.12); }
-.comfort-msg {
-  display: none; margin-top: 16px; padding: 16px; border-radius: 12px;
-  background: rgba(255,255,255,0.03); font-size: 0.85rem; line-height: 1.7;
-  color: #f5e6d3; text-align: center; font-family: 'Playfair Display'; font-style: italic;
+.note-card:hover { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.1); }
+.note-card .nc-label { font-size: 0.65rem; color: rgba(245,230,211,0.3); letter-spacing: 1px; text-transform: uppercase; }
+.note-card .nc-icon { font-size: 1.3rem; margin-bottom: 4px; }
+.note-card.sealed .nc-seal { font-size: 0.55rem; color: rgba(245,230,211,0.12); margin-top: 4px; letter-spacing: 0.5px; }
+.note-card.opened { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.12); }
+.note-card.opened .nc-label { color: #f5cba0; }
+.note-card.opened .nc-seal { display: none; }
+.note-modal {
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 100; background: rgba(10,5,5,0.8); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center; padding: 20px;
 }
+.note-modal.show { display: flex; }
+.note-modal-content {
+  max-width: 340px; width: 100%; padding: 28px 24px; border-radius: 20px;
+  background: linear-gradient(180deg, #2d1215, #1a0a0a);
+  border: 1px solid rgba(255,180,130,0.1); text-align: center;
+  position: relative; animation: modalIn 0.3s ease;
+}
+@keyframes modalIn { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+.note-modal-content h3 {
+  font-family: 'Playfair Display'; font-size: 1rem; font-weight: 400;
+  color: #f5cba0; margin-bottom: 12px;
+}
+.note-modal-content p {
+  font-family: 'Playfair Display'; font-style: italic; font-size: 0.9rem;
+  color: #f5e6d3; line-height: 1.7;
+}
+.note-modal-close {
+  margin-top: 16px; padding: 8px 20px; border-radius: 20px; border: none;
+  background: rgba(255,180,130,0.08); color: #f5cba0; font-family: Inter;
+  font-size: 0.7rem; cursor: pointer; transition: all 0.3s; letter-spacing: 0.5px;
+}
+.note-modal-close:hover { background: rgba(255,180,130,0.14); }
 
-/* his message placeholder */
-#hisMessage {
-  margin: 40px 0; padding: 24px; border-radius: 16px;
-  border: 1px dashed rgba(255,180,130,0.15); text-align: center;
-  background: rgba(255,180,130,0.02);
-  min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+/* ===== 5 SENSES GROUNDING (quick) ===== */
+.senses-wrap {
+  margin: 6px 0; padding: 20px; border-radius: 16px; text-align: center;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
 }
+.senses-grid { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.sense-row {
+  padding: 8px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 10px;
+  cursor: pointer; transition: all 0.3s;
+}
+.sense-row:hover { background: rgba(255,180,130,0.04); }
+.sense-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(255,180,130,0.08); display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; color: #f5cba0; flex-shrink: 0;
+}
+.sense-text { font-size: 0.75rem; color: rgba(245,230,211,0.4); text-align: left; line-height: 1.4; }
+.sense-row.done .sense-num { background: rgba(255,180,130,0.15); }
+.sense-row.done .sense-text { color: #f5cba0; }
+
+/* ===== HIS MESSAGE ===== */
+#hisMessage {
+  margin: 28px 0; padding: 24px; border-radius: 16px;
+  border: 1px dashed rgba(255,180,130,0.12); text-align: center;
+  background: rgba(255,180,130,0.015);
+  min-height: 100px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; transition: all 0.5s;
+}
+#hisMessage.has-content { border-style: solid; border-color: rgba(255,180,130,0.15); background: rgba(255,180,130,0.025); }
 #hisMessage .placeholder {
-  font-family: 'Playfair Display'; font-size: 0.9rem; color: rgba(245,230,211,0.2);
+  font-family: 'Playfair Display'; font-size: 0.85rem; color: rgba(245,230,211,0.18);
   font-style: italic; line-height: 1.6;
 }
-#hisMessage .filled { display: none; font-family: 'Playfair Display'; font-size: 1rem; color: #f5e6d3; line-height: 1.7; }
+#hisMessage .placeholder span { font-size: 0.65rem; opacity: 0.5; }
+#hisMessage .filled { display: none; font-family: 'Playfair Display'; font-size: 0.95rem; color: #f5e6d3; line-height: 1.7; font-style: italic; }
 
-/* footer */
-.footer { text-align: center; margin-top: 20px; padding: 20px 0; }
-.footer p { font-size: 0.6rem; color: rgba(245,230,211,0.12); letter-spacing: 1px; }
+/* ===== SOUND TOGGLE ===== */
+#soundWrap {
+  display: flex; justify-content: center; margin: 24px 0;
+}
+#soundBtn {
+  padding: 10px 24px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.02); color: rgba(245,230,211,0.3); font-family: Inter;
+  font-size: 0.7rem; cursor: pointer; transition: all 0.3s; letter-spacing: 0.5px;
+  display: flex; align-items: center; gap: 6px;
+}
+#soundBtn:hover { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.1); color: #f5cba0; }
+#soundBtn.on { background: rgba(255,180,130,0.06); border-color: rgba(255,180,130,0.1); color: #f5cba0; }
+.sound-icon { font-size: 0.9rem; }
+
+/* ===== AFFIRMATION LIST (additional) ===== */
+.affirm-list {
+  margin: 6px 0; display: flex; flex-direction: column; gap: 0;
+}
+.affirm-item {
+  padding: 0 8px; text-align: center;
+  font-family: 'Playfair Display'; font-size: 0.78rem; font-style: italic;
+  color: rgba(245,230,211,0.15); line-height: 2.2;
+  transition: all 0.5s; cursor: pointer;
+}
+.affirm-item.revealed { color: #f5e6d3; }
+.affirm-item:hover { color: rgba(245,230,211,0.2); }
+
+/* ===== TIMED MESSAGE ===== */
+.time-msg {
+  text-align: center; margin: 24px 0 0;
+  font-family: 'Playfair Display'; font-style: italic; font-size: 0.75rem;
+  color: rgba(245,230,211,0.12); line-height: 1.6; min-height: 40px;
+  transition: opacity 1s;
+}
+
+/* ===== FOOTER ===== */
+.footer { text-align: center; margin-top: 32px; padding: 20px 0; }
+.footer p { font-size: 0.55rem; color: rgba(245,230,211,0.1); letter-spacing: 1px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 400px) {
+  .main-msg h1 { font-size: 1.4rem; }
+  .notes-grid { gap: 6px; }
+  .note-card { padding: 14px 8px; min-height: 56px; }
+}
 </style>
 </head>
 <body>
 
-<div class="warm-bg"></div>
+<div class="warm-bg">
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+  <div class="glow-3"></div>
+</div>
 
 <div class="container">
 
@@ -179,48 +409,155 @@ body {
       <div id="candleFlame"></div>
     </div>
   </div>
-  <p class="candle-hint">light a candle</p>
+  <p class="candle-hint" id="candleHint">light a candle for yourself</p>
 
   <!-- Main Message -->
   <div class="main-msg">
     <h1>you don't have to<br>be okay today</h1>
-    <p>rest. breathe. let yourself be held.<br>this space is just for you.</p>
+    <p class="sub">this is a no‑pressure zone.<br>rest. feel. let yourself be held.</p>
   </div>
 
-  <!-- Breathing Circle -->
-  <div id="breatheWrap">
-    <div id="breatheCircle" onclick="toggleBreathe()">
-      <span id="breatheText">tap</span>
+  <!-- Mood Check-in -->
+  <div class="section-title">how are you feeling?</div>
+  <div class="mood-wrap">
+    <div class="mood-options" id="moodOptions">
+      <button class="mood-btn" data-mood="tired">😔</button>
+      <button class="mood-btn" data-mood="sad">🥺</button>
+      <button class="mood-btn" data-mood="okay">😐</button>
+      <button class="mood-btn" data-mood="calm">🙂</button>
+      <button class="mood-btn" data-mood="better">💪</button>
     </div>
-    <p id="breatheLabel">breathe with me</p>
+    <div class="mood-response" id="moodResponse">tap how you feel — no judgment here</div>
   </div>
 
-  <!-- Little Comforts -->
-  <p style="font-size:0.7rem;color:rgba(245,230,211,0.25);text-align:center;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">little comforts</p>
-  <div class="comforts-grid">
-    <div class="comfort-card" onclick="openComfort(this, 0)">
-      <div class="cw-icon">🫖</div>
-      <div class="cw-label">tea</div>
-    </div>
-    <div class="comfort-card" onclick="openComfort(this, 1)">
-      <div class="cw-icon">🧣</div>
-      <div class="cw-label">warmth</div>
-    </div>
-    <div class="comfort-card" onclick="openComfort(this, 2)">
-      <div class="cw-icon">🎬</div>
-      <div class="cw-label">movie</div>
-    </div>
-    <div class="comfort-card" onclick="openComfort(this, 3)">
-      <div class="cw-icon">🛌</div>
-      <div class="cw-label">rest</div>
+  <!-- Affirmation -->
+  <div class="section-title">something to hold onto</div>
+  <div class="affirm-wrap" id="affirmWrap" onclick="nextAffirmation()">
+    <div class="affirm-label">✧ tap for a new one ✧</div>
+    <div class="affirm-text" id="affirmText">You are allowed to take up space. You are allowed to rest. You are allowed to be exactly as you are right now.</div>
+    <div class="affirm-tip" id="affirmNum">1 / 24</div>
+  </div>
+
+  <!-- Grounding -->
+  <div class="section-title">a moment to breathe</div>
+  <div id="groundingWrap" onclick="nextGrounding()">
+    <div id="groundingLabel">tap to begin</div>
+    <div id="groundingStep">breathe in slowly …</div>
+    <div id="groundingNum">1 / 5</div>
+    <div class="grounding-dots" id="groundingDots">
+      <div class="grounding-dot active"></div>
+      <div class="grounding-dot"></div>
+      <div class="grounding-dot"></div>
+      <div class="grounding-dot"></div>
+      <div class="grounding-dot"></div>
     </div>
   </div>
-  <div class="comfort-msg" id="comfortMsg"><div id="comfortText"></div></div>
+
+  <!-- Warm Drink -->
+  <div class="section-title">something warm</div>
+  <div id="drinkWrap" onclick="toggleDrink()">
+    <div class="cup-container">
+      <div class="steam"></div>
+      <div class="steam"></div>
+      <div class="steam"></div>
+      <div class="cup-rim"></div>
+      <div class="cup-body">
+        <div class="cup-handle"></div>
+      </div>
+    </div>
+    <div class="drink-status" id="drinkStatus">tap to pour something warm</div>
+  </div>
+
+  <!-- 5 Senses Grounding -->
+  <div class="section-title">come back to now</div>
+  <div class="senses-wrap">
+    <p style="font-size:0.65rem;color:rgba(245,230,211,0.15);letter-spacing:0.5px;line-height:1.6;margin-bottom:8px;">name something you can …</p>
+    <div class="senses-grid" id="sensesGrid">
+      <div class="sense-row" onclick="doneSense(this)">
+        <div class="sense-num">1</div>
+        <div class="sense-text">see — look around, find 3 things you can see right now</div>
+      </div>
+      <div class="sense-row" onclick="doneSense(this)">
+        <div class="sense-num">2</div>
+        <div class="sense-text">touch — feel 2 things you can touch (your blanket, your hair, the air)</div>
+      </div>
+      <div class="sense-row" onclick="doneSense(this)">
+        <div class="sense-num">3</div>
+        <div class="sense-text">hear — listen for 2 sounds you can hear right now</div>
+      </div>
+      <div class="sense-row" onclick="doneSense(this)">
+        <div class="sense-num">4</div>
+        <div class="sense-text">smell — notice 1 scent around you (or imagine your favorite warm smell)</div>
+      </div>
+      <div class="sense-row" onclick="doneSense(this)">
+        <div class="sense-num">5</div>
+        <div class="sense-text">taste — take a sip of water or tea, or just notice the taste in your mouth</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Worry Release -->
+  <div class="section-title">let it go</div>
+  <div id="worryWrap">
+    <p style="font-family:'Playfair Display';font-style:italic;font-size:0.75rem;color:rgba(245,230,211,0.2);margin-bottom:10px;">write down what's on your mind, then let it float away</p>
+    <textarea id="worryInput" rows="2" placeholder="something you want to release …" maxlength="200"></textarea>
+    <button id="worryBtn" onclick="releaseWorry()">✧ let it go ✧</button>
+  </div>
+
+  <!-- Notes from Him -->
+  <div class="section-title">open when …</div>
+  <div class="notes-grid" id="notesGrid">
+    <div class="note-card sealed" data-note="0" onclick="openNote(this, 0)">
+      <div class="nc-icon">💌</div>
+      <div class="nc-label">you miss me</div>
+      <div class="nc-seal">✦ sealed ✦</div>
+    </div>
+    <div class="note-card sealed" data-note="1" onclick="openNote(this, 1)">
+      <div class="nc-icon">🫂</div>
+      <div class="nc-label">you feel low</div>
+      <div class="nc-seal">✦ sealed ✦</div>
+    </div>
+    <div class="note-card sealed" data-note="2" onclick="openNote(this, 2)">
+      <div class="nc-icon">☀️</div>
+      <div class="nc-label">you need warmth</div>
+      <div class="nc-seal">✦ sealed ✦</div>
+    </div>
+    <div class="note-card sealed" data-note="3" onclick="openNote(this, 3)">
+      <div class="nc-icon">🌙</div>
+      <div class="nc-label">you can't sleep</div>
+      <div class="nc-seal">✦ sealed ✦</div>
+    </div>
+  </div>
+
+  <!-- Note Modal -->
+  <div class="note-modal" id="noteModal">
+    <div class="note-modal-content">
+      <h3 id="noteTitle">💌 you miss me</h3>
+      <p id="noteBody">i miss you too. every moment you're not here feels a little quieter, a little less warm. but i'm always just a thought away. close your eyes and imagine me holding your hand — i am. always.</p>
+      <button class="note-modal-close" onclick="closeNoteModal()">close ✦</button>
+    </div>
+  </div>
+
+  <!-- Affirmations to Reveal -->
+  <div class="section-title">truths, one by one</div>
+  <div class="affirm-list" id="affirmList"></div>
 
   <!-- His Message -->
+  <div class="section-title">a note from him</div>
   <div id="hisMessage">
-    <div class="placeholder" id="placeholderMsg">he hasn't written<br>his message yet 💕<br><span style="font-size:0.7rem;opacity:0.5;">come back later</span></div>
+    <div class="placeholder" id="placeholderMsg">he hasn't written his message yet.<br><span>come back later 💕</span></div>
     <div class="filled" id="filledMsg"></div>
+  </div>
+
+  <!-- Timed Message -->
+  <div class="time-msg" id="timeMsg"></div>
+
+  <!-- Sound -->
+  <div id="soundWrap">
+    <button id="soundBtn" onclick="toggleSound()">
+      <span class="sound-icon">🎵</span>
+      <span id="soundLabel">play soft sound</span>
+    </button>
   </div>
 
   <div class="footer">
@@ -230,92 +567,396 @@ body {
 </div>
 
 <script>
-// Candle
-var candleLit = localStorage.getItem("candleLit") === "true";
+// ===== CANDLE =====
+var candleLit = localStorage.getItem("comfort_candleLit") === "true";
 var flame = document.getElementById("candleFlame");
 var glow = document.getElementById("flameGlow");
-if (candleLit) { flame.classList.add("lit"); glow.classList.add("lit"); }
+var hint = document.getElementById("candleHint");
+if (candleLit) { flame.classList.add("lit"); glow.classList.add("lit"); hint.textContent = "your light is burning ✦"; }
 function toggleCandle() {
   candleLit = !candleLit;
-  if (candleLit) { flame.classList.add("lit"); glow.classList.add("lit"); }
-  else { flame.classList.remove("lit"); glow.classList.remove("lit"); }
-  localStorage.setItem("candleLit", candleLit);
+  if (candleLit) { flame.classList.add("lit"); glow.classList.add("lit"); hint.textContent = "your light is burning ✦"; }
+  else { flame.classList.remove("lit"); glow.classList.remove("lit"); hint.textContent = "light a candle for yourself"; }
+  localStorage.setItem("comfort_candleLit", candleLit);
 }
 
-// Breathing
-var breathing = false;
-var breatheEl = document.getElementById("breatheCircle");
-var breatheText = document.getElementById("breatheText");
-var breatheLabel = document.getElementById("breatheLabel");
-var breatheTimer;
-function toggleBreathe() {
-  if (breathing) { stopBreathe(); return; }
-  breathing = true;
-  breatheLabel.textContent = "tap to stop";
-  doBreatheCycle();
-}
-function doBreatheCycle() {
-  if (!breathing) return;
-  breatheEl.className = "breathe-in";
-  breatheText.textContent = "breathe in";
-  setTimeout(function() {
-    if (!breathing) return;
-    breatheEl.className = "";
-    breatheText.textContent = "hold";
-    setTimeout(function() {
-      if (!breathing) return;
-      breatheEl.className = "breathe-out";
-      breatheText.textContent = "breathe out";
-      setTimeout(function() {
-        if (!breathing) return;
-        doBreatheCycle();
-      }, 4000);
-    }, 2000);
-  }, 4000);
-}
-function stopBreathe() {
-  breathing = false;
-  clearTimeout(breatheTimer);
-  breatheEl.className = "";
-  breatheText.textContent = "tap";
-  breatheLabel.textContent = "breathe with me";
+// ===== MOOD =====
+var moodResponses = {
+  tired: "that's okay. you don't have to be anything but what you are right now. rest is not a reward — it's a need. you're allowed to feel tired.",
+  sad: "let yourself feel it. sadness isn't weakness — it's proof that you care, that you love, that you're human. i'm here. you're not alone in it.",
+  okay: "okay is enough. you don't have to be more than okay today. just being here, breathing, existing — that's enough. that's always enough.",
+  calm: "i'm glad you feel calm. you deserve these quiet moments. let yourself stay here a little longer. peace looks good on you.",
+  better: "i'm proud of you. you're stronger than you know. but remember — you don't always have to be better. you're already enough, exactly as you are."
+};
+var moodBtns = document.querySelectorAll(".mood-btn");
+var moodResponse = document.getElementById("moodResponse");
+moodBtns.forEach(function(b) {
+  b.addEventListener("click", function(e) {
+    e.stopPropagation();
+    moodBtns.forEach(function(x) { x.classList.remove("selected"); });
+    b.classList.add("selected");
+    var m = b.getAttribute("data-mood");
+    moodResponse.textContent = moodResponses[m] || "i see you. i'm here.";
+    moodResponse.style.opacity = 0;
+    setTimeout(function() { moodResponse.style.opacity = 1; }, 50);
+    localStorage.setItem("comfort_mood", m);
+  });
+});
+var savedMood = localStorage.getItem("comfort_mood");
+if (savedMood) {
+  moodBtns.forEach(function(b) {
+    if (b.getAttribute("data-mood") === savedMood) {
+      b.classList.add("selected");
+      moodResponse.textContent = moodResponses[savedMood];
+    }
+  });
 }
 
-// Comforts
-var comfortMessages = [
-  "Put the kettle on. Chamomile, ginger, or your favorite — let the warmth spread through your hands. You don't need to do anything else right now.",
-  "Wrap yourself in something soft. A blanket, a hoodie, anything that feels like a hug. Let the warmth settle around you like a quiet promise.",
-  "Put on something that makes you feel good. A comfort movie, a familiar show, soft music — let it play in the background while you rest.",
-  "Lie down. Close your eyes. You've done enough today. The world can wait. Just let yourself be still for a little while."
+// ===== AFFIRMATIONS =====
+var affirmations = [
+  "You are allowed to take up space. You are allowed to rest. You are allowed to be exactly as you are right now.",
+  "You don't have to earn your rest. You don't have to be productive to be worthy. You matter, just by being here.",
+  "Your body is not betraying you. It's working so hard to take care of you. Be gentle with it today.",
+  "You are not too much. You are not too sensitive. You are not too anything. You are exactly the right amount of everything.",
+  "This feeling will pass. Like every storm, every wave, every night — this too shall soften. And I'll be here when it does.",
+  "You are loved beyond what you do. You are loved for who you are — and who you are is enough.",
+  "It's okay to ask for help. It's okay to need someone. It's okay to not be okay. None of this makes you weak.",
+  "You've made it through every hard day you've ever had. You will make it through this one too. One breath at a time.",
+  "Rest is not lazy. Rest is not selfish. Rest is how you refill your cup so you can keep being the amazing person you are.",
+  "You are worthy of care. You are worthy of kindness. You are worthy of love — especially from yourself.",
+  "Let yourself be soft today. The world doesn't need you to be strong all the time. It needs you to be real. And you are.",
+  "You are doing better than you think. Even if it doesn't feel like it. Even if today is hard. You're still here. That's everything.",
+  "Give yourself permission to let go. Of the pressure, of the guilt, of the 'shoulds.' Just for today, let yourself be.",
+  "You are not alone. Even when it feels like it. Even in the quiet. There are people who love you, who see you, who are glad you exist.",
+  "It's okay to cry. Tears are not weakness — they're your heart speaking the words your mouth can't find yet.",
+  "You don't have to have it all figured out. Life is not a test you need to pass. It's a journey you're allowed to take one step at a time.",
+  "You are beautiful. Not because of how you look, but because of how you love, how you feel, how you keep going even when it's hard.",
+  "You deserve softness. You deserve warmth. You deserve to be held and cared for. Don't let anyone — including yourself — tell you otherwise.",
+  "Breathe. Just one breath. In — fill yourself with kindness. Out — let go of what doesn't serve you. That's all you need to do right now.",
+  "You are not behind. You are not failing. You are exactly where you need to be, learning what you need to learn, becoming who you're meant to be.",
+  "Your feelings are valid. All of them. The joy and the pain, the calm and the chaos. They're all part of you, and they're all okay.",
+  "You are stronger than you know. But you don't have to be strong today. You can just be. And that's more than enough.",
+  "The way you care about others — you deserve that same care for yourself. Be as gentle with you as you are with the ones you love.",
+  "You matter. Not for what you do. Not for how you look. Not for how you feel today. You just matter. Period."
 ];
-function openComfort(el, idx) {
-  var content = document.getElementById("comfortMsg");
-  var text = document.getElementById("comfortText");
-  if (el.classList.contains("opened")) return;
-  el.classList.add("opened");
-  el.querySelector(".cw-label").classList.add("open");
-  content.style.display = "block";
-  text.textContent = comfortMessages[idx];
-  content.style.animation = "none";
-  void content.offsetHeight;
-  content.style.animation = "";
+var affirmIdx = parseInt(localStorage.getItem("comfort_affirmIdx")) || 0;
+var affirmText = document.getElementById("affirmText");
+var affirmNum = document.getElementById("affirmNum");
+affirmText.textContent = affirmations[affirmIdx];
+affirmNum.textContent = (affirmIdx + 1) + " / " + affirmations.length;
+function nextAffirmation() {
+  affirmIdx = (affirmIdx + 1) % affirmations.length;
+  affirmText.style.opacity = 0;
+  setTimeout(function() {
+    affirmText.textContent = affirmations[affirmIdx];
+    affirmText.style.opacity = 1;
+  }, 250);
+  affirmNum.textContent = (affirmIdx + 1) + " / " + affirmations.length;
+  localStorage.setItem("comfort_affirmIdx", affirmIdx);
 }
 
-// Warm particles
+// ===== GROUNDING =====
+var groundingSteps = [
+  "breathe in slowly through your nose … hold it … and breathe out gently",
+  "notice 5 things you can see right now — let your eyes wander softly",
+  "feel 4 things your body is touching — the surface beneath you, the air on your skin",
+  "listen for 3 sounds around you — near and far — just listen, don't judge",
+  "notice 2 things you can smell — or imagine your favorite calming scent",
+  "name 1 thing you're grateful for right now — anything, no matter how small",
+  "one more deep breath … in … and out … you're doing so well"
+];
+var groundIdx = 0;
+var groundLabel = document.getElementById("groundingLabel");
+var groundStep = document.getElementById("groundingStep");
+var groundNum = document.getElementById("groundingNum");
+var groundDots = document.getElementById("groundingDots");
+function nextGrounding() {
+  groundIdx = (groundIdx + 1) % groundingSteps.length;
+  groundStep.style.opacity = 0;
+  setTimeout(function() {
+    groundStep.textContent = groundingSteps[groundIdx];
+    groundStep.style.opacity = 1;
+  }, 200);
+  var shown = Math.min(groundIdx + 1, 5);
+  groundNum.textContent = (groundIdx + 1) + " / " + groundingSteps.length;
+  groundLabel.textContent = "tap for next step";
+  // update dots
+  var dots = groundDots.querySelectorAll(".grounding-dot");
+  dots.forEach(function(d, i) {
+    d.classList.toggle("active", i < shown);
+  });
+}
+
+// ===== WARM DRINK =====
+var drinkWarm = false;
+var drinkWrap = document.getElementById("drinkWrap");
+var drinkStatus = document.getElementById("drinkStatus");
+function toggleDrink() {
+  drinkWarm = !drinkWarm;
+  drinkWrap.classList.toggle("warm", drinkWarm);
+  drinkStatus.textContent = drinkWarm ? "warm and waiting for you 🫖" : "tap to pour something warm";
+  drinkStatus.classList.toggle("warm", drinkWarm);
+}
+
+// ===== 5 SENSES =====
+function doneSense(el) {
+  if (el.classList.contains("done")) {
+    el.classList.remove("done");
+    return;
+  }
+  el.classList.add("done");
+}
+
+// ===== WORRY RELEASE =====
+function releaseWorry() {
+  var input = document.getElementById("worryInput");
+  var text = input.value.trim();
+  if (!text) return;
+  // create floating text
+  var el = document.createElement("div");
+  el.className = "worry-float";
+  el.textContent = "\u201c" + text + "\u201d";
+  var btn = document.getElementById("worryBtn");
+  var rect = btn.getBoundingClientRect();
+  el.style.left = (rect.left + rect.width / 2 - 100) + "px";
+  el.style.top = (rect.top - 10) + "px";
+  document.body.appendChild(el);
+  // create sparkle burst
+  for (var s = 0; s < 8; s++) {
+    (function(i) {
+      var sp = document.createElement("div");
+      sp.style.cssText = "position:fixed;pointer-events:none;z-index:10;" +
+        "font-size:" + (8 + Math.random() * 8) + "px;" +
+        "left:" + (rect.left + rect.width / 2) + "px;" +
+        "top:" + (rect.top - 10) + "px;" +
+        "color:rgba(245,230,211,0.3);" +
+        "transition:all 1.2s ease-out;opacity:1;";
+      sp.textContent = ["\u2728", "\u2726", "\u2734", "\u2661"][Math.floor(Math.random() * 4)];
+      document.body.appendChild(sp);
+      var angle = (i / 8) * 2 * Math.PI;
+      var dist = 40 + Math.random() * 60;
+      setTimeout(function() {
+        sp.style.transform = "translate(" + (Math.cos(angle) * dist) + "px," + (Math.sin(angle) * dist - 30) + "px)";
+        sp.style.opacity = 0;
+      }, 50);
+      setTimeout(function() { sp.remove(); }, 1500);
+    })(s);
+  }
+  input.value = "";
+  el.addEventListener("animationend", function() { el.remove(); });
+}
+
+// ===== OPEN WHEN NOTES =====
+var noteModal = document.getElementById("noteModal");
+var noteTitle = document.getElementById("noteTitle");
+var noteBody = document.getElementById("noteBody");
+var noteContents = [
+  { title: "you miss me \u2764", body: "i miss you too. every moment you're not here feels a little quieter, a little less warm. but i'm always just a thought away. close your eyes and imagine me holding your hand \u2014 i am. always. come find me when you can, or just stay here and know that you're loved." },
+  { title: "you feel low \uD83E\uDEC2", body: "it's okay to feel this way. you don't have to fight it or push it away. let yourself feel, let yourself cry, let yourself rest. i'm not going anywhere. when you're ready, i'll be right here. you are so much stronger than you know \u2014 but you don't have to be strong today." },
+  { title: "you need warmth \u2600\uFE0F", body: "wrap yourself in something soft. hold something warm. breathe slowly. you are safe. you are cared for. let this moment hold you the way i would if i were there. you deserve warmth. you deserve tenderness. you deserve to feel good." },
+  { title: "you can't sleep \uD83C\uDF19", body: "close your eyes. don't try to sleep \u2014 just rest. let your thoughts drift like clouds. imagine a warm, gentle light wrapping around you. i'm with you, even in the quiet. especially in the quiet. rest now. the world can wait." }
+];
+var openedNotes = JSON.parse(localStorage.getItem("comfort_openedNotes") || "[]");
+function initNotes() {
+  var cards = document.querySelectorAll(".note-card");
+  openedNotes.forEach(function(idx) {
+    var card = cards[idx];
+    if (card) {
+      card.classList.add("opened");
+      card.classList.remove("sealed");
+      card.querySelector(".nc-seal").textContent = "\u2726 opened \u2726";
+    }
+  });
+}
+initNotes();
+function openNote(el, idx) {
+  if (el.classList.contains("opened")) {
+    // show modal anyway
+    showNoteModal(idx);
+    return;
+  }
+  el.classList.add("opened");
+  el.classList.remove("sealed");
+  el.querySelector(".nc-seal").textContent = "\u2726 opened \u2726";
+  openedNotes.push(idx);
+  localStorage.setItem("comfort_openedNotes", JSON.stringify(openedNotes));
+  showNoteModal(idx);
+}
+function showNoteModal(idx) {
+  noteTitle.textContent = noteContents[idx].title;
+  noteBody.textContent = noteContents[idx].body;
+  noteModal.classList.add("show");
+}
+function closeNoteModal() {
+  noteModal.classList.remove("show");
+}
+noteModal.addEventListener("click", function(e) {
+  if (e.target === noteModal) closeNoteModal();
+});
+
+// ===== AFFIRM LIST =====
+var truths = [
+  "you are doing enough",
+  "you are allowed to rest",
+  "you are worthy of love",
+  "this feeling will pass",
+  "you don't have to earn your worth",
+  "you are not alone",
+  "your body deserves kindness",
+  "you've made it this far",
+  "you can let go today",
+  "you matter"
+];
+var affListEl = document.getElementById("affirmList");
+var revealedCount = parseInt(localStorage.getItem("comfort_revealedCount")) || 0;
+truths.forEach(function(t, i) {
+  var div = document.createElement("div");
+  div.className = "affirm-item" + (i < revealedCount ? " revealed" : "");
+  div.textContent = "\u2726 " + t;
+  div.setAttribute("data-idx", i);
+  div.addEventListener("click", function() {
+    var idx = parseInt(this.getAttribute("data-idx"));
+    if (!this.classList.contains("revealed")) {
+      this.classList.add("revealed");
+      var maxRevealed = Math.max(revealedCount, idx + 1);
+      // reveal any earlier ones too
+      for (var j = 0; j < maxRevealed; j++) {
+        var item = affListEl.children[j];
+        if (item) item.classList.add("revealed");
+      }
+      revealedCount = maxRevealed;
+      localStorage.setItem("comfort_revealedCount", revealedCount);
+    }
+  });
+  affListEl.appendChild(div);
+});
+
+// ===== TIMED MESSAGES =====
+var timeMessages = [
+  { hour: [6, 11], msg: "good morning. today is a fresh start. you've got this \u2014 one gentle moment at a time." },
+  { hour: [11, 14], msg: "afternoon. how about something warm to drink? and maybe a few minutes of doing nothing at all." },
+  { hour: [14, 17], msg: "you've made it through another day. whatever happened, you're still here. that's everything." },
+  { hour: [17, 20], msg: "evening is here. time to slow down. let the day go. you did enough." },
+  { hour: [20, 23], msg: "night is falling. wrap yourself in something soft. you're safe. you're loved. rest now." },
+  { hour: [23, 6], msg: "it's late. close your eyes. the world can wait. you deserve rest more than anything else right now." }
+];
+function updateTimeMsg() {
+  var h = new Date().getHours();
+  var msgEl = document.getElementById("timeMsg");
+  for (var i = 0; i < timeMessages.length; i++) {
+    var t = timeMessages[i];
+    if (h >= t.hour[0] && h < t.hour[1]) {
+      msgEl.textContent = t.msg;
+      return;
+    }
+  }
+  msgEl.textContent = timeMessages[timeMessages.length - 1].msg;
+}
+updateTimeMsg();
+
+// ===== SOUND =====
+var audioCtx, audioSrc, audioGain, isPlaying = false;
+var soundBtn = document.getElementById("soundBtn");
+var soundLabel = document.getElementById("soundLabel");
+function toggleSound() {
+  if (isPlaying) { stopSound(); return; }
+  startSound();
+}
+function startSound() {
+  try {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      // create gentle noise (brown-ish noise for warmth)
+      var sr = audioCtx.sampleRate;
+      var len = sr * 4;
+      var buf = audioCtx.createBuffer(1, len, sr);
+      var data = buf.getChannelData(0);
+      var v = 0;
+      for (var i = 0; i < len; i++) {
+        v += (Math.random() * 2 - 1) * 0.04;
+        v *= 0.98;
+        data[i] = v * 0.15;
+      }
+      audioSrc = audioCtx.createBufferSource();
+      audioSrc.buffer = buf;
+      audioSrc.loop = true;
+      audioGain = audioCtx.createGain();
+      audioGain.gain.value = 0;
+      audioSrc.connect(audioGain);
+      audioGain.connect(audioCtx.destination);
+      audioSrc.start();
+      // fade in
+      var now = audioCtx.currentTime;
+      audioGain.gain.setValueAtTime(0, now);
+      audioGain.gain.linearRampToValueAtTime(0.15, now + 3);
+    } else {
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      audioGain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 3);
+    }
+    isPlaying = true;
+    soundBtn.classList.add("on");
+    soundLabel.textContent = "soft sound on \u2661";
+  } catch(e) {
+    soundLabel.textContent = "sound unavailable";
+  }
+}
+function stopSound() {
+  try {
+    if (audioGain) {
+      audioGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
+      setTimeout(function() {
+        if (audioSrc && audioSrc.stop) audioSrc.stop();
+        audioCtx = null; audioSrc = null; audioGain = null;
+      }, 1200);
+    }
+  } catch(e) {}
+  isPlaying = false;
+  soundBtn.classList.remove("on");
+  soundLabel.textContent = "play soft sound";
+}
+
+// ===== PARTICLES =====
 (function() {
-  for (var i = 0; i < 15; i++) {
+  // warm particles
+  for (var i = 0; i < 18; i++) {
     (function() {
       var p = document.createElement("div");
       p.className = "particle";
       p.style.left = (5 + Math.random() * 90) + "%";
-      p.style.width = (2 + Math.random() * 4) + "px";
-      p.style.height = p.style.width;
-      p.style.animationDuration = (12 + Math.random() * 16) + "s";
-      p.style.animationDelay = (Math.random() * 10) + "s";
+      var size = 2 + Math.random() * 4;
+      p.style.width = size + "px";
+      p.style.height = size + "px";
+      // warm colors
+      var colors = ["rgba(255,180,130,", "rgba(245,230,211,", "rgba(255,200,150,", "rgba(255,150,100,"];
+      var c = colors[Math.floor(Math.random() * colors.length)];
+      p.style.background = "radial-gradient(circle, " + c + "0.3), transparent)";
+      p.style.animationDuration = (14 + Math.random() * 18) + "s";
+      p.style.animationDelay = (Math.random() * 12) + "s";
       document.body.appendChild(p);
     })();
   }
+  // sparkles
+  for (var j = 0; j < 8; j++) {
+    (function() {
+      var s = document.createElement("div");
+      s.className = "sparkle";
+      s.style.left = (8 + Math.random() * 84) + "%";
+      s.textContent = ["\u2726", "\u2734", "\u2728", "\u2661"][Math.floor(Math.random() * 4)];
+      var colors = ["rgba(255,200,150,", "rgba(245,230,211,", "rgba(255,180,130,"];
+      s.style.color = colors[Math.floor(Math.random() * colors.length)] + "0.15)";
+      s.style.animationDuration = (18 + Math.random() * 22) + "s";
+      s.style.animationDelay = (Math.random() * 15) + "s";
+      s.style.fontSize = (8 + Math.random() * 6) + "px";
+      document.body.appendChild(s);
+    })();
+  }
 })();
+
+// ===== EDITABLE SECTIONS FOR HIM =====
+// To add your personal message, find the line "he hasn't written his message yet"
+// below and replace the placeholder div content or uncomment the filled div.
+
+// You can also edit the Open When... note contents in the noteContents array above.
 </script>
 </body>
 </html>
